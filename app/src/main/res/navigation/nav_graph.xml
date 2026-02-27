@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/home">
+
+    <activity
+        android:id="@+id/startActivity"
+        android:name="com.hits.itindr.StartActivity"
+        android:label="StartActivity" />
+
+    <fragment
+        android:id="@+id/home"
+        android:name="com.hits.itindr.HomeFragment"
+        android:label="HomeFragment">
+
+        <action
+            android:id="@+id/action_home_to_register"
+            app:destination="@id/register" />
+        <action
+            android:id="@+id/action_home_to_login"
+            app:destination="@id/login" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/login"
+        android:name="com.hits.itindr.LoginFragment"
+        android:label="LoginFragment">
+
+        <action
+            android:id="@+id/action_login_to_main"
+            app:destination="@id/mainActivity" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/register"
+        android:name="com.hits.itindr.RegisterFragment"
+        android:label="RegisterFragment">
+
+        <action
+            android:id="@+id/action_register_to_info"
+            app:destination="@id/info" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/info"
+        android:name="com.hits.itindr.InfoFragment"
+        android:label="InfoFragment">
+
+        <action
+            android:id="@+id/action_info_to_main"
+            app:destination="@id/mainActivity" />
+    </fragment>
+
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.hits.itindr.MainActivity"
+        android:label="MainActivity" />
+</navigation>

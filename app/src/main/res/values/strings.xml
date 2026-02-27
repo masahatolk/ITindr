@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">ITindr</string>
+    <string name="info_header">О себе</string>
+    <string name="login_header">Вход</string>
+    <string name="login_button_text">Войти</string>
+    <string name="back_button_text">Назад</string>
+    <string name="email">Email</string>
+    <string name="email_input_layout_text">Ваш email</string>
+    <string name="register_button_text">Зарегистрироваться</string>
+    <string name="register_header">Регистрация</string>
+    <string name="save_button_text">Сохранить</string>
 </resources>
