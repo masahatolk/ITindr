@@ -1,5 +1,6 @@
 package com.hits.itindr
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -20,12 +21,17 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         val navController = findNavController()
 
         binding.loginButton.setOnClickListener {
-            navController.navigate(R.id.action_login_to_main)
+            openMain()
         }
 
         binding.backLoginButton.setOnClickListener {
             navController.popBackStack()
         }
+    }
+
+    private fun openMain() {
+        startActivity(Intent(requireContext(), MainActivity::class.java))
+        requireActivity().finish()
     }
 
     override fun onDestroyView() {

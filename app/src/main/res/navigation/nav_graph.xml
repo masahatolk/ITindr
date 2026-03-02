@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/home">
+    app:startDestination="@id/splash">
 
     <activity
         android:id="@+id/startActivity"
@@ -26,10 +26,18 @@
 
         <action
             android:id="@+id/action_home_to_register"
-            app:destination="@id/register" />
+            app:destination="@id/register"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_out_right"
+            app:popExitAnim="@anim/slide_in_left"/>
         <action
             android:id="@+id/action_home_to_login"
-            app:destination="@id/login" />
+            app:destination="@id/login"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_out_right"
+            app:popExitAnim="@anim/slide_in_left"/>
     </fragment>
 
     <fragment
@@ -37,9 +45,6 @@
         android:name="com.hits.itindr.LoginFragment"
         android:label="LoginFragment">
 
-        <action
-            android:id="@+id/action_login_to_main"
-            app:destination="@id/mainActivity" />
     </fragment>
 
     <fragment
@@ -49,7 +54,11 @@
 
         <action
             android:id="@+id/action_register_to_info"
-            app:destination="@id/info" />
+            app:destination="@id/info"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_out_right"
+            app:popExitAnim="@anim/slide_in_left"/>
     </fragment>
 
     <fragment
@@ -57,13 +66,5 @@
         android:name="com.hits.itindr.InfoFragment"
         android:label="InfoFragment">
 
-        <action
-            android:id="@+id/action_info_to_main"
-            app:destination="@id/mainActivity" />
     </fragment>
-
-    <activity
-        android:id="@+id/mainActivity"
-        android:name="com.hits.itindr.MainActivity"
-        android:label="MainActivity" />
 </navigation>

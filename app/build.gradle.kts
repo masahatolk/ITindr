@@ -15,6 +15,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.compose.compiler)
     kotlin("plugin.serialization") version "2.0.21"
 }
 
@@ -52,11 +53,18 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.14"
     }
 }
 
 dependencies {
 
+    implementation(platform(libs.androidx.compose.bom))
+
+    implementation(libs.androidx.material3)
     // Jetpack Compose integration
     implementation(libs.androidx.navigation.compose)
 

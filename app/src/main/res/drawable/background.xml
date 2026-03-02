@@ -2,7 +2,7 @@
 
     <item>
         <shape>
-            <solid android:color="#1F2125"/>
+            <solid android:color="@color/gray"/>
         </shape>
     </item>
 
@@ -14,7 +14,7 @@
                 android:gradientRadius="600dp"
                 android:centerX="1.0"
                 android:centerY="0.1"
-                android:startColor="#CC5A01FF"
+                android:startColor="@color/purple"
                 android:endColor="@android:color/transparent"/>
         </shape>
     </item>
@@ -27,7 +27,7 @@
                 android:gradientRadius="500dp"
                 android:centerX="0.0"
                 android:centerY="0.55"
-                android:startColor="#CCAF01FF"
+                android:startColor="@color/light_purple"
                 android:endColor="@android:color/transparent"/>
         </shape>
     </item>

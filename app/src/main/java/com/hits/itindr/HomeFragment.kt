@@ -30,7 +30,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.registerHomeButton.isEnabled = false
         binding.loginHomeButton.isEnabled = false
 
-        binding.motionLayout.setTransitionListener(object : MotionLayout.TransitionListener {
+        binding.motionHomeLayout.setTransitionListener(object : MotionLayout.TransitionListener {
             override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
                 binding.registerHomeButton.isEnabled = true
                 binding.loginHomeButton.isEnabled = true

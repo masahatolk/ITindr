@@ -22,5 +22,6 @@
     <string name="name_input_layout_text">Ваше имя</string>
     <string name="additional_info">О себе</string>
     <string name="additional_info_input_layout_text">Опишите себя</string>
-    <string name="interests">Укажи интересы</string>
+    <string name="interests">Укажите интересы</string>
+    <string name="main_activity">Main Activity</string>
 </resources>
