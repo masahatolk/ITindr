@@ -18,8 +18,5 @@ class StartActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
-//        splash.setKeepOnScreenCondition {
-//            !viewModel.isDataLoaded
-//        }
     }
 }

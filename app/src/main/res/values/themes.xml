@@ -20,7 +20,7 @@
 
     <style name="Theme.App.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/purple</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/icon_splashscreen</item>
         <item name="postSplashScreenTheme">@style/Theme.ITindr</item>
     </style>
 
@@ -51,7 +51,7 @@
         <item name="textAllCaps">false</item>
     </style>
 
-    <style name="TransparentButton" parent="Widget.Material3.Button">
+    <style name="Transparent20Button" parent="Widget.Material3.Button">
         <item name="cornerRadius">16dp</item>
 
         <item name="android:backgroundTint">@color/white_transparent20</item>
@@ -62,8 +62,21 @@
         <item name="textAllCaps">false</item>
     </style>
 
+    <style name="Transparent30Button" parent="Widget.AppCompat.ImageButton">
+
+        <item name="android:background">@drawable/rounded_transparent30_button</item>
+    </style>
+
+    <style name="TransparentBadge">
+        <item name="android:background">@drawable/rounded_transparent20_button</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">inter</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
     <!-- Input Styles -->
-    <style name="Widget.App.TextInputLayout.Email"
+    <style name="Widget.App.TextInputLayout"
         parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
 
         <item name="boxBackgroundMode">filled</item>
@@ -78,14 +91,19 @@
         <item name="boxCornerRadiusBottomStart">8dp</item>
         <item name="boxCornerRadiusBottomEnd">8dp</item>
 
-        <item name="hintTextColor">@color/white_transparent50</item>
-        <item name="android:textColorHint">@color/white_transparent50</item>
-
         <item name="boxCollapsedPaddingTop">12dp</item>
     </style>
 
     <style name="Widget.App.TextInputEditText" parent="Widget.MaterialComponents.TextInputEditText.FilledBox">
+        <item name="hintTextColor">@color/white_transparent50</item>
+        <item name="android:textColorHint">@color/white_transparent50</item>
+
         <item name="android:backgroundTint">@color/white_transparent20</item>
         <item name="android:textColor">@color/white</item>
+
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:minHeight">48dp</item>
     </style>
 </resources>

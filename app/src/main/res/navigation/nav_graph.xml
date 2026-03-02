@@ -10,6 +10,16 @@
         android:label="StartActivity" />
 
     <fragment
+        android:id="@+id/splash"
+        android:name="com.hits.itindr.SplashScreenFragment"
+        android:label="SplashScreenFragment">
+
+        <action
+            android:id="@+id/action_splash_to_home"
+            app:destination="@id/home" />
+    </fragment>
+
+    <fragment
         android:id="@+id/home"
         android:name="com.hits.itindr.HomeFragment"
         android:label="HomeFragment">

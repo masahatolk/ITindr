@@ -10,5 +10,6 @@
 
     <color name="purple">#CC5A01FF</color>
     <color name="white_transparent20">#33FFFFFF</color>
+    <color name="white_transparent30">#4DFFFFFF</color>
     <color name="white_transparent50">#80FFFFFF</color>
 </resources>
