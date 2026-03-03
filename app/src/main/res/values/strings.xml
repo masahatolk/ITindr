@@ -24,4 +24,7 @@
     <string name="additional_info_input_layout_text">Опишите себя</string>
     <string name="interests">Укажите интересы</string>
     <string name="main_activity">Main Activity</string>
+    <string name="logo_base_image">logo base image</string>
+    <string name="logo_dot_image">logo dot image</string>
+    <string name="objects_image">objects image</string>
 </resources>

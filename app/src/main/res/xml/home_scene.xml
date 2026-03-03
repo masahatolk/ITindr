@@ -3,7 +3,7 @@
 
     <ConstraintSet android:id="@+id/start">
 
-        <Constraint android:id="@id/logo">
+        <Constraint android:id="@id/logo_container">
             <PropertySet android:alpha="0" />
             <Transform android:translationY="-60dp" />
         </Constraint>
@@ -23,7 +23,7 @@
             <Transform android:translationY="60dp" />
         </Constraint>
 
-        <Constraint android:id="@id/background_image">
+        <Constraint android:id="@id/image_container">
             <PropertySet android:alpha="0" />
         </Constraint>
 
