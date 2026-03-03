@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/splash">
+
+    <activity
+        android:id="@+id/startActivity"
+        android:name="com.hits.itindr.StartActivity"
+        android:label="StartActivity" />
+
+    <fragment
+        android:id="@+id/splash"
+        android:name="com.hits.itindr.SplashScreenFragment"
+        android:label="SplashScreenFragment">
+
+        <action
+            android:id="@+id/action_splash_to_home"
+            app:destination="@id/home" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/home"
+        android:name="com.hits.itindr.HomeFragment"
+        android:label="HomeFragment">
+
+        <action
+            android:id="@+id/action_home_to_register"
+            app:destination="@id/register"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_out_right"
+            app:popExitAnim="@anim/slide_in_left"/>
+        <action
+            android:id="@+id/action_home_to_login"
+            app:destination="@id/login"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_out_right"
+            app:popExitAnim="@anim/slide_in_left"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/login"
+        android:name="com.hits.itindr.LoginFragment"
+        android:label="LoginFragment">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/register"
+        android:name="com.hits.itindr.RegisterFragment"
+        android:label="RegisterFragment">
+
+        <action
+            android:id="@+id/action_register_to_info"
+            app:destination="@id/info"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_out_right"
+            app:popExitAnim="@anim/slide_in_left"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/info"
+        android:name="com.hits.itindr.InfoFragment"
+        android:label="InfoFragment">
+
+    </fragment>
+</navigation>
