@@ -62,6 +62,9 @@ android {
 
 dependencies {
 
+    implementation(libs.androidx.compose.ui.test.junit4)
+    implementation(libs.kaspresso)
+
     implementation(platform(libs.androidx.compose.bom))
 
     implementation(libs.androidx.material3)
