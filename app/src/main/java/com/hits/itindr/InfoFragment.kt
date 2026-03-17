@@ -17,8 +17,48 @@ class InfoFragment : Fragment(R.layout.fragment_info) {
 
         _binding = FragmentInfoBinding.bind(view)
 
+        setupTags()
+
         binding.saveButton.setOnClickListener {
             openMain()
+        }
+    }
+
+    private fun setupTags() {
+        val tags = listOf(
+            TagItem(1, "Python"),
+            TagItem(2, "Django"),
+            TagItem(3, "REST"),
+            TagItem(4, "Swift"),
+            TagItem(5, "Obj-C"),
+            TagItem(6, "React JS"),
+            TagItem(7, "Kotlin"),
+            TagItem(8, "Git"),
+            TagItem(9, "Unity"),
+            TagItem(10, ".NET"),
+            TagItem(11, "SQL"),
+            TagItem(12, "Clean Architecture"),
+            TagItem(13, "UML")
+        )
+
+        binding.tagView.apply {
+            this.tags = tags
+
+            multiSelect = true
+
+            //maxSelected = 5
+
+            onSelectionChange = { selectedIds ->
+                println("Selected: $selectedIds")
+            }
+
+            onTagClick = { id, isSelected ->
+                println("Tag $id clicked, selected = $isSelected")
+            }
+
+            onSelectionLimitReached = { limit ->
+                println("Limit reached: $limit")
+            }
         }
     }
 
