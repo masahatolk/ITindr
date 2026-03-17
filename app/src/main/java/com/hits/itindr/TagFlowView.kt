@@ -1,7 +1,11 @@
 package com.hits.itindr
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.RectF
+import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -84,7 +88,7 @@ class TagFlowView @JvmOverloads constructor(
         setMeasuredDimension(width, resolveSize(totalHeight + paddingBottom, heightMeasureSpec))
     }
 
-    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {}
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) = Unit
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)

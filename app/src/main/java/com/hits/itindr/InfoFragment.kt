@@ -46,7 +46,7 @@ class InfoFragment : Fragment(R.layout.fragment_info) {
 
             multiSelect = true
 
-            //maxSelected = 5
+            // maxSelected = 5
 
             onSelectionChange = { selectedIds ->
                 println("Selected: $selectedIds")
