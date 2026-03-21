@@ -7,4 +7,5 @@ import androidx.lifecycle.ViewModel
 
 class MainViewModel : ViewModel() {
     var selectedIndex by mutableIntStateOf(0)
+    var previousIndex by  mutableIntStateOf(0)
 }
