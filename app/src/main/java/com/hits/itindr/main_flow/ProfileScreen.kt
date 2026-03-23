@@ -1,6 +1,7 @@
 package com.hits.itindr.main_flow
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,6 +15,7 @@ import androidx.compose.ui.unit.sp
 fun ProfileScreen() {
     Box(
         modifier = Modifier
+            .fillMaxSize()
             .padding(horizontal = 24.dp, vertical = 16.dp)
     ) {
         Text(

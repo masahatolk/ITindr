@@ -2,17 +2,6 @@
 <project version="4">
   <component name="deploymentTargetSelector">
     <selectionStates>
-      <SelectionState runConfigName="app">
-        <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-03-23T14:22:05.120788100Z">
-          <Target type="DEFAULT_BOOT">
-            <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\masht\.android\avd\Small_Phone.avd" />
-            </handle>
-          </Target>
-        </DropdownSelection>
-        <DialogSelection />
-      </SelectionState>
       <SelectionState runConfigName="homeElementsVisible() (1)">
         <option name="selectionMode" value="DROPDOWN" />
         <DropdownSelection timestamp="2026-03-16T15:07:37.106634700Z">
@@ -34,6 +23,9 @@
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
       <SelectionState runConfigName="NavigationTest (1)">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="ITindr">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

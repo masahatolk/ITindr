@@ -2,7 +2,6 @@ package com.hits.itindr.main_flow.feed.swipeable_cards.ui
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateOffsetAsState
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
@@ -23,8 +22,6 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.round
-import com.hits.itindr.main_flow.feed.swipeable_cards.utils.accelerateX
-import com.hits.itindr.main_flow.feed.swipeable_cards.utils.consume
 import kotlin.math.absoluteValue
 
 @Composable
@@ -38,6 +35,7 @@ internal fun SwipeableCard(
     scale: Float,
     onDragOffsetChange: (Offset) -> Unit,
     onSwipe: (SwipeableCardDirection) -> Unit,
+    onOffsetAnimationFinished: (Offset) -> Unit = {},
     content: @Composable (Offset) -> Unit,
 ) {
     val internalOffset by offset
@@ -52,6 +50,7 @@ internal fun SwipeableCard(
     val animatedOffset by animateOffsetAsState(
         targetValue = internalOffset,
         animationSpec = animations.cardsAnimationSpec,
+        finishedListener = onOffsetAnimationFinished,
     )
 
     val rotationAnimation by animateFloatAsState(

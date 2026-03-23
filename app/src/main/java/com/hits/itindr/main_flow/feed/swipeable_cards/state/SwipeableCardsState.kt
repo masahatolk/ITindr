@@ -59,7 +59,6 @@ class SwipeableCardsState(
     }
 
     fun moveNext() {
-        swipingVisibleCards.remove(currentCardIndex - 1)
         if (currentCardIndex < itemCount()) {
             currentCardIndex++
         }
@@ -76,6 +75,11 @@ class SwipeableCardsState(
         swipingVisibleCards.add(currentCardIndex)
         dragOffsets[currentCardIndex] = Offset(targetX, 0f)
         moveNext()
+    }
+
+    fun completeSwipe(index: Int) {
+        swipingVisibleCards.remove(index)
+        dragOffsets.remove(index)
     }
 
     fun setCurrentIndex(index: Int) {

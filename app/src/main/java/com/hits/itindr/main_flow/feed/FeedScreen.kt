@@ -55,7 +55,7 @@ fun FeedScreen() {
     val profiles = remember { mockProfiles }
     val swipeableCardsState = rememberSwipeableCardsState(itemCount = { profiles.size })
     val currentProfile = profiles.getOrNull(swipeableCardsState.currentCardIndex)
-
+    val hasCardsToShow = currentProfile != null || swipeableCardsState.swipingVisibleCards.isNotEmpty()
 
     Column(
         modifier = Modifier
@@ -79,7 +79,7 @@ fun FeedScreen() {
                 .weight(1f),
             contentAlignment = Alignment.TopCenter,
         ) {
-            if (currentProfile == null) {
+            if (!hasCardsToShow) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center,

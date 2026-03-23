@@ -69,7 +69,7 @@ class CardItemProvider<T>(
 
         SwipeableCard(
             onSwipe = { direction ->
-                state.moveNext()
+                state.swipe(direction)
                 item?.let { cardItem -> onSwipe(cardItem.item, direction) }
             },
             offset = offset,
@@ -87,6 +87,11 @@ class CardItemProvider<T>(
                     index = index,
                     offset = offset,
                 )
+            },
+            onOffsetAnimationFinished = {
+                if (index in state.swipingVisibleCards) {
+                    state.completeSwipe(index)
+                }
             },
         ) { offset ->
             item?.itemContent?.invoke(item.item, index, offset)
