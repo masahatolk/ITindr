@@ -77,7 +77,7 @@ fun SwipeableProfileCard(
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(CARD_CORNER_RADIUS.dp))
-            .background(Color(0xFF1F2125)),
+            .background(colorResource(R.color.gray)),
     ) {
         Image(
             painter = painterResource(id = imageResId),
@@ -89,15 +89,7 @@ fun SwipeableProfileCard(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(
-                            Color.Transparent,
-                            Color.Black.copy(alpha = 0.12f + animatedProgress * 0.18f),
-                            Color.Black.copy(alpha = 0.58f + animatedProgress * OVERLAY_MAX_ALPHA),
-                        )
-                    )
-                )
+                .background(Color.Black.copy(alpha = animatedProgress * 0.5f))
         )
 
         DescriptionScrollIndicator(
@@ -166,7 +158,7 @@ fun SwipeableProfileCard(
                 )
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -235,9 +227,10 @@ private fun ProfileTagsFlow(
     AndroidView(
         modifier = modifier,
         factory = { context ->
-            TagFlowView(ContextThemeWrapper(context, R.style.TagFlowView)).apply {
-                multiSelect = true
-                maxSelected = null
+            TagFlowView(ContextThemeWrapper(context, R.style.SwipeableProfileTagFlowView)).apply {
+                setOnTouchListener { _, _ -> true }
+                isClickable = false
+                isFocusable = false
             }
         },
         update = { view ->
