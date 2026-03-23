@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
+import android.view.ContextThemeWrapper
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -36,12 +38,15 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hits.itindr.R
+import com.hits.itindr.TagFlowView
+import com.hits.itindr.TagItem
 import com.hits.itindr.main_flow.feed.swipeable_cards.Profile
 import kotlin.math.roundToInt
 
@@ -50,7 +55,7 @@ private const val DETAILS_DRAG_RANGE = 240f
 private const val OVERLAY_MAX_ALPHA = 0.62f
 private const val DESCRIPTION_REVEAL_OFFSET = 56f
 private const val COLLAPSED_CONTENT_OFFSET = 92f
-private const val SCROLL_INDICATOR_TRAVEL = 148f
+private const val SCROLL_INDICATOR_TRAVEL = 162f
 
 @Composable
 fun SwipeableProfileCard(
@@ -136,11 +141,12 @@ fun SwipeableProfileCard(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                profile.tags.forEach { tag ->
-                    TagChip(text = tag)
-                }
-            }
+            ProfileTagsFlow(
+                tags = profile.tags,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+            )
 
             val descriptionOffset = ((1f - animatedProgress) * DESCRIPTION_REVEAL_OFFSET).roundToInt()
             Box(
@@ -222,20 +228,24 @@ private fun DescriptionScrollIndicator(
 }
 
 @Composable
-private fun TagChip(text: String) {
-    Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(50))
-            .background(Color.Black.copy(alpha = 0.55f))
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-    ) {
-        Text(
-            text = text,
-            color = Color.White,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.SemiBold,
-        )
-    }
+private fun ProfileTagsFlow(
+    tags: List<String>,
+    modifier: Modifier = Modifier,
+) {
+    AndroidView(
+        modifier = modifier,
+        factory = { context ->
+            TagFlowView(ContextThemeWrapper(context, R.style.TagFlowView)).apply {
+                multiSelect = true
+                maxSelected = null
+            }
+        },
+        update = { view ->
+            view.tags = tags.mapIndexed { index, tag ->
+                TagItem(id = index, text = tag)
+            }
+        },
+    )
 }
 
 @Composable

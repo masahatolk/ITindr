@@ -3,6 +3,7 @@ package com.hits.itindr.main_flow.feed.swipeable_cards.ui
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateOffsetAsState
 import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
@@ -76,30 +77,28 @@ internal fun SwipeableCard(
             .then(
                 if (draggable) {
                     Modifier.pointerInput(Unit) {
-                        detectDragGestures(
+                        detectHorizontalDragGestures(
                             onDragStart = {
                                 isDragging = true
                             },
                             onDragEnd = {
-                                if (internalOffset.x > threshold) {
-                                    onSwipe(SwipeableCardDirection.Right)
-                                } else if (internalOffset.x < -threshold) {
-                                    onSwipe(SwipeableCardDirection.Left)
+                                when {
+                                    internalOffset.x > threshold -> onSwipe(SwipeableCardDirection.Right)
+                                    internalOffset.x < -threshold -> onSwipe(SwipeableCardDirection.Left)
+                                    else -> onDragOffsetChange(Offset.Zero)
                                 }
-                                onDragOffsetChange(Offset.Zero)
                                 isDragging = false
                             },
-                            onDrag = { change, dragAmount ->
+                            onHorizontalDrag = { change, dragAmount ->
                                 change.consume()
-                                val newOffset = internalOffset.consume(
-                                    other = dragAmount.accelerateX(
-                                        acceleration = properties.draggingAcceleration,
-                                    ),
-                                    reverseX = isRtl,
-                                )
-                                onDragOffsetChange(newOffset)
+                                val newX = if (isRtl) {
+                                    internalOffset.x - (dragAmount * properties.draggingAcceleration)
+                                } else {
+                                    internalOffset.x + (dragAmount * properties.draggingAcceleration)
+                                }
+                                onDragOffsetChange(Offset(newX, 0f))
                                 if (properties.enableHapticFeedbackOnThreshold) {
-                                    if (internalOffset.x.absoluteValue > threshold) {
+                                    if (newX.absoluteValue > threshold) {
                                         if (firstHaptic) {
                                             haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                                             firstHaptic = false
@@ -108,7 +107,7 @@ internal fun SwipeableCard(
                                         firstHaptic = true
                                     }
                                 }
-                            }
+                            },
                         )
                     }
                 } else {
