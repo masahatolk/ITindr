@@ -66,6 +66,8 @@ class SwipeableCardsState(
     }
 
     fun swipe(direction: SwipeableCardDirection) {
+        if (currentCardIndex !in 0..<itemCount()) return
+
         val targetX = when (direction) {
             SwipeableCardDirection.Left -> -size.width.toFloat() * 1.5f
             SwipeableCardDirection.Right -> size.width.toFloat() * 1.5f
