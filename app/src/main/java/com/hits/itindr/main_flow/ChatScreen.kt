@@ -1,4 +1,4 @@
-package com.hits.itindr
+package com.hits.itindr.main_flow
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -11,13 +11,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun PeopleScreen() {
+fun ChatScreen() {
     Box(
         modifier = Modifier
             .padding(horizontal = 24.dp, vertical = 16.dp)
     ) {
         Text(
-            text = "Люди",
+            text = "Чаты",
             color = Color.White,
             fontWeight = FontWeight.Bold,
             fontSize = 40.sp

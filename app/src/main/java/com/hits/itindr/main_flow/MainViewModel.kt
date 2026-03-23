@@ -1,4 +1,4 @@
-package com.hits.itindr
+package com.hits.itindr.main_flow
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -7,5 +7,5 @@ import androidx.lifecycle.ViewModel
 
 class MainViewModel : ViewModel() {
     var selectedIndex by mutableIntStateOf(0)
-    var previousIndex by  mutableIntStateOf(0)
+    var previousIndex by mutableIntStateOf(0)
 }

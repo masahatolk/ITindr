@@ -1,4 +1,4 @@
-package com.hits.itindr
+package com.hits.itindr.main_flow
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

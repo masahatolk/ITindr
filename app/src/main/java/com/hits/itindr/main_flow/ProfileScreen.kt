@@ -1,4 +1,4 @@
-package com.hits.itindr
+package com.hits.itindr.main_flow
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding

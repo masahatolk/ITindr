@@ -1,17 +1,14 @@
-package com.hits.itindr
+package com.hits.itindr.main_flow
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -26,6 +23,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.hits.itindr.R
 
 @Composable
 fun BottomNavigation(
@@ -43,7 +41,7 @@ fun BottomNavigation(
 
     SubcomposeLayout(
         modifier = Modifier
-            .padding(bottom = 48.dp)
+            .padding(bottom = 24.dp)
             .clip(RoundedCornerShape(32.dp))
             .background(colorResource(id = R.color.bottom_nav_gray))
             .padding(8.dp),
@@ -74,7 +72,7 @@ fun BottomNavigation(
         val finalPlaceable = subcompose("final") {
             Row(
                 modifier = Modifier.width(with(density) { maxWidth.toDp() }),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 items.forEachIndexed { index, icon ->
                     NavItem(

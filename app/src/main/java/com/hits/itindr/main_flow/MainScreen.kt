@@ -1,4 +1,4 @@
-package com.hits.itindr
+package com.hits.itindr.main_flow
 
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.hits.itindr.GradientBackground
 
 @Composable
 fun MainScreen(viewModel: MainViewModel) {
