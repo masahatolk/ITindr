@@ -59,7 +59,7 @@ fun MainScreen(viewModel: MainViewModel) {
                             ),
                         )
                     ).using(
-                        SizeTransform(clip = false),
+                        SizeTransform(clip = true),
                     )
                 },
                 label = "main_screen_navigation",
