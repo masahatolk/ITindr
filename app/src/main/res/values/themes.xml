@@ -106,4 +106,22 @@
         <item name="android:paddingBottom">0dp</item>
         <item name="android:minHeight">48dp</item>
     </style>
+
+    <style name="TagFlowView">
+        <item name="tagBackgroundColor">@color/white_transparent20</item>
+        <item name="tagSelectedBackgroundColor">@color/white</item>
+
+        <item name="tagTextColor">@color/white</item>
+        <item name="tagSelectedTextColor">@color/black</item>
+
+        <item name="tagTextSize">16sp</item>
+        <item name="tagTextStyle">bold</item>
+
+        <item name="tagHorizontalPadding">12dp</item>
+        <item name="tagVerticalPadding">4dp</item>
+        <item name="tagSpacing">8dp</item>
+        <item name="tagLineSpacing">8dp</item>
+
+        <item name="tagCornerRadius">16dp</item>
+    </style>
 </resources>
