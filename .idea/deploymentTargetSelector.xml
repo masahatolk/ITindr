@@ -27,6 +27,9 @@
       </SelectionState>
       <SelectionState runConfigName="ITindr">
         <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="ITindr">
+        <option name="selectionMode" value="DROPDOWN" />
         <DropdownSelection timestamp="2026-03-24T04:40:43.668017Z">
           <Target type="DEFAULT_BOOT">
             <handle>
