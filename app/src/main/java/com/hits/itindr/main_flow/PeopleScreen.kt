@@ -11,6 +11,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+import androidx.compose.ui.platform.testTag
+
+const val PEOPLE_SCREEN_TITLE_TAG = "people_screen_title"
+
 @Composable
 fun PeopleScreen() {
     Box(
@@ -19,6 +23,7 @@ fun PeopleScreen() {
             .padding(horizontal = 24.dp, vertical = 16.dp)
     ) {
         Text(
+            modifier = Modifier.testTag(PEOPLE_SCREEN_TITLE_TAG),
             text = "Люди",
             color = Color.White,
             fontWeight = FontWeight.Bold,
