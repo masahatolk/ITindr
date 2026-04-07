@@ -27,4 +27,8 @@
     <string name="logo_base_image">logo base image</string>
     <string name="logo_dot_image">logo dot image</string>
     <string name="objects_image">objects image</string>
+    <string name="login_error_empty_email">Email не должен быть пустым</string>
+    <string name="login_error_invalid_email">Введите корректный email</string>
+    <string name="login_error_empty_password">Пароль не должен быть пустым</string>
+    <string name="login_error_request_failed">Не удалось выполнить вход</string>
 </resources>
