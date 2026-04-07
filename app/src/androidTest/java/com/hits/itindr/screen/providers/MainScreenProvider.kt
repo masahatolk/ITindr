@@ -15,6 +15,36 @@ class MainScreenProvider(
         }
     }
 
+    fun checkMainElementsVisible() {
+        testContext.step("$TAG Проверяем основные элементы главного экрана") {
+            MainScreen.checkMainElements(composeRule)
+        }
+    }
+
+    fun openPeopleScreen() {
+        testContext.step("$TAG Нажимаем кнопку Люди") {
+            MainScreen.openPeopleScreen(composeRule)
+        }
+    }
+
+    fun checkPeopleScreenOpened() {
+        testContext.step("$TAG Проверяем, что открыт экран Люди") {
+            MainScreen.checkPeopleScreenOpened(composeRule)
+        }
+    }
+
+    fun swipeCardAndCheckOverlay() {
+        testContext.step("$TAG Скроллим карточку и проверяем затемнение") {
+            MainScreen.swipeCardAndCheckOverlay(composeRule)
+        }
+    }
+
+    fun dislikeAndCheckDataUpdated() {
+        testContext.step("$TAG Нажимаем Dislike и проверяем обновление данных") {
+            MainScreen.dislikeAndCheckDataUpdated(composeRule)
+        }
+    }
+
     companion object {
         private const val TAG = "MainScreenProvider"
 

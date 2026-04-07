@@ -38,9 +38,12 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -52,10 +55,15 @@ import kotlin.math.roundToInt
 
 private const val CARD_CORNER_RADIUS = 32
 private const val DETAILS_DRAG_RANGE = 240f
-private const val OVERLAY_MAX_ALPHA = 0.62f
 private const val DESCRIPTION_REVEAL_OFFSET = 56f
 private const val COLLAPSED_CONTENT_OFFSET = 92f
 private const val SCROLL_INDICATOR_TRAVEL = 162f
+const val PROFILE_CARD_TAG = "profile_card"
+const val PROFILE_PHOTO_TAG = "profile_photo"
+const val PROFILE_INTERESTS_TAG = "profile_interests"
+const val PROFILE_OVERLAY_TAG = "profile_overlay"
+const val PROFILE_DISLIKE_BUTTON_TAG = "profile_dislike_button"
+const val PROFILE_LIKE_BUTTON_TAG = "profile_like_button"
 
 @Composable
 fun SwipeableProfileCard(
@@ -76,19 +84,26 @@ fun SwipeableProfileCard(
 
     Box(
         modifier = modifier
+            .testTag(PROFILE_CARD_TAG)
             .clip(RoundedCornerShape(CARD_CORNER_RADIUS.dp))
             .background(colorResource(R.color.gray)),
     ) {
         Image(
             painter = painterResource(id = imageResId),
             contentDescription = profile.name,
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .testTag(PROFILE_PHOTO_TAG),
             contentScale = ContentScale.Crop,
         )
 
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .testTag(PROFILE_OVERLAY_TAG)
+                .semantics {
+                    stateDescription = "overlay_alpha_${(animatedProgress * 100).roundToInt()}"
+                }
                 .background(Color.Black.copy(alpha = animatedProgress * 0.5f))
         )
 
@@ -168,6 +183,7 @@ fun SwipeableProfileCard(
                     color = colorResource(R.color.red),
                     icon = painterResource(id = R.drawable.close),
                     onClick = onDislike,
+                    testTag = PROFILE_DISLIKE_BUTTON_TAG,
                     modifier = Modifier.weight(1f),
                 )
 
@@ -175,6 +191,7 @@ fun SwipeableProfileCard(
                     color = colorResource(R.color.green),
                     icon = painterResource(id = R.drawable.like),
                     onClick = onLike,
+                    testTag = PROFILE_LIKE_BUTTON_TAG,
                     modifier = Modifier.weight(1f),
                 )
             }
@@ -225,17 +242,17 @@ private fun ProfileTagsFlow(
     modifier: Modifier = Modifier,
 ) {
     AndroidView(
-        modifier = modifier,
+        modifier = modifier.testTag(PROFILE_INTERESTS_TAG),
+        update = { view ->
+            view.tags = tags.mapIndexed { index, tag ->
+                TagItem(id = index, text = tag)
+            }
+        },
         factory = { context ->
             TagFlowView(ContextThemeWrapper(context, R.style.SwipeableProfileTagFlowView)).apply {
                 setOnTouchListener { _, _ -> true }
                 isClickable = false
                 isFocusable = false
-            }
-        },
-        update = { view ->
-            view.tags = tags.mapIndexed { index, tag ->
-                TagItem(id = index, text = tag)
             }
         },
     )
@@ -246,10 +263,12 @@ private fun CardActionButton(
     color: Color,
     icon: Painter,
     onClick: () -> Unit,
+    testTag: String,
     modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier
+            .testTag(testTag)
             .clip(RoundedCornerShape(30.dp))
             .background(color)
             .clickable(onClick = onClick)

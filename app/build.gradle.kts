@@ -9,6 +9,7 @@ dependencies {
     detektPlugins(rootProject.libs.detekt.formatting)
     detektPlugins(rootProject.libs.detekt.rules.compose)
     detekt(rootProject.libs.detekt.cli)
+    testImplementation(kotlin("test"))
 }
 
 plugins {
