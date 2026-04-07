@@ -1,4 +1,4 @@
-package com.hits.itindr
+package com.hits.itindr.login.presentation
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,10 +7,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.hits.itindr.R
+import com.hits.itindr.applyStatusBarPadding
 import com.hits.itindr.databinding.FragmentLoginBinding
-import com.hits.itindr.login.presentation.LoginUiEvent
-import com.hits.itindr.login.presentation.LoginViewModel
-import com.hits.itindr.login.presentation.LoginViewModelFactory
+import com.hits.itindr.login.LoginModule
 import com.hits.itindr.main_flow.MainActivity
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
@@ -27,7 +27,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         _binding = FragmentLoginBinding.bind(view)
 
         val navController = findNavController()
-        viewModel = ViewModelProvider(this, LoginViewModelFactory())[LoginViewModel::class.java]
+        viewModel = ViewModelProvider(this, LoginModule.provideViewModelFactory())[LoginViewModel::class.java]
 
         binding.loginButton.setOnClickListener {
             val email = binding.emailInputLayout.editText?.text?.toString().orEmpty()
