@@ -58,31 +58,31 @@ object MainScreen {
     }
 
     fun swipeCardAndCheckOverlay(rule: ComposeTestRule) {
-        val overlayBefore = getOverlayDescription(rule)
+        val overlayBefore = getMaxOverlayAlpha(rule)
         var overlayAfter = overlayBefore
 
         for (attempt in 1..3) {
             rule.onAllNodesWithTag(PROFILE_DETAILS_DRAG_AREA_TAG).onFirst().performTouchInput {
                 swipe(
-                    start = Offset(x = centerX, y = bottom - 20f),
-                    end = Offset(x = centerX, y = top + (height * 0.35f)),
+                    start = Offset(x = centerX, y = bottom - 1f),
+                    end = Offset(x = centerX, y = top + 1f),
                     durationMillis = 300,
                 )
             }
             rule.waitForIdle()
-            overlayAfter = getOverlayDescription(rule)
+            overlayAfter = getMaxOverlayAlpha(rule)
 
-            if (overlayAfter != "overlay_alpha_0") {
+            if (overlayAfter > 0) {
                 break
             }
         }
 
         rule.waitUntil(timeoutMillis = 5_000) {
-            getOverlayDescription(rule) != "overlay_alpha_0"
+            getMaxOverlayAlpha(rule) > 0
         }
 
-        assertEquals("overlay_alpha_0", overlayBefore)
-        assertNotEquals("overlay_alpha_0", overlayAfter)
+        assertEquals(0, overlayBefore)
+        assertNotEquals(0, overlayAfter)
     }
 
     fun dislikeAndCheckDataUpdated(rule: ComposeTestRule) {
@@ -95,8 +95,13 @@ object MainScreen {
         rule.onNodeWithText("Мария Смирнова").assertIsDisplayed()
     }
 
-    private fun getOverlayDescription(rule: ComposeTestRule): String {
-        val node = rule.onAllNodesWithTag(PROFILE_OVERLAY_TAG).onFirst().fetchSemanticsNode()
-        return node.config.getOrNull(SemanticsProperties.StateDescription).orEmpty()
+    private fun getMaxOverlayAlpha(rule: ComposeTestRule): Int {
+        return rule.onAllNodesWithTag(PROFILE_OVERLAY_TAG).fetchSemanticsNodes()
+            .mapNotNull { node ->
+                node.config.getOrNull(SemanticsProperties.StateDescription)
+                    ?.removePrefix("overlay_alpha_")
+                    ?.toIntOrNull()
+            }
+            .maxOrNull() ?: 0
     }
 }
