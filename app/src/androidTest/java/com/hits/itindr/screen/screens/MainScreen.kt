@@ -17,6 +17,7 @@ import androidx.compose.ui.test.swipeUp
 import com.hits.itindr.main_flow.NAV_ITEM_PREFIX_TAG
 import com.hits.itindr.main_flow.PEOPLE_SCREEN_TITLE_TAG
 import com.hits.itindr.main_flow.feed.swipeable_cards.ui.PROFILE_CARD_TAG
+import com.hits.itindr.main_flow.feed.swipeable_cards.ui.PROFILE_DETAILS_DRAG_AREA_TAG
 import com.hits.itindr.main_flow.feed.swipeable_cards.ui.PROFILE_DISLIKE_BUTTON_TAG
 import com.hits.itindr.main_flow.feed.swipeable_cards.ui.PROFILE_INTERESTS_TAG
 import com.hits.itindr.main_flow.feed.swipeable_cards.ui.PROFILE_LIKE_BUTTON_TAG
@@ -61,8 +62,12 @@ object MainScreen {
         var overlayAfter = overlayBefore
 
         for (attempt in 1..3) {
-            rule.onAllNodesWithTag(PROFILE_INTERESTS_TAG).onFirst().performTouchInput {
-                swipeUp()
+            rule.onAllNodesWithTag(PROFILE_DETAILS_DRAG_AREA_TAG).onFirst().performTouchInput {
+                swipe(
+                    start = Offset(x = centerX, y = bottom - 20f),
+                    end = Offset(x = centerX, y = top + (height * 0.35f)),
+                    durationMillis = 300,
+                )
             }
             rule.waitForIdle()
             overlayAfter = getOverlayDescription(rule)

@@ -62,6 +62,7 @@ const val PROFILE_CARD_TAG = "profile_card"
 const val PROFILE_PHOTO_TAG = "profile_photo"
 const val PROFILE_INTERESTS_TAG = "profile_interests"
 const val PROFILE_OVERLAY_TAG = "profile_overlay"
+const val PROFILE_DETAILS_DRAG_AREA_TAG = "profile_details_drag_area"
 const val PROFILE_DISLIKE_BUTTON_TAG = "profile_dislike_button"
 const val PROFILE_LIKE_BUTTON_TAG = "profile_like_button"
 
@@ -118,6 +119,7 @@ fun SwipeableProfileCard(
             modifier = Modifier
                 .align(Alignment.BottomStart)
                 .fillMaxWidth()
+                .testTag(PROFILE_DETAILS_DRAG_AREA_TAG)
                 .pointerInput(Unit) {
                     detectVerticalDragGestures(
                         onVerticalDrag = { change, dragAmount ->
