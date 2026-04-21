@@ -14,15 +14,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hits.itindr.GradientBackground
 
 private const val SCREEN_TRANSITION_DURATION_MS = 320
 
 @Composable
 fun MainScreen(viewModel: MainViewModel) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
     val stateHolder = rememberSaveableStateHolder()
 
     GradientBackground {
@@ -31,7 +34,7 @@ fun MainScreen(viewModel: MainViewModel) {
                 .padding(WindowInsets.statusBars.asPaddingValues()),
         ) {
             AnimatedContent(
-                targetState = viewModel.selectedIndex,
+                targetState = state.selectedIndex,
                 modifier = Modifier.weight(1f),
                 transitionSpec = {
                     val direction = if (targetState > initialState) 1 else -1
@@ -76,10 +79,10 @@ fun MainScreen(viewModel: MainViewModel) {
                 contentAlignment = Alignment.Center
             ) {
                 BottomNavigation(
-                    selectedIndex = viewModel.selectedIndex,
+                    selectedIndex = state.selectedIndex,
                     onItemSelected = { index ->
-                        viewModel.selectedIndex = index
-                    }
+                        viewModel.onIntent(MainIntent.SelectTab(index))
+                    },
                 )
             }
         }

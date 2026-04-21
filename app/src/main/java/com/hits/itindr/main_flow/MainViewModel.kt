@@ -1,10 +1,19 @@
 package com.hits.itindr.main_flow
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 class MainViewModel : ViewModel() {
-    var selectedIndex by mutableIntStateOf(0)
+
+    private val _uiState = MutableStateFlow(MainUiState())
+    val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
+
+    fun onIntent(intent: MainIntent) {
+        _uiState.update { state ->
+            reduceMainState(state, intent)
+        }
+    }
 }
