@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "ITindr"
 include(":app")
- 
+include(":chat-feature")

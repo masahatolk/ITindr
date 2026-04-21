@@ -1,11 +1,9 @@
-package com.hits.itindr.main_flow.chat
+package com.hits.chat_feature
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
-import com.hits.itindr.R
-import io.github.kakaocup.kakao.common.utilities.getResourceColor
 
 data class ChatMessageAppearance(
     val backgroundColor: Color,
@@ -63,9 +61,9 @@ class DefaultChatMessageAppearanceBuilder : ChatMessageAppearanceBuilder {
 }
 
 class ChatMessageAppearanceDirector {
-    fun createIncomingAppearance(): ChatMessageAppearance {
+    fun createIncomingAppearance(backgroundColor: Color): ChatMessageAppearance {
         return DefaultChatMessageAppearanceBuilder()
-            .setBackgroundColor(Color(getResourceColor(R.color.bottom_nav_gray)))
+            .setBackgroundColor(backgroundColor)
             .setTextColor(Color.White)
             .setTextSize(16.sp)
             .setTextWeight(FontWeight.Normal)
@@ -73,9 +71,9 @@ class ChatMessageAppearanceDirector {
             .build()
     }
 
-    fun createOutgoingAppearance(): ChatMessageAppearance {
+    fun createOutgoingAppearance(backgroundColor: Color): ChatMessageAppearance {
         return DefaultChatMessageAppearanceBuilder()
-            .setBackgroundColor(Color(getResourceColor(R.color.purple_bubble)))
+            .setBackgroundColor(backgroundColor)
             .setTextColor(Color.White)
             .setTextSize(16.sp)
             .setTextWeight(FontWeight.Medium)

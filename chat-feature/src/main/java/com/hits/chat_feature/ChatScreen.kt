@@ -1,4 +1,4 @@
-package com.hits.itindr.main_flow.chat
+package com.hits.chat_feature
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

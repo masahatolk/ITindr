@@ -1,4 +1,4 @@
-package com.hits.itindr.main_flow.chat
+package com.hits.chat_feature
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,13 +13,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
+import com.hits.itindr.chat.R
 
 @Composable
 fun ConversationScreen() {
     val director = ChatMessageAppearanceDirector()
-    val incomingAppearance = director.createIncomingAppearance()
-    val outgoingAppearance = director.createOutgoingAppearance()
+    val incomingAppearance = director.createIncomingAppearance(
+        backgroundColor = colorResource(id = R.color.chat_incoming_background),
+    )
+    val outgoingAppearance = director.createOutgoingAppearance(
+        backgroundColor = colorResource(id = R.color.chat_outgoing_background),
+    )
 
     Column(
         modifier = Modifier

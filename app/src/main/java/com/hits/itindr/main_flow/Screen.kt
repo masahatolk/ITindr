@@ -1,7 +1,7 @@
 package com.hits.itindr.main_flow
 
 import androidx.compose.runtime.Composable
-import com.hits.itindr.main_flow.chat.ChatScreen
+import com.hits.chat_feature.ChatScreen
 import com.hits.itindr.main_flow.feed.FeedScreen
 
 sealed class Screen(val route: String, val content: @Composable () -> Unit) {
