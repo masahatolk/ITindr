@@ -61,6 +61,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.coil.compose)
 
     implementation(libs.androidx.compose.ui.test.junit4)
     implementation(libs.kaspresso)

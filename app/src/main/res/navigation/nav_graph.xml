@@ -42,7 +42,7 @@
 
     <fragment
         android:id="@+id/login"
-        android:name="com.hits.itindr.LoginFragment"
+        android:name="com.hits.itindr.login.presentation.LoginFragment"
         android:label="LoginFragment">
 
     </fragment>
