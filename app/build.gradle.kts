@@ -71,6 +71,7 @@ dependencies {
 
     implementation(libs.androidx.material3)
     implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.koin.android)
     // Jetpack Compose integration
     implementation(libs.androidx.navigation.compose)
 

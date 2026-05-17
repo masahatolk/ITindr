@@ -16,10 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import com.hits.itindr.chat.R
+import org.koin.compose.koinInject
 
 @Composable
 fun ConversationScreen() {
-    val director = ChatMessageAppearanceDirector()
+    val director: ChatMessageAppearanceDirector = koinInject()
     val incomingAppearance = director.createIncomingAppearance(
         backgroundColor = colorResource(id = R.color.chat_incoming_background),
     )
