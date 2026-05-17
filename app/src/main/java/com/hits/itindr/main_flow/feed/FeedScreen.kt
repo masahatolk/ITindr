@@ -18,7 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.hits.itindr.R
-import com.hits.itindr.main_flow.feed.swipeable_cards.Profile
 import com.hits.itindr.main_flow.feed.swipeable_cards.state.rememberSwipeableCardsState
 import com.hits.itindr.main_flow.feed.swipeable_cards.ui.SwipeableCardDirection
 import com.hits.itindr.main_flow.feed.swipeable_cards.ui.SwipeableCardsProperties
@@ -28,31 +27,11 @@ import com.hits.itindr.main_flow.feed.swipeable_cards.ui.lazy.items
 
 private const val FEED_LOG_TAG = "FeedScreen"
 
-private val mockProfiles = listOf(
-    Profile(
-        name = "Андрей Иванов",
-        tags = listOf("Python", "Django", "REST"),
-        description = "Люблю программировать на питоне. Люблю изучать питон. Люблю всё, что угодно, связанное с питоном. А еще я люблю перл.Люблю программировать на питоне. Люблю изучать питон. Люблю всё, что угодно, связанное с питоном. А еще я люблю перл.Люблю программировать на питоне. Люблю изучать питон. Люблю всё, что угодно, связанное с питоном. А еще я люблю перл.Люблю программировать на питоне. Люблю изучать питон. Люблю всё, что угодно, связанное с питоном. А еще я люблю перл.",
-        imageResName = "photo"
-    ),
-    Profile(
-        name = "Мария Смирнова",
-        tags = listOf("Kotlin", "Compose", "Android", "Git", "SQL", "UML"),
-        description = "Собираю мобильные продукты, люблю чистую архитектуру и команды, где можно спорить о naming-е и всё равно остаться друзьями.",
-        imageResName = "photo2"
-    ),
-    Profile(
-        name = "Илья Петров",
-        tags = listOf("Java", "Spring", "PostgreSQL"),
-        description = "Пишу backend, автоматизирую рутину и радуюсь, когда фича едет в прод без ночных инцидентов. Всегда за хороший code review.",
-        imageResName = "photo3"
-    )
-)
-
-
 @Composable
-fun FeedScreen() {
-    val profiles = remember { mockProfiles }
+fun FeedScreen(
+    viewModel: FeedViewModel = remember { FeedViewModel() },
+) {
+    val profiles = viewModel.profiles
     val swipeableCardsState = rememberSwipeableCardsState(itemCount = { profiles.size })
     val currentProfile = profiles.getOrNull(swipeableCardsState.currentCardIndex)
     val hasCardsToShow = currentProfile != null || swipeableCardsState.swipingVisibleCards.isNotEmpty()

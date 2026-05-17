@@ -61,6 +61,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":chat-feature"))
     implementation(libs.coil.compose)
 
     implementation(libs.androidx.compose.ui.test.junit4)
@@ -69,6 +70,7 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
 
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.lifecycle.runtime.compose)
     // Jetpack Compose integration
     implementation(libs.androidx.navigation.compose)
 
