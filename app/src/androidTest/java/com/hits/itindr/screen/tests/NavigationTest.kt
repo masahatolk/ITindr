@@ -2,7 +2,7 @@ package com.hits.itindr.screen.tests
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.rules.ActivityScenarioRule
-import com.hits.itindr.main_flow.MainActivity
+import com.hits.itindr.mainflow.MainActivity
 import com.hits.itindr.StartActivity
 import com.hits.itindr.screen.providers.HomeScreenProvider.Companion.homeScreenProvider
 import com.hits.itindr.screen.providers.InfoScreenProvider.Companion.infoScreenProvider

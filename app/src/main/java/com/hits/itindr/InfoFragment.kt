@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.hits.itindr.databinding.FragmentInfoBinding
-import com.hits.itindr.main_flow.MainActivity
+import com.hits.itindr.mainflow.MainActivity
 
 class InfoFragment : Fragment(R.layout.fragment_info) {
     private var _binding: FragmentInfoBinding? = null

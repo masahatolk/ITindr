@@ -13,20 +13,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
-import com.hits.itindr.chat.R
-import org.koin.compose.koinInject
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun ConversationScreen() {
-    val director: ChatMessageAppearanceDirector = koinInject()
-    val incomingAppearance = director.createIncomingAppearance(
-        backgroundColor = colorResource(id = R.color.chat_incoming_background),
-    )
-    val outgoingAppearance = director.createOutgoingAppearance(
-        backgroundColor = colorResource(id = R.color.chat_outgoing_background),
-    )
+fun ConversationRoute(
+    viewModel: ConversationViewModel = koinViewModel(),
+) {
+    val state = viewModel.buildState()
+    ConversationScreenContent(state = state)
+}
+
+@Composable
+fun ConversationScreenContent(
+    state: ConversationUiState,
+) {
 
     Column(
         modifier = Modifier
@@ -35,17 +36,13 @@ fun ConversationScreen() {
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
 
-        ConversationMessage(
-            text = "Привет! Покажешь свой питон?",
-            appearance = incomingAppearance,
-            isOutgoing = false,
-        )
-
-        ConversationMessage(
-            text = "Может лучше ты сначала свой перл?",
-            appearance = outgoingAppearance,
-            isOutgoing = true,
-        )
+        state.messages.forEach { message ->
+            ConversationMessage(
+                text = message.text,
+                appearance = message.appearance,
+                isOutgoing = message.isOutgoing,
+            )
+        }
     }
 }
 

@@ -11,7 +11,7 @@ import com.hits.itindr.R
 import com.hits.itindr.applyStatusBarPadding
 import com.hits.itindr.databinding.FragmentLoginBinding
 import com.hits.itindr.login.LoginModule
-import com.hits.itindr.main_flow.MainActivity
+import com.hits.itindr.mainflow.MainActivity
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
     private var _binding: FragmentLoginBinding? = null
