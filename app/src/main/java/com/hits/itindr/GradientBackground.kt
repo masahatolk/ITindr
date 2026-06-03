@@ -14,13 +14,11 @@ import androidx.compose.ui.res.colorResource
 @Composable
 fun GradientBackground(content: @Composable () -> Unit) {
     BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
-
         val width = constraints.maxWidth.toFloat()
         val height = constraints.maxHeight.toFloat()
         val maxDim = maxOf(width, height)
 
         Box {
-
             Box(
                 modifier = Modifier
                     .fillMaxSize()

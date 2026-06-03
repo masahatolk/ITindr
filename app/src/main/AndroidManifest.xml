@@ -14,7 +14,7 @@
         android:theme="@style/Theme.ITindr">
 
         <activity
-            android:name=".main_flow.MainActivity"
+            android:name=".mainflow.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.ITindr">
