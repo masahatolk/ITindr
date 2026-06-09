@@ -1,10 +1,12 @@
 package com.hits.itindr
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.hits.itindr.databinding.FragmentSplashScreenBinding
+import com.hits.itindr.mainflow.MainActivity
 
 class SplashScreenFragment : Fragment(R.layout.fragment_splash_screen) {
     private var _binding: FragmentSplashScreenBinding? = null
@@ -16,7 +18,12 @@ class SplashScreenFragment : Fragment(R.layout.fragment_splash_screen) {
 
         val navController = findNavController()
 
-        navController.navigate(R.id.action_splash_to_home)
+        if (AppGraph.tokenStore.getToken().isNullOrBlank()) {
+            navController.navigate(R.id.action_splash_to_home)
+        } else {
+            startActivity(Intent(requireContext(), MainActivity::class.java))
+            requireActivity().finish()
+        }
     }
 
     override fun onDestroyView() {

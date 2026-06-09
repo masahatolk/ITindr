@@ -10,6 +10,8 @@ class Application : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        AppGraph.init(this)
+
         startKoin {
             androidContext(this@Application)
             modules(chatModule)

@@ -1,5 +1,5 @@
 package com.hits.itindr.login.data
 
 interface AuthRemoteDataSource {
-    fun login(email: String, password: String): Boolean
+    suspend fun login(email: String, password: String): String
 }

@@ -3,7 +3,7 @@ package com.hits.itindr.login.domain
 class LoginUseCase(
     private val authRepository: AuthRepository,
 ) {
-    fun execute(email: String, password: String): LoginResult {
+    suspend fun execute(email: String, password: String): LoginResult {
         if (email.isBlank()) {
             return LoginResult.Error(LoginError.EMPTY_EMAIL)
         }
@@ -16,11 +16,12 @@ class LoginUseCase(
             return LoginResult.Error(LoginError.EMPTY_PASSWORD)
         }
 
-        return if (authRepository.login(email, password)) {
-            LoginResult.Success
-        } else {
-            LoginResult.Error(LoginError.REQUEST_FAILED)
-        }
+        return runCatching {
+            authRepository.login(email, password)
+        }.fold(
+            onSuccess = { LoginResult.Success },
+            onFailure = { LoginResult.Error(LoginError.REQUEST_FAILED) },
+        )
     }
 
     private companion object {
