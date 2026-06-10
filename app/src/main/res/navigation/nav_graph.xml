@@ -49,7 +49,7 @@
 
     <fragment
         android:id="@+id/register"
-        android:name="com.hits.itindr.RegisterFragment"
+        android:name="com.hits.itindr.login.presentation.RegisterFragment"
         android:label="RegisterFragment">
 
         <action

@@ -1,6 +1,5 @@
 package com.hits.itindr.login.presentation
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -13,33 +12,39 @@ import com.google.android.material.snackbar.Snackbar
 import com.hits.itindr.AppGraph
 import com.hits.itindr.R
 import com.hits.itindr.applyStatusBarPadding
-import com.hits.itindr.databinding.FragmentLoginBinding
-import com.hits.itindr.mainflow.MainActivity
+import com.hits.itindr.databinding.FragmentRegisterBinding
 import kotlinx.coroutines.launch
 
-class LoginFragment : Fragment(R.layout.fragment_login) {
-    private var _binding: FragmentLoginBinding? = null
+class RegisterFragment : Fragment(R.layout.fragment_register) {
+    private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: LoginViewModel
+    private lateinit var viewModel: RegisterViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         view.applyStatusBarPadding()
 
-        _binding = FragmentLoginBinding.bind(view)
+        _binding = FragmentRegisterBinding.bind(view)
 
         val navController = findNavController()
-        viewModel = ViewModelProvider(this, AppGraph.provideLoginViewModelFactory())[LoginViewModel::class.java]
+        viewModel = ViewModelProvider(
+            this,
+            AppGraph.provideRegisterViewModelFactory(),
+        )[RegisterViewModel::class.java]
 
-        binding.loginButton.setOnClickListener {
+        binding.registerButton.setOnClickListener {
             val email = binding.emailInputLayout.editText?.text?.toString().orEmpty()
             val password = binding.passwordInputLayout.editText?.text?.toString().orEmpty()
-            viewModel.onLoginClicked(email, password)
+            val passwordConfirm = binding.passwordConfirmInputLayout.editText
+                ?.text
+                ?.toString()
+                .orEmpty()
+            viewModel.onRegisterClicked(email, password, passwordConfirm)
         }
 
-        binding.backLoginButton.setOnClickListener {
+        binding.backRegisterButton.setOnClickListener {
             navController.popBackStack()
         }
 
@@ -47,17 +52,12 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.event.collect { event ->
                     when (event) {
-                        LoginUiEvent.OpenMainScreen -> openMain()
-                        is LoginUiEvent.ShowError -> showError(event.messageResId)
+                        RegisterUiEvent.OpenInfoScreen -> navController.navigate(R.id.action_register_to_info)
+                        is RegisterUiEvent.ShowError -> showError(event.messageResId)
                     }
                 }
             }
         }
-    }
-
-    private fun openMain() {
-        startActivity(Intent(requireContext(), MainActivity::class.java))
-        requireActivity().finish()
     }
 
     private fun showError(messageResId: Int) {

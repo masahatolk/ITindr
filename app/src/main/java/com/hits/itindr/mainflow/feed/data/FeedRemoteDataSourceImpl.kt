@@ -10,9 +10,7 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.booleanOrNull
-import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.contentOrNull
-import kotlinx.serialization.json.put
 
 class FeedRemoteDataSourceImpl(
     private val httpClient: ApiHttpClient,
@@ -28,26 +26,20 @@ class FeedRemoteDataSourceImpl(
     }
 
     override suspend fun likeProfile(profileId: String): ReactionResult {
-        return sendReaction(profileId, LIKE_PATHS)
+        return sendReaction(profileId, LIKE_PATH)
     }
 
     override suspend fun dislikeProfile(profileId: String): ReactionResult {
-        return sendReaction(profileId, DISLIKE_PATHS)
+        return sendReaction(profileId, DISLIKE_PATH)
     }
 
-    private suspend fun sendReaction(profileId: String, pathTemplates: List<String>): ReactionResult {
-        var lastError: ApiException? = null
-        for (template in pathTemplates) {
-            val path = template.replace(PROFILE_ID_PLACEHOLDER, profileId)
-            val body = buildJsonObject { put("profileId", profileId) }.toString()
-            val response = httpClient.post(path, body)
-            if (response.isSuccessful) {
-                return ReactionResult(isMutual = parseIsMutual(response.body))
-            }
-            lastError = ApiException(response.statusCode, response.body)
-            if (response.statusCode != NOT_FOUND) break
+    private suspend fun sendReaction(profileId: String, pathTemplate: String): ReactionResult {
+        val path = pathTemplate.replace(USER_ID_PLACEHOLDER, profileId)
+        val response = httpClient.post(path, body = null)
+        if (response.isSuccessful) {
+            return ReactionResult(isMutual = parseIsMutual(response.body))
         }
-        throw lastError ?: ApiException(0, "Не удалось отправить реакцию")
+        throw ApiException(response.statusCode, response.body)
     }
 
     private fun parseProfiles(responseBody: String): List<Profile> {
@@ -112,30 +104,11 @@ class FeedRemoteDataSourceImpl(
     }
 
     private companion object {
-        const val NOT_FOUND = 404
-        const val PROFILE_ID_PLACEHOLDER = "{id}"
+        const val USER_ID_PLACEHOLDER = "{userId}"
         const val DEFAULT_IMAGE_RES_NAME = "photo"
         const val FEED_PATH = "/user/feed"
-        val LIKE_PATHS = listOf(
-            "/api/feed/{id}/like",
-            "/feed/{id}/like",
-            "/api/profiles/{id}/like",
-            "/profiles/{id}/like",
-            "/api/feed/like",
-            "/feed/like",
-            "/api/profiles/like",
-            "/profiles/like",
-        )
-        val DISLIKE_PATHS = listOf(
-            "/api/feed/{id}/dislike",
-            "/feed/{id}/dislike",
-            "/api/profiles/{id}/dislike",
-            "/profiles/{id}/dislike",
-            "/api/feed/dislike",
-            "/feed/dislike",
-            "/api/profiles/dislike",
-            "/profiles/dislike",
-        )
+        const val LIKE_PATH = "/user/{userId}/like"
+        const val DISLIKE_PATH = "/user/{userId}/dislike"
         val PROFILE_ARRAY_KEYS = listOf("items", "profiles", "users", "data", "content")
         val ID_KEYS = listOf("id", "userId", "profileId", "uuid")
         val NAME_KEYS = listOf("name", "fullName", "username", "login")

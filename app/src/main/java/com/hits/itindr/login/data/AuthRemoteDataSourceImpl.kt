@@ -16,11 +16,7 @@ class AuthRemoteDataSourceImpl (
     private val httpClient: ApiHttpClient,
 ) : AuthRemoteDataSource {
     override suspend fun login(email: String, password: String): String {
-        val requestBody = buildJsonObject {
-            put("email", email)
-            put("username", email)
-            put("password", password)
-        }.toString()
+        val requestBody = buildAuthRequestBody(email, password)
 
         val response = httpClient.post(LOGIN_PATH, requestBody, authorized = false)
 
@@ -29,6 +25,24 @@ class AuthRemoteDataSourceImpl (
         }
 
         throw ApiException(response.statusCode, response.body)
+    }
+
+    override suspend fun register(email: String, password: String): String {
+        val requestBody = buildAuthRequestBody(email, password)
+        val response = httpClient.post(REGISTER_PATH, requestBody, authorized = false)
+
+        if (response.isSuccessful) {
+            return parseToken(response.body)
+        }
+
+        throw ApiException(response.statusCode, response.body)
+    }
+
+    private fun buildAuthRequestBody(email: String, password: String): String {
+        return buildJsonObject {
+            put("email", email)
+            put("password", password)
+        }.toString()
     }
 
     private fun parseToken(responseBody: String): String {
@@ -47,8 +61,8 @@ class AuthRemoteDataSourceImpl (
     }
 
     private companion object {
-        const val NOT_FOUND = 404
         const val LOGIN_PATH = "/auth/login"
+        const val REGISTER_PATH = "/auth/register"
         val TOKEN_KEYS = listOf("accessToken", "access_token", "token", "jwt")
         val json = Json { ignoreUnknownKeys = true }
     }

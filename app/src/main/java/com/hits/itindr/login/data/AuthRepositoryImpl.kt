@@ -6,9 +6,13 @@ import com.hits.itindr.login.domain.AuthRepository
 
 class AuthRepositoryImpl(
     private val remoteDataSource: AuthRemoteDataSource,
-    tokenStore: TokenStore,
+    private val tokenStore: TokenStore,
 ) : AuthRepository {
     override suspend fun login(email: String, password: String) {
         tokenStore.saveToken(remoteDataSource.login(email, password))
+    }
+
+    override suspend fun register(email: String, password: String) {
+        tokenStore.saveToken(remoteDataSource.register(email, password))
     }
 }

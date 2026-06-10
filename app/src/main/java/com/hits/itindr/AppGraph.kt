@@ -8,7 +8,9 @@ import com.hits.itindr.login.data.AuthRemoteDataSourceImpl
 import com.hits.itindr.login.data.AuthRepositoryImpl
 import com.hits.itindr.login.domain.AuthRepository
 import com.hits.itindr.login.domain.LoginUseCase
+import com.hits.itindr.login.domain.RegisterUseCase
 import com.hits.itindr.login.presentation.LoginViewModelFactory
+import com.hits.itindr.login.presentation.RegisterViewModelFactory
 import com.hits.itindr.mainflow.feed.data.FeedRemoteDataSource
 import com.hits.itindr.mainflow.feed.data.FeedRemoteDataSourceImpl
 import com.hits.itindr.mainflow.feed.data.FeedRepositoryImpl
@@ -44,5 +46,9 @@ object AppGraph {
 
     fun provideLoginViewModelFactory(): LoginViewModelFactory {
         return LoginViewModelFactory(LoginUseCase(authRepository))
+    }
+
+    fun provideRegisterViewModelFactory(): RegisterViewModelFactory {
+        return RegisterViewModelFactory(RegisterUseCase(authRepository))
     }
 }

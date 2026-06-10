@@ -17,7 +17,11 @@ class ApiHttpClient(
         authorized = authorized,
     )
 
-    suspend fun post(path: String, body: String = EMPTY_JSON, authorized: Boolean = true): ApiResponse = request(
+    suspend fun post(
+        path: String,
+        body: String? = EMPTY_JSON,
+        authorized: Boolean = true,
+    ): ApiResponse = request(
         path = path,
         method = METHOD_POST,
         body = body,
@@ -65,6 +69,11 @@ class ApiHttpClient(
     }
 
     private fun readBody(connection: HttpURLConnection, statusCode: Int): String {
+
+        if (statusCode == HttpURLConnection.HTTP_NO_CONTENT) {
+            return ""
+        }
+
         val stream = if (statusCode in SUCCESS_CODES) {
             connection.inputStream
         } else {

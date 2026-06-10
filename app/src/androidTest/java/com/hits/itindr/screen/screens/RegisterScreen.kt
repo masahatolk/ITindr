@@ -1,7 +1,7 @@
 package com.hits.itindr.screen.screens
 
 import com.hits.itindr.R
-import com.hits.itindr.RegisterFragment
+import com.hits.itindr.login.presentation.RegisterFragment
 import com.kaspersky.kaspresso.screens.KScreen
 import io.github.kakaocup.kakao.text.KButton
 import io.github.kakaocup.kakao.text.KTextView
