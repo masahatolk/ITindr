@@ -3,7 +3,6 @@ package com.hits.itindr.mainflow.feed.swipeableCards.ui
 import android.view.ContextThemeWrapper
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
@@ -43,6 +42,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import coil.compose.AsyncImage
 import com.hits.itindr.R
 import com.hits.itindr.TagFlowView
 import com.hits.itindr.TagItem
@@ -77,11 +77,13 @@ fun SwipeableProfileCard(
             .clip(RoundedCornerShape(CARD_CORNER_RADIUS.dp))
             .background(colorResource(R.color.gray)),
     ) {
-        Image(
-            painter = painterResource(id = imageResId),
+        AsyncImage(
+            model = profile.imageUrl ?: imageResId,
             contentDescription = profile.name,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop,
+            error = painterResource(id = imageResId),
+            placeholder = painterResource(id = imageResId),
         )
 
         Box(

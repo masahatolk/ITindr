@@ -9,6 +9,10 @@ import com.hits.itindr.login.data.AuthRepositoryImpl
 import com.hits.itindr.login.domain.AuthRepository
 import com.hits.itindr.login.domain.LoginUseCase
 import com.hits.itindr.login.presentation.LoginViewModelFactory
+import com.hits.itindr.mainflow.feed.data.FeedRemoteDataSource
+import com.hits.itindr.mainflow.feed.data.FeedRemoteDataSourceImpl
+import com.hits.itindr.mainflow.feed.data.FeedRepositoryImpl
+import com.hits.itindr.mainflow.feed.domain.FeedRepository
 import com.hits.itindr.network.ApiHttpClient
 
 object AppGraph {
@@ -27,8 +31,12 @@ object AppGraph {
             tokenStore
         )
     }
-    //private val feedRemoteDataSource: FeedRemoteDataSource by lazy { FeedRemoteDataSourceImpl(httpClient) }
-    //val feedRepository: FeedRepository by lazy { FeedRepositoryImpl(feedRemoteDataSource) }
+    private val feedRemoteDataSource: FeedRemoteDataSource by lazy {
+        FeedRemoteDataSourceImpl(
+            httpClient
+        )
+    }
+    val feedRepository: FeedRepository by lazy { FeedRepositoryImpl(feedRemoteDataSource) }
 
     fun init(context: Context) {
         appContext = context.applicationContext

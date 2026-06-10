@@ -75,7 +75,7 @@ class ApiHttpClient(
     }
 
     private companion object {
-        const val BASE_URL = "http://158.160.26.231:18081/itindr/api/mobile"
+        const val BASE_URL = "http://158.160.26.231:18081/itindr/api/mobile/v1"
         const val TIMEOUT_MS = 15_000
         const val METHOD_GET = "GET"
         const val METHOD_POST = "POST"

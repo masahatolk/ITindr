@@ -1,5 +1,7 @@
 package com.hits.itindr.login.data
 
+import com.hits.itindr.R
+import com.hits.itindr.R.string.server_didnt_return_auth_token
 import com.hits.itindr.network.ApiException
 import com.hits.itindr.network.ApiHttpClient
 import kotlinx.serialization.json.Json
@@ -46,7 +48,7 @@ class AuthRemoteDataSourceImpl (
 
     private companion object {
         const val NOT_FOUND = 404
-        const val LOGIN_PATH = "/v1/auth/login"
+        const val LOGIN_PATH = "/auth/login"
         val TOKEN_KEYS = listOf("accessToken", "access_token", "token", "jwt")
         val json = Json { ignoreUnknownKeys = true }
     }

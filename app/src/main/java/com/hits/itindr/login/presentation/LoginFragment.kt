@@ -7,6 +7,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
+import com.hits.itindr.AppGraph
 import com.hits.itindr.R
 import com.hits.itindr.applyStatusBarPadding
 import com.hits.itindr.databinding.FragmentLoginBinding
@@ -27,7 +29,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         _binding = FragmentLoginBinding.bind(view)
 
         val navController = findNavController()
-        viewModel = ViewModelProvider(this, LoginModule.provideViewModelFactory())[LoginViewModel::class.java]
+        viewModel = ViewModelProvider(this, AppGraph.provideLoginViewModelFactory())[LoginViewModel::class.java]
 
         binding.loginButton.setOnClickListener {
             val email = binding.emailInputLayout.editText?.text?.toString().orEmpty()
@@ -53,7 +55,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun showError(messageResId: Int) {
-        Toast.makeText(requireContext(), getString(messageResId), Toast.LENGTH_SHORT).show()
+        Snackbar.make(binding.root, getString(messageResId), Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {

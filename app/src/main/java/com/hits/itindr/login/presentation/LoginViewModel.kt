@@ -3,10 +3,12 @@ package com.hits.itindr.login.presentation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.hits.itindr.R
 import com.hits.itindr.login.domain.LoginError
 import com.hits.itindr.login.domain.LoginResult
 import com.hits.itindr.login.domain.LoginUseCase
+import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val loginUseCase: LoginUseCase,
@@ -16,10 +18,12 @@ class LoginViewModel(
     val event: LiveData<LoginUiEvent> = _event
 
     fun onLoginClicked(email: String, password: String) {
-        val result = loginUseCase.execute(email.trim(), password)
-        _event.value = when (result) {
-            is LoginResult.Error -> LoginUiEvent.ShowError(result.type.toMessageRes())
-            LoginResult.Success -> LoginUiEvent.OpenMainScreen
+        viewModelScope.launch {
+            val result = loginUseCase.execute(email.trim(), password)
+            _event.value = when (result) {
+                is LoginResult.Error -> LoginUiEvent.ShowError(result.type.toMessageRes())
+                LoginResult.Success -> LoginUiEvent.OpenMainScreen
+            }
         }
     }
 
