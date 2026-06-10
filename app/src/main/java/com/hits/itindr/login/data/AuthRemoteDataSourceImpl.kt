@@ -1,7 +1,5 @@
 package com.hits.itindr.login.data
 
-import com.hits.itindr.R
-import com.hits.itindr.R.string.server_didnt_return_auth_token
 import com.hits.itindr.network.ApiException
 import com.hits.itindr.network.ApiHttpClient
 import kotlinx.serialization.json.Json
@@ -32,7 +30,8 @@ class AuthRemoteDataSourceImpl (
         val response = httpClient.post(REGISTER_PATH, requestBody, authorized = false)
 
         if (response.isSuccessful) {
-            return parseToken(response.body)
+            parseTokenOrNull(response.body)?.let { token -> return token }
+            return login(email, password)
         }
 
         throw ApiException(response.statusCode, response.body)
@@ -46,9 +45,18 @@ class AuthRemoteDataSourceImpl (
     }
 
     private fun parseToken(responseBody: String): String {
-        val root = json.parseToJsonElement(responseBody)
-        TOKEN_KEYS.firstNotNullOfOrNull { key -> root.findString(key) }?.let { return it }
-        throw ApiException(0, "Сервер не вернул токен авторизации")
+        return parseTokenOrNull(responseBody)
+            ?: throw ApiException(0, "Сервер не вернул токен авторизации")
+    }
+
+    private fun parseTokenOrNull(responseBody: String): String? {
+        return runCatching {
+            val root = json.parseToJsonElement(responseBody)
+            (root as? JsonPrimitive)
+                ?.contentOrNull
+                ?.takeIf(String::isNotBlank)
+                ?: TOKEN_KEYS.firstNotNullOfOrNull { key -> root.findString(key) }
+        }.getOrNull()
     }
 
     private fun JsonElement.findString(key: String): String? {
