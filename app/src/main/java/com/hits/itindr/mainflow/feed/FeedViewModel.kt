@@ -3,7 +3,6 @@ package com.hits.itindr.mainflow.feed
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hits.itindr.AppGraph
-import com.hits.itindr.mainflow.feed.data.MockFeedRepository
 import com.hits.itindr.mainflow.feed.domain.FeedRepository
 import com.hits.itindr.network.ApiException
 import kotlinx.coroutines.flow.MutableStateFlow

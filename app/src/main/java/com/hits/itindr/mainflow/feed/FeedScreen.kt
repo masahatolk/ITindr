@@ -138,12 +138,14 @@ fun FeedScreen(
                                     onLike = {
                                         if (profile == currentProfile) {
                                             swipeableCardsState.swipe(SwipeableCardDirection.Right)
+                                            viewModel.onIntent(FeedIntent.Like(profile))
                                             Log.d(FEED_LOG_TAG, "Liked ${profile.name}")
                                         }
                                     },
                                     onDislike = {
                                         if (profile == currentProfile) {
                                             swipeableCardsState.swipe(SwipeableCardDirection.Left)
+                                            viewModel.onIntent(FeedIntent.Dislike(profile))
                                             Log.d(FEED_LOG_TAG, "Disliked ${profile.name}")
                                         }
                                     },

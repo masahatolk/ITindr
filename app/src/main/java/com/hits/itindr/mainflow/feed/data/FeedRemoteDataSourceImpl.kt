@@ -22,7 +22,7 @@ class FeedRemoteDataSourceImpl(
             return parseProfiles(response.body)
         }
 
-        throw ApiException(0, "Не удалось загрузить ленту")
+        throw ApiException(response.statusCode, response.body)
     }
 
     override suspend fun likeProfile(profileId: String): ReactionResult {
@@ -90,7 +90,11 @@ class FeedRemoteDataSourceImpl(
             val value = this[key] ?: return@forEach
             if (value is JsonArray) {
                 return value.mapNotNull { item ->
-                    (item as? JsonPrimitive)?.contentOrNull?.takeIf(String::isNotBlank)
+                    when (item) {
+                        is JsonPrimitive -> item.contentOrNull?.takeIf(String::isNotBlank)
+                        is JsonObject -> item.findString(TOPIC_TITLE_KEYS)
+                        else -> null
+                    }
                 }
             }
             (value as? JsonPrimitive)?.contentOrNull
@@ -110,11 +114,19 @@ class FeedRemoteDataSourceImpl(
         const val LIKE_PATH = "/user/{userId}/like"
         const val DISLIKE_PATH = "/user/{userId}/dislike"
         val PROFILE_ARRAY_KEYS = listOf("items", "profiles", "users", "data", "content")
-        val ID_KEYS = listOf("id", "userId", "profileId", "uuid")
+        val ID_KEYS = listOf("userId", "id", "profileId", "uuid")
         val NAME_KEYS = listOf("name", "fullName", "username", "login")
-        val TAG_KEYS = listOf("tags", "interests", "skills", "stack")
-        val DESCRIPTION_KEYS = listOf("description", "about", "bio", "additionalInfo", "info")
-        val IMAGE_KEYS = listOf("imageUrl", "avatarUrl", "photoUrl", "avatar", "photo")
+        val TAG_KEYS = listOf("topics", "tags", "interests", "skills", "stack")
+        val TOPIC_TITLE_KEYS = listOf("title", "name")
+        val DESCRIPTION_KEYS = listOf(
+            "aboutMyself",
+            "description",
+            "about",
+            "bio",
+            "additionalInfo",
+            "info",
+        )
+        val IMAGE_KEYS = listOf("avatar", "imageUrl", "avatarUrl", "photoUrl", "photo")
         val MUTUAL_KEYS = listOf("isMutual", "mutual")
         val json = Json { ignoreUnknownKeys = true }
     }
