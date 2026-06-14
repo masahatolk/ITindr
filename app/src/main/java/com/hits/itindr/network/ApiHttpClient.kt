@@ -46,6 +46,16 @@ class ApiHttpClient(
         authorized = authorized,
     )
 
+    suspend fun delete(
+        path: String,
+        authorized: Boolean = true,
+    ): ApiResponse = request(
+        path = path,
+        method = METHOD_DELETE,
+        body = null,
+        authorized = authorized,
+    )
+
     private suspend fun request(
         path: String,
         method: String,
@@ -131,6 +141,7 @@ class ApiHttpClient(
         const val TIMEOUT_SECONDS = 15L
         const val METHOD_GET = "GET"
         const val METHOD_POST = "POST"
+        const val METHOD_DELETE = "DELETE"
         const val EMPTY_JSON = "{}"
         const val EMPTY_BODY = ""
         const val HEADER_ACCEPT = "Accept"

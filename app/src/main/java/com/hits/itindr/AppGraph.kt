@@ -8,8 +8,10 @@ import com.hits.itindr.login.data.AuthRemoteDataSourceImpl
 import com.hits.itindr.login.data.AuthRepositoryImpl
 import com.hits.itindr.login.domain.AuthRepository
 import com.hits.itindr.login.domain.LoginUseCase
+import com.hits.itindr.login.domain.LogoutUseCase
 import com.hits.itindr.login.domain.RegisterUseCase
 import com.hits.itindr.login.presentation.LoginViewModelFactory
+import com.hits.itindr.login.presentation.ProfileViewModelFactory
 import com.hits.itindr.login.presentation.RegisterViewModelFactory
 import com.hits.itindr.mainflow.feed.data.FeedRemoteDataSource
 import com.hits.itindr.mainflow.feed.data.FeedRemoteDataSourceImpl
@@ -29,8 +31,7 @@ object AppGraph {
     }
     private val authRepository: AuthRepository by lazy {
         AuthRepositoryImpl(
-            authRemoteDataSource,
-            tokenStore
+            authRemoteDataSource, tokenStore
         )
     }
     private val feedRemoteDataSource: FeedRemoteDataSource by lazy {
@@ -50,5 +51,11 @@ object AppGraph {
 
     fun provideRegisterViewModelFactory(): RegisterViewModelFactory {
         return RegisterViewModelFactory(RegisterUseCase(authRepository))
+    }
+
+    fun provideProfileViewModelFactory(): ProfileViewModelFactory {
+        return ProfileViewModelFactory(
+            LogoutUseCase(authRepository)
+        )
     }
 }

@@ -37,6 +37,17 @@ class AuthRemoteDataSourceImpl (
         throw ApiException(response.statusCode, response.body)
     }
 
+    override suspend fun logout() {
+        val response = httpClient.delete(
+            path = LOGOUT_PATH,
+            authorized = true
+        )
+
+        if (!response.isSuccessful) {
+            throw ApiException(response.statusCode, response.body)
+        }
+    }
+
     private fun buildAuthRequestBody(email: String, password: String): String {
         return buildJsonObject {
             put("email", email)
@@ -71,6 +82,7 @@ class AuthRemoteDataSourceImpl (
     private companion object {
         const val LOGIN_PATH = "/auth/login"
         const val REGISTER_PATH = "/auth/register"
+        const val LOGOUT_PATH = "/auth/logout"
         val TOKEN_KEYS = listOf("accessToken", "access_token", "token", "jwt")
         val json = Json { ignoreUnknownKeys = true }
     }

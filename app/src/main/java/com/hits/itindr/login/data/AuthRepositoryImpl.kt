@@ -14,4 +14,9 @@ class AuthRepositoryImpl(
     override suspend fun register(email: String, password: String) {
         tokenStore.saveToken(remoteDataSource.register(email, password))
     }
+
+    override suspend fun logout() {
+        remoteDataSource.logout()
+        tokenStore.clearToken()
+    }
 }
