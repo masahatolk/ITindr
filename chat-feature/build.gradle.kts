@@ -33,5 +33,9 @@ android {
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.logging.interceptor)
 }
