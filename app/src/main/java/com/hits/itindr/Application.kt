@@ -1,7 +1,7 @@
 package com.hits.itindr
 
 import android.app.Application
-import com.hits.chat_feature.chatModule
+import com.hits.chat_feature.di.chatModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 

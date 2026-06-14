@@ -31,8 +31,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.hits.chat_feature.ChatIntent
-import com.hits.chat_feature.ChatViewModel
 import com.hits.chat_feature.domain.Chat
 import org.koin.androidx.compose.koinViewModel
 

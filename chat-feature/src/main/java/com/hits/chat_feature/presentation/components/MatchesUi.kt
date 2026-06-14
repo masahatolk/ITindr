@@ -15,6 +15,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableFloatState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -100,7 +102,7 @@ fun MatchItem(
 @Composable
 fun rememberCountdownProgress(
     expiresAt: Long
-): State<Float> {
+): MutableFloatState {
     val progress = remember { mutableFloatStateOf(1f) }
 
     LaunchedEffect(expiresAt) {

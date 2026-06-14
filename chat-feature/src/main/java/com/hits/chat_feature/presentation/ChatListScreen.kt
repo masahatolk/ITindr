@@ -26,7 +26,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.hits.chat_feature.ChatUiState
 import com.hits.chat_feature.domain.Chat
 import com.hits.chat_feature.domain.MatchUi
 import com.hits.chat_feature.presentation.components.MatchesRow

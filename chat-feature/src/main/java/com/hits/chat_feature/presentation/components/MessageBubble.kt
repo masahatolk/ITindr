@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
-import com.hits.chat_feature.ChatMessageAppearanceDirector
+import com.hits.chat_feature.presentation.ChatMessageAppearanceDirector
 import com.hits.chat_feature.domain.ChatMessage
 import com.hits.itindr.chat.R
 

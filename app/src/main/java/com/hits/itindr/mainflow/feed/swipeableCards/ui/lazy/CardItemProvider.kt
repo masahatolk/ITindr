@@ -1,5 +1,6 @@
 package com.hits.itindr.mainflow.feed.swipeableCards.ui.lazy
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.lazy.layout.LazyLayoutItemProvider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -41,6 +42,7 @@ internal fun <T> rememberItemProvider(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 class CardItemProvider<T>(
     private val itemsState: State<List<LazyCardItemContent<T>>>,
     private val state: SwipeableCardsState,

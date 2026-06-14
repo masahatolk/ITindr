@@ -3,6 +3,7 @@ package com.hits.itindr.mainflow.feed.swipeableCards.ui.lazy
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.VectorConverter
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.layout.LazyLayout
 import androidx.compose.runtime.Composable
@@ -22,6 +23,7 @@ import com.hits.itindr.mainflow.feed.swipeableCards.ui.SwipeableCardsFactors
 import com.hits.itindr.mainflow.feed.swipeableCards.ui.SwipeableCardsProperties
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun <T> LazySwipeableCards(
     modifier: Modifier = Modifier,
@@ -74,8 +76,8 @@ fun <T> LazySwipeableCards(
         itemProvider = { itemProvider },
     ) { constraints ->
 
-        val indexesWithPlaceables = indexes.associateWith { that ->
-            compose(that).map { it.measure(constraints) }
+        val indexesWithPlaceables = indexes.associateWith { index ->
+            measure(index, constraints)
         }
 
         val maxHeight = indexesWithPlaceables.values

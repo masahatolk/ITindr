@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.hits.chat_feature.ChatUiState
 import com.hits.chat_feature.presentation.components.ChatInput
 import com.hits.chat_feature.presentation.components.ChatToolbar
 import com.hits.chat_feature.presentation.components.MessageBubble

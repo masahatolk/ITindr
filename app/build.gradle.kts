@@ -1,6 +1,3 @@
-apply {
-    plugin(rootProject.libs.plugins.detekt.get().pluginId)
-}
 detekt {
     autoCorrect = true
     config.setFrom("$rootDir/config/detekt/detekt.yml")
@@ -21,9 +18,7 @@ plugins {
 
 android {
     namespace = "com.hits.itindr"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.hits.itindr"

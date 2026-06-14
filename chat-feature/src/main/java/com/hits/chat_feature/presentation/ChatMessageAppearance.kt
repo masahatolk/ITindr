@@ -1,4 +1,4 @@
-package com.hits.chat_feature
+package com.hits.chat_feature.presentation
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight

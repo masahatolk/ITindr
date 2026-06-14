@@ -84,7 +84,7 @@ fun FeedScreen(
                 tint = Color.White,
             )
 
-            BoxWithConstraints(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 24.dp)
@@ -116,8 +116,8 @@ fun FeedScreen(
                     else -> {
                         LazySwipeableCards(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .height(maxHeight),
+                                .fillMaxWidth(),
+                                //.height(maxHeight),
                             state = swipeableCardsState,
                             properties = SwipeableCardsProperties(
                                 padding = 0.dp,

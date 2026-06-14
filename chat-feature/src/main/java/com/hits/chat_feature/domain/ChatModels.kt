@@ -3,8 +3,6 @@ package com.hits.chat_feature.domain
 data class Chat(
     val id: String,
     val title: String,
-    val companionId: String?,
-    val companionName: String?,
     val lastMessage: String?,
     val updatedAt: Long,
 )
@@ -24,4 +22,9 @@ data class MatchUi(
     val avatarUrl: String? = null,
     val matchedAt: Long,
     val expiresAt: Long,
+)
+
+data class CachedResult<T>(
+    val value: T,
+    val fromCache: Boolean,
 )

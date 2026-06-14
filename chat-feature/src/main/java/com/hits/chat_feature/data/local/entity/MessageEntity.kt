@@ -1,0 +1,18 @@
+package com.hits.chat_feature.data.local.entity
+
+import androidx.room.Entity
+import androidx.room.Index
+import androidx.room.PrimaryKey
+
+@Entity(
+    tableName = "messages",
+    indices = [Index("chatId")]
+)
+data class MessageEntity(
+    @PrimaryKey
+    val id: String,
+    val chatId: String,
+    val text: String,
+    val createdAt: Long,
+    val isOutgoing: Boolean,
+)
