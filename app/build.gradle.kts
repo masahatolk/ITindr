@@ -58,6 +58,8 @@ android {
 dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(project(":chat-feature"))
+    implementation(project(":core-network"))
+    implementation(project(":core-auth"))
     implementation(libs.coil.compose)
 
     implementation(libs.androidx.compose.ui.test.junit4)

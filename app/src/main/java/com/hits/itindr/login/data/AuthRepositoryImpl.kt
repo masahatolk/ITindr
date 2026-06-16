@@ -1,6 +1,6 @@
 package com.hits.itindr.login.data
 
-import com.hits.itindr.auth.TokenStore
+import com.hits.core_auth.TokenStore
 import com.hits.itindr.login.domain.AuthRepository
 
 class AuthRepositoryImpl(

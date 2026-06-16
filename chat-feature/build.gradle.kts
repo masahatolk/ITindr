@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.compose.compiler)
 
     alias(libs.plugins.ksp)
+
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -31,6 +33,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":core-network"))
+
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.material3)
     implementation(libs.androidx.lifecycle.runtime.compose)

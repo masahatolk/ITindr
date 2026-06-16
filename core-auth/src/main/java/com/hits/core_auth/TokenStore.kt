@@ -1,4 +1,4 @@
-package com.hits.itindr.auth
+package com.hits.core_auth
 
 interface TokenStore {
     fun getToken(): String?

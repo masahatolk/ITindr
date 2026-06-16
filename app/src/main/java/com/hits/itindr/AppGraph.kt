@@ -1,8 +1,8 @@
 package com.hits.itindr
 
 import android.content.Context
+import com.hits.core_auth.TokenStore
 import com.hits.itindr.auth.EncryptedTokenStore
-import com.hits.itindr.auth.TokenStore
 import com.hits.itindr.login.data.AuthRemoteDataSource
 import com.hits.itindr.login.data.AuthRemoteDataSourceImpl
 import com.hits.itindr.login.data.AuthRepositoryImpl

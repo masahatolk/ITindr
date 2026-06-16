@@ -1,6 +1,7 @@
 package com.hits.chat_feature.data.repository
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.hits.chat_feature.data.local.dao.ChatDao
 import com.hits.chat_feature.data.local.dao.MessageDao

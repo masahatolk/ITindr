@@ -2,7 +2,7 @@ package com.hits.itindr.network
 
 import android.content.ContentValues.TAG
 import android.util.Log
-import com.hits.itindr.auth.TokenStore
+import com.hits.core_auth.TokenStore
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.util.concurrent.TimeUnit

@@ -11,6 +11,7 @@ import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 import androidx.core.content.edit
+import com.hits.core_auth.TokenStore
 
 class EncryptedTokenStore(context: Context) : TokenStore {
     private val preferences: SharedPreferences = context.getSharedPreferences(
