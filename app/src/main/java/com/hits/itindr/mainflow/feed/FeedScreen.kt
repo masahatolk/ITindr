@@ -52,6 +52,10 @@ fun FeedScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
 
+    LaunchedEffect(Unit) {
+        viewModel.onIntent(FeedIntent.LoadFeed)
+    }
+
     LaunchedEffect(state.errorMessage) {
         state.errorMessage?.let { message ->
             snackbarHostState.showSnackbar(message)

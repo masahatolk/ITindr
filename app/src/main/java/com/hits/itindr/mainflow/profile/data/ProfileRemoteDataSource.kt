@@ -1,6 +1,6 @@
-package com.hits.itindr.login.domain
+package com.hits.itindr.mainflow.profile.data
 
-interface ProfileRepository {
+interface ProfileRemoteDataSource {
 
     suspend fun updateProfile(
         name: String,

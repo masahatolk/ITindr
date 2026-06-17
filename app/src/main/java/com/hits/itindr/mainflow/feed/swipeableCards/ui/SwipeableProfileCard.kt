@@ -234,8 +234,11 @@ private fun ProfileTagsFlow(
             }
         },
         update = { view ->
-            view.tags = tags.mapIndexed { index, tag ->
-                TagItem(id = index, text = tag)
+            view.tags = tags.map { tag ->
+                TagItem(
+                    id = tag,
+                    text = tag
+                )
             }
         },
     )

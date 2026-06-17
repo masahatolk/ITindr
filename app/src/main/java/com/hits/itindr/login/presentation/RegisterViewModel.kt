@@ -1,17 +1,20 @@
 package com.hits.itindr.login.presentation
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.hits.itindr.R
+import com.hits.itindr.login.domain.AuthRepository
 import com.hits.itindr.login.domain.RegisterError
 import com.hits.itindr.login.domain.RegisterResult
 import com.hits.itindr.login.domain.RegisterUseCase
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 
 class RegisterViewModel(
     private val registerUseCase: RegisterUseCase,
-    private val registrationStore: RegistrationStore
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     private val _event =
@@ -41,14 +44,19 @@ class RegisterViewModel(
 
             RegisterResult.Success -> {
 
-                registrationStore.saveCredentials(
-                    email = email.trim(),
-                    password = password
-                )
+                viewModelScope.launch {
 
-                _event.tryEmit(
-                    RegisterUiEvent.OpenInfoScreen
-                )
+                    try {
+                        authRepository.register(
+                            email = email,
+                            password = password
+                        )
+
+                        _event.emit(RegisterUiEvent.OpenInfoScreen)
+                    } catch (e: Exception) {
+                        _event.emit(RegisterUiEvent.ShowError(R.string.register_error_request_failed))
+                    }
+                }
             }
         }
     }

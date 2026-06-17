@@ -59,6 +59,7 @@ val loginModule = module {
         InfoViewModel(
             get(),
             get(),
+            get(),
             get()
         )
     }

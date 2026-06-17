@@ -40,8 +40,8 @@ class TagFlowView @JvmOverloads constructor(
 
     private val selectionManager = TagSelectionManager()
 
-    var onTagClick: ((Int, Boolean) -> Unit)? = null
-    var onSelectionChange: ((List<Int>) -> Unit)? = null
+    var onTagClick: ((String, Boolean) -> Unit)? = null
+    var onSelectionChange: ((List<String>) -> Unit)? = null
     var onSelectionLimitReached: ((Int) -> Unit)? = null
 
     init {
@@ -153,8 +153,8 @@ class TagFlowView @JvmOverloads constructor(
     private class TagSelectionManager {
         var multiSelect: Boolean = true
         var maxSelected: Int? = null
-        private val selectedIds = mutableSetOf<Int>()
-        var onSelectionChange: ((List<Int>) -> Unit)? = null
+        private val selectedIds = mutableSetOf<String>()
+        var onSelectionChange: ((List<String>) -> Unit)? = null
         var onSelectionLimitReached: ((Int) -> Unit)? = null
 
         fun handleClick(tag: TagItem) {
@@ -176,7 +176,7 @@ class TagFlowView @JvmOverloads constructor(
             onSelectionChange?.invoke(selectedIds.toList())
         }
 
-        fun isSelected(id: Int): Boolean = selectedIds.contains(id)
+        fun isSelected(id: String): Boolean = selectedIds.contains(id)
     }
 
     private val Int.dp: Int get() = (this * resources.displayMetrics.density).toInt()

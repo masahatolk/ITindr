@@ -1,5 +1,8 @@
-package com.hits.itindr.login.data.dto
+package com.hits.itindr.mainflow.profile.data.dto
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class UpdateProfileRequest(
     val name: String,
     val aboutMyself: String?,
