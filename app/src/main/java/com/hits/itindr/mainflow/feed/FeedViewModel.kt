@@ -2,9 +2,8 @@ package com.hits.itindr.mainflow.feed
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hits.itindr.AppGraph
 import com.hits.itindr.mainflow.feed.domain.FeedRepository
-import com.hits.itindr.network.ApiException
+import com.hits.core_network.ApiException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,8 +11,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class FeedViewModel(
-    private val repository: FeedRepository = AppGraph.feedRepository,
-) : ViewModel() {
+    private val repository: FeedRepository
+) : ViewModel()
+{
     private val _uiState = MutableStateFlow(FeedUiState(isLoading = true))
     val uiState: StateFlow<FeedUiState> = _uiState.asStateFlow()
 

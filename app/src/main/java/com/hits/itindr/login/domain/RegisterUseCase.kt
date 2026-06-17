@@ -1,9 +1,13 @@
 package com.hits.itindr.login.domain
 
-class RegisterUseCase(
-    private val authRepository: AuthRepository,
-) {
-    suspend fun execute(email: String, password: String, passwordConfirm: String): RegisterResult {
+class RegisterUseCase(private val authRepository: AuthRepository) {
+
+    fun validate(
+        email: String,
+        password: String,
+        passwordConfirm: String
+    ): RegisterResult {
+
         if (email.isBlank()) {
             return RegisterResult.Error(RegisterError.EMPTY_EMAIL)
         }
@@ -20,12 +24,7 @@ class RegisterUseCase(
             return RegisterResult.Error(RegisterError.PASSWORDS_DO_NOT_MATCH)
         }
 
-        return runCatching {
-            authRepository.register(email, password)
-        }.fold(
-            onSuccess = { RegisterResult.Success },
-            onFailure = { RegisterResult.Error(RegisterError.REQUEST_FAILED) },
-        )
+        return RegisterResult.Success
     }
 
     private companion object {

@@ -36,12 +36,13 @@ import com.hits.itindr.mainflow.feed.swipeableCards.ui.SwipeableCardsProperties
 import com.hits.itindr.mainflow.feed.swipeableCards.ui.SwipeableProfileCard
 import com.hits.itindr.mainflow.feed.swipeableCards.ui.lazy.LazySwipeableCards
 import com.hits.itindr.mainflow.feed.swipeableCards.ui.lazy.items
+import org.koin.androidx.compose.koinViewModel
 
 private const val FEED_LOG_TAG = "FeedScreen"
 
 @Composable
 fun FeedScreen(
-    viewModel: FeedViewModel = remember { FeedViewModel() },
+    viewModel: FeedViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val profiles = state.profiles

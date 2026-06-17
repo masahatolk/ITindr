@@ -1,7 +1,6 @@
 package com.hits.itindr.login.presentation
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.hits.itindr.R
 import com.hits.itindr.login.domain.RegisterError
 import com.hits.itindr.login.domain.RegisterResult
@@ -9,23 +8,48 @@ import com.hits.itindr.login.domain.RegisterUseCase
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.launch
 
 class RegisterViewModel(
     private val registerUseCase: RegisterUseCase,
+    private val registrationStore: RegistrationStore
 ) : ViewModel() {
 
-    private val _event = MutableSharedFlow<RegisterUiEvent>(extraBufferCapacity = EVENT_BUFFER_CAPACITY)
+    private val _event =
+        MutableSharedFlow<RegisterUiEvent>(extraBufferCapacity = EVENT_BUFFER_CAPACITY)
     val event: SharedFlow<RegisterUiEvent> = _event.asSharedFlow()
 
-    fun onRegisterClicked(email: String, password: String, passwordConfirm: String) {
-        viewModelScope.launch {
-            val result = registerUseCase.execute(email.trim(), password, passwordConfirm)
-            val event = when (result) {
-                is RegisterResult.Error -> RegisterUiEvent.ShowError(result.type.toMessageRes())
-                RegisterResult.Success -> RegisterUiEvent.OpenInfoScreen
+    fun onRegisterClicked(
+        email: String,
+        password: String,
+        passwordConfirm: String
+    ) {
+        val result =
+            registerUseCase.validate(
+                email.trim(),
+                password,
+                passwordConfirm
+            )
+
+        when (result) {
+            is RegisterResult.Error -> {
+                _event.tryEmit(
+                    RegisterUiEvent.ShowError(
+                        result.type.toMessageRes()
+                    )
+                )
             }
-            _event.emit(event)
+
+            RegisterResult.Success -> {
+
+                registrationStore.saveCredentials(
+                    email = email.trim(),
+                    password = password
+                )
+
+                _event.tryEmit(
+                    RegisterUiEvent.OpenInfoScreen
+                )
+            }
         }
     }
 

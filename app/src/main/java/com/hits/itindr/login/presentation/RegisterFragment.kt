@@ -9,17 +9,17 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
-import com.hits.itindr.AppGraph
 import com.hits.itindr.R
 import com.hits.itindr.applyStatusBarPadding
 import com.hits.itindr.databinding.FragmentRegisterBinding
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RegisterFragment : Fragment(R.layout.fragment_register) {
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: RegisterViewModel
+    private val viewModel: RegisterViewModel by viewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -29,10 +29,6 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         _binding = FragmentRegisterBinding.bind(view)
 
         val navController = findNavController()
-        viewModel = ViewModelProvider(
-            this,
-            AppGraph.provideRegisterViewModelFactory(),
-        )[RegisterViewModel::class.java]
 
         binding.registerButton.setOnClickListener {
             val email = binding.emailInputLayout.editText?.text?.toString().orEmpty()

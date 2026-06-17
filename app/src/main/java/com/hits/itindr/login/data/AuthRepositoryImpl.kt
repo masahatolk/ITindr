@@ -8,11 +8,11 @@ class AuthRepositoryImpl(
     private val tokenStore: TokenStore,
 ) : AuthRepository {
     override suspend fun login(email: String, password: String) {
-        tokenStore.saveToken(remoteDataSource.login(email, password))
+        tokenStore.saveToken(remoteDataSource.login(email, password).accessToken)
     }
 
     override suspend fun register(email: String, password: String) {
-        tokenStore.saveToken(remoteDataSource.register(email, password))
+        tokenStore.saveToken(remoteDataSource.register(email, password).accessToken)
     }
 
     override suspend fun logout() {

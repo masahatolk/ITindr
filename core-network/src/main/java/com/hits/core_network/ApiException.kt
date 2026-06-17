@@ -1,4 +1,4 @@
-package com.hits.itindr.network
+package com.hits.core_network
 
 class ApiException(
     val statusCode: Int,

@@ -8,8 +8,10 @@ import com.hits.itindr.databinding.FragmentInfoBinding
 import com.hits.itindr.mainflow.MainActivity
 
 class InfoFragment : Fragment(R.layout.fragment_info) {
+    private lateinit var viewModel: InfoViewModel
     private var _binding: FragmentInfoBinding? = null
     private val binding get() = _binding!!
+    private var selectedTopicIds = emptyList<String>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -21,7 +23,31 @@ class InfoFragment : Fragment(R.layout.fragment_info) {
         setupTags()
 
         binding.saveButton.setOnClickListener {
-            openMain()
+
+            val name =
+                binding.nameInputLayout
+                    .editText
+                    ?.text
+                    ?.toString()
+                    .orEmpty()
+
+            val about =
+                binding.additionalInfoInputLayout
+                    .editText
+                    ?.text
+                    ?.toString()
+
+            viewModel.saveProfile(
+                name = name,
+                aboutMyself = about,
+                topics = selectedTopicIds,
+                onSuccess = {
+                    openMain()
+                },
+                onError = {
+                    // показать Snackbar
+                }
+            )
         }
     }
 
@@ -49,8 +75,10 @@ class InfoFragment : Fragment(R.layout.fragment_info) {
 
             // maxSelected = 5
 
-            onSelectionChange = { selectedIds ->
-                println("Selected: $selectedIds")
+            onSelectionChange = { ids ->
+
+                selectedTopicIds =
+                    ids.map { it.toString() }
             }
 
             onTagClick = { id, isSelected ->

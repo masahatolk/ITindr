@@ -1,133 +1,72 @@
 package com.hits.itindr.mainflow.feed.data
 
+import com.hits.core_network.ApiException
+import com.hits.itindr.mainflow.feed.data.network.FeedApi
 import com.hits.itindr.mainflow.feed.domain.ReactionResult
 import com.hits.itindr.mainflow.feed.swipeableCards.Profile
-import com.hits.itindr.network.ApiException
-import com.hits.itindr.network.ApiHttpClient
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
-import kotlinx.serialization.json.booleanOrNull
-import kotlinx.serialization.json.contentOrNull
 
 class FeedRemoteDataSourceImpl(
-    private val httpClient: ApiHttpClient,
+    private val api: FeedApi
 ) : FeedRemoteDataSource {
+
     override suspend fun getProfiles(): List<Profile> {
 
-        val response = httpClient.get(FEED_PATH)
-        if (response.isSuccessful) {
-            return parseProfiles(response.body)
-        }
+        val response = api.getFeed()
 
-        throw ApiException(response.statusCode, response.body)
-    }
-
-    override suspend fun likeProfile(profileId: String): ReactionResult {
-        return sendReaction(profileId, LIKE_PATH)
-    }
-
-    override suspend fun dislikeProfile(profileId: String): ReactionResult {
-        return sendReaction(profileId, DISLIKE_PATH)
-    }
-
-    private suspend fun sendReaction(profileId: String, pathTemplate: String): ReactionResult {
-        val path = pathTemplate.replace(USER_ID_PLACEHOLDER, profileId)
-        val response = httpClient.post(path, body = null)
-        if (response.isSuccessful) {
-            return ReactionResult(isMutual = parseIsMutual(response.body))
-        }
-        throw ApiException(response.statusCode, response.body)
-    }
-
-    private fun parseProfiles(responseBody: String): List<Profile> {
-        val root = json.parseToJsonElement(responseBody)
-        val items = when (root) {
-            is JsonArray -> root
-            is JsonObject -> PROFILE_ARRAY_KEYS.firstNotNullOfOrNull { key ->
-                root[key] as? JsonArray
-            } ?: JsonArray(emptyList())
-            else -> JsonArray(emptyList())
-        }
-
-        return items.mapIndexedNotNull { index, element ->
-            val profileObject = element as? JsonObject ?: return@mapIndexedNotNull null
-            Profile(
-                id = profileObject.findString(ID_KEYS) ?: index.toString(),
-                name = profileObject.findString(NAME_KEYS).orEmpty(),
-                tags = profileObject.findStringList(TAG_KEYS),
-                description = profileObject.findString(DESCRIPTION_KEYS).orEmpty(),
-                imageResName = DEFAULT_IMAGE_RES_NAME,
-                imageUrl = profileObject.findString(IMAGE_KEYS),
+        if (!response.isSuccessful) {
+            throw ApiException(
+                response.code(),
+                response.errorBody()?.string().orEmpty()
             )
         }
-    }
 
-    private fun parseIsMutual(responseBody: String): Boolean {
-        return runCatching {
-            json.parseToJsonElement(responseBody).findBoolean(MUTUAL_KEYS) ?: false
-        }.getOrDefault(false)
-    }
-
-    private fun JsonElement.findBoolean(keys: List<String>): Boolean? {
-        val currentObject = this as? JsonObject ?: return null
-        keys.firstNotNullOfOrNull { key ->
-            (currentObject[key] as? JsonPrimitive)?.booleanOrNull
-        }?.let { return it }
-        return currentObject.values.firstNotNullOfOrNull { child -> child.findBoolean(keys) }
-    }
-
-    private fun JsonObject.findString(keys: List<String>): String? {
-        return keys.firstNotNullOfOrNull { key ->
-            (this[key] as? JsonPrimitive)?.contentOrNull?.takeIf(String::isNotBlank)
-        }
-    }
-
-    private fun JsonObject.findStringList(keys: List<String>): List<String> {
-        keys.forEach { key ->
-            val value = this[key] ?: return@forEach
-            if (value is JsonArray) {
-                return value.mapNotNull { item ->
-                    when (item) {
-                        is JsonPrimitive -> item.contentOrNull?.takeIf(String::isNotBlank)
-                        is JsonObject -> item.findString(TOPIC_TITLE_KEYS)
-                        else -> null
-                    }
-                }
+        return response.body()
+            ?.map { dto ->
+                Profile(
+                    id = dto.userId,
+                    name = dto.name,
+                    description = dto.aboutMyself.orEmpty(),
+                    imageResName = "photo",
+                    imageUrl = dto.avatar,
+                    tags = dto.topics.map { it.title }
+                )
             }
-            (value as? JsonPrimitive)?.contentOrNull
-                ?.split(',', ';')
-                ?.map(String::trim)
-                ?.filter(String::isNotBlank)
-                ?.takeIf { it.isNotEmpty() }
-                ?.let { return it }
-        }
-        return emptyList()
+            ?: emptyList()
     }
 
-    private companion object {
-        const val USER_ID_PLACEHOLDER = "{userId}"
-        const val DEFAULT_IMAGE_RES_NAME = "photo"
-        const val FEED_PATH = "/user/feed"
-        const val LIKE_PATH = "/user/{userId}/like"
-        const val DISLIKE_PATH = "/user/{userId}/dislike"
-        val PROFILE_ARRAY_KEYS = listOf("items", "profiles", "users", "data", "content")
-        val ID_KEYS = listOf("userId", "id", "profileId", "uuid")
-        val NAME_KEYS = listOf("name", "fullName", "username", "login")
-        val TAG_KEYS = listOf("topics", "tags", "interests", "skills", "stack")
-        val TOPIC_TITLE_KEYS = listOf("title", "name")
-        val DESCRIPTION_KEYS = listOf(
-            "aboutMyself",
-            "description",
-            "about",
-            "bio",
-            "additionalInfo",
-            "info",
+    override suspend fun likeProfile(
+        profileId: String
+    ): ReactionResult {
+
+        val response = api.like(profileId)
+
+        if (!response.isSuccessful) {
+            throw ApiException(
+                response.code(),
+                response.errorBody()?.string().orEmpty()
+            )
+        }
+
+        return ReactionResult(
+            isMutual = response.body()?.isMutual ?: false
         )
-        val IMAGE_KEYS = listOf("avatar", "imageUrl", "avatarUrl", "photoUrl", "photo")
-        val MUTUAL_KEYS = listOf("isMutual", "mutual")
-        val json = Json { ignoreUnknownKeys = true }
+    }
+
+    override suspend fun dislikeProfile(
+        profileId: String
+    ): ReactionResult {
+
+        val response = api.dislike(profileId)
+
+        if (!response.isSuccessful) {
+            throw ApiException(
+                response.code(),
+                response.errorBody()?.string().orEmpty()
+            )
+        }
+
+        return ReactionResult(
+            isMutual = false
+        )
     }
 }

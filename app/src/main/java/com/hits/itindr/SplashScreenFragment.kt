@@ -5,11 +5,14 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.hits.core_auth.TokenStore
 import com.hits.itindr.databinding.FragmentSplashScreenBinding
 import com.hits.itindr.mainflow.MainActivity
+import org.koin.android.ext.android.inject
 
 class SplashScreenFragment : Fragment(R.layout.fragment_splash_screen) {
     private var _binding: FragmentSplashScreenBinding? = null
+    private val tokenStore: TokenStore by inject()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -18,7 +21,7 @@ class SplashScreenFragment : Fragment(R.layout.fragment_splash_screen) {
 
         val navController = findNavController()
 
-        if (AppGraph.tokenStore.getToken().isNullOrBlank()) {
+        if (tokenStore.getToken().isNullOrBlank()) {
             navController.navigate(R.id.action_splash_to_home)
         } else {
             startActivity(Intent(requireContext(), MainActivity::class.java))

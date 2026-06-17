@@ -1,5 +1,7 @@
 package com.hits.itindr.login.domain
 
+import android.util.Log
+
 class LoginUseCase(
     private val authRepository: AuthRepository,
 ) {
@@ -20,7 +22,10 @@ class LoginUseCase(
             authRepository.login(email, password)
         }.fold(
             onSuccess = { LoginResult.Success },
-            onFailure = { LoginResult.Error(LoginError.REQUEST_FAILED) },
+            onFailure = {
+                it.printStackTrace()
+                Log.e("LoginUseCase", "Login error", it)
+                LoginResult.Error(LoginError.REQUEST_FAILED) },
         )
     }
 

@@ -1,6 +1,7 @@
 package com.hits.core_network.di
 
 import com.hits.core_network.interceptor.AuthInterceptor
+import com.hits.core_network.interceptor.UnauthorizedInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -16,9 +17,7 @@ val networkModule = module {
     }
 
     single {
-        HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
+        UnauthorizedInterceptor(get())
     }
 
     single {
@@ -30,6 +29,7 @@ val networkModule = module {
     single {
         OkHttpClient.Builder()
             .addInterceptor(get<AuthInterceptor>())
+            .addInterceptor(get<UnauthorizedInterceptor>())
             .addInterceptor(get<HttpLoggingInterceptor>())
             .build()
     }

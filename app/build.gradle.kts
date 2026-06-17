@@ -14,6 +14,7 @@ plugins {
     alias(libs.plugins.detekt)
     alias(libs.plugins.compose.compiler)
     kotlin("plugin.serialization") version "2.0.21"
+    id("kotlin-parcelize")
 }
 
 android {
@@ -70,6 +71,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
     // Jetpack Compose integration
     implementation(libs.androidx.navigation.compose)
 
@@ -87,6 +89,8 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.logging.interceptor)
 
+    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.serialization)
 
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.core.ktx)
