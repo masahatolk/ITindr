@@ -1,7 +1,7 @@
 package com.hits.itindr.mainflow
 
 import androidx.compose.runtime.Composable
-import com.hits.chat_feature.presentation.ChatScreen
+import com.hits.impl.ui.ChatScreen
 import com.hits.itindr.login.presentation.ProfileRoute
 import com.hits.itindr.mainflow.feed.FeedScreen
 

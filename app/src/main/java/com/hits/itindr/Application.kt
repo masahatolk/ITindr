@@ -1,8 +1,9 @@
 package com.hits.itindr
 
 import android.app.Application
-import com.hits.chat_feature.di.chatModule
+import com.hits.core_database.di.databaseModule
 import com.hits.core_network.di.networkModule
+import com.hits.impl.di.chatModule
 import com.hits.itindr.auth.authModule
 import com.hits.itindr.login.di.loginModule
 import com.hits.itindr.mainflow.feed.di.feedModule
@@ -18,12 +19,13 @@ class Application : Application() {
         startKoin {
             androidContext(this@Application)
             modules(
-                chatModule,
                 authModule,
                 networkModule,
+                databaseModule,
                 loginModule,
                 feedModule,
-                profileModule
+                profileModule,
+                chatModule
             )
         }
     }

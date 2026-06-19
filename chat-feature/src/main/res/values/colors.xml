@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="chat_incoming_background">#35373B</color>
-    <color name="chat_outgoing_background">#5A1FCC</color>
-    <color name="match_indicator">#FFFF4FA3</color>
-</resources>
