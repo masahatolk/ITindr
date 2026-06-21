@@ -8,5 +8,5 @@ data class MessageDto(
     val text: String,
     val createdAt: String,
     val attachments: List<String> = emptyList(),
-    val user: UserDto? = null
+    val user: UserDto? = null,
 )

@@ -28,7 +28,7 @@ val chatModule = module {
     }
 
     viewModel {
-        ChatViewModel(get())
+        ChatViewModel(get(), get())
     }
 
     single {

@@ -1,11 +1,13 @@
 package com.hits.impl.ui
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hits.api.model.Chat
 import com.hits.api.model.ChatMessage
+import com.hits.api.model.ChatMessageUi
 import com.hits.api.repository.ChatRepository
+import com.hits.core_auth.session.UserSession
+import com.hits.impl.data.mapper.toUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,8 +16,13 @@ import kotlinx.coroutines.launch
 
 class ChatViewModel(
     private val repository: ChatRepository,
+    private val userSession: UserSession,
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(ChatUiState(isChatsLoading = true))
+    private val _uiState = MutableStateFlow(
+        ChatUiState(
+            isChatsLoading = true
+        )
+    )
     val uiState: StateFlow<ChatUiState> = _uiState.asStateFlow()
 
     init {
@@ -58,11 +65,12 @@ class ChatViewModel(
                         )
                     }
                 }
-                .onFailure { throwable -> showError(throwable, loadingChats = false) }
+                .onFailure { throwable ->
+                    showError(throwable, loadingChats = false)
+                }
         }
     }
 
-    // TODO
     private fun createChat(companionId: String) {
         val normalizedCompanionId = companionId.trim()
         if (normalizedCompanionId.isBlank()) {
@@ -125,9 +133,15 @@ class ChatViewModel(
     private fun appendSentMessage(
         message: ChatMessage
     ) {
+        val currentUserId =
+            userSession.getUserId().orEmpty()
+
+        val uiMessage =
+            message.toUi(currentUserId)
+
         _uiState.update {
             it.copy(
-                messages = it.messages + message.copy(),
+                messages = it.messages + uiMessage,
                 messageDraft = "",
                 isSendingMessage = false,
             )
@@ -150,10 +164,26 @@ class ChatViewModel(
             }
                 .onSuccess { result ->
 
+                    val currentUserId = userSession.getUserId()
+
+                    val uiMessages =
+                        result.value.map { message ->
+
+                            println("CHAT USER ID = ${message.userId}")
+
+                            ChatMessageUi(
+                                id = message.id,
+                                text = message.text,
+                                senderName = message.senderName,
+                                isOutgoing =
+                                    message.userId == currentUserId
+                            )
+                        }
+
                     _uiState.update {
                         it.copy(
-                            messages = result.value,
-                            isMessagesLoading = false,
+                            messages = uiMessages,
+                            isMessagesLoading = false
                         )
                     }
                 }
@@ -196,7 +226,7 @@ data class ChatUiState(
     val currentChatId: String? = null,
     val chatTitle: String = "",
     val chats: List<Chat> = emptyList(),
-    val messages: List<ChatMessage> = emptyList(),
+    val messages: List<ChatMessageUi> = emptyList(),
     val messageDraft: String = "",
     val isChatsLoading: Boolean = false,
     val isMessagesLoading: Boolean = false,

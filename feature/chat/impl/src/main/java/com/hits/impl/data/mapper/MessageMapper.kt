@@ -3,6 +3,7 @@ package com.hits.impl.data.mapper
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.hits.api.model.ChatMessage
+import com.hits.api.model.ChatMessageUi
 import com.hits.impl.data.local.entity.MessageEntity
 import com.hits.impl.data.remote.dto.MessageDto
 import com.hits.impl.data.remote.parser.parseDate
@@ -25,6 +26,18 @@ fun MessageEntity.toDomain(): ChatMessage {
         text = text,
         createdAt = createdAt,
         senderName = null,
-        userId = null,
+        userId = userId,
+    )
+}
+
+fun ChatMessage.toUi(
+    currentUserId: String
+): ChatMessageUi {
+
+    return ChatMessageUi(
+        id = id,
+        text = text,
+        senderName = senderName,
+        isOutgoing = userId == currentUserId
     )
 }

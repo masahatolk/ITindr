@@ -8,11 +8,10 @@ import com.hits.api.model.ChatMessage
 import com.hits.api.repository.ChatRepository
 import com.hits.impl.data.local.dao.ChatDao
 import com.hits.impl.data.local.dao.MessageDao
+import com.hits.impl.data.local.entity.MessageEntity
 import com.hits.impl.data.mapper.toDomain
 import com.hits.impl.data.mapper.toEntity
 import com.hits.impl.data.remote.datasource.ChatRemoteDataSource
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.RequestBody.Companion.toRequestBody
 
 class ChatRepositoryImpl(
     private val remoteDataSource: ChatRemoteDataSource,
@@ -34,6 +33,8 @@ class ChatRepositoryImpl(
             )
 
         } catch (e: Exception) {
+
+            e.printStackTrace()
 
             val cache = chatDao.getChats()
 
@@ -94,8 +95,6 @@ class ChatRepositoryImpl(
     ): ChatMessage {
 
         return try {
-
-            val body = text.toRequestBody("text/plain".toMediaType())
 
             val remote = remoteDataSource.sendMessage(chatId, text)
 

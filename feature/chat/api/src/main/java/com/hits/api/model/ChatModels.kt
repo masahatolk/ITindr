@@ -17,6 +17,13 @@ data class ChatMessage(
     val senderName: String?,
 )
 
+data class ChatMessageUi(
+    val id: String,
+    val text: String,
+    val isOutgoing: Boolean,
+    val senderName: String?
+)
+
 data class CachedResult<T>(
     val value: T,
     val fromCache: Boolean,

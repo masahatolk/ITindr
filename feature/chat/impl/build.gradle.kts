@@ -44,6 +44,7 @@ dependencies {
     implementation(libs.material)
     implementation(project(":feature:chat:api"))
     implementation(project(":core-ui"))
+    implementation(project(":core-auth"))
     implementation(libs.androidx.material3)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -9,5 +9,6 @@ data class ChatEntity(
     val id: String,
     val title: String,
     val lastMessage: String?,
+    val avatar: String?,
     val updatedAt: Long,
 )

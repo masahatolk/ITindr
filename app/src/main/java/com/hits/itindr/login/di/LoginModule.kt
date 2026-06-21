@@ -28,6 +28,8 @@ val loginModule = module {
     single<AuthRepository> {
         AuthRepositoryImpl(
             get(),
+            get(),
+            get(),
             get()
         )
     }

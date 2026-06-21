@@ -5,11 +5,11 @@ import com.hits.impl.data.remote.dto.ChatDto
 import com.hits.impl.data.remote.dto.CreateChatRequest
 import com.hits.impl.data.remote.dto.MessageDto
 import okhttp3.RequestBody.Companion.toRequestBody
-import kotlin.collections.map
 
 class ChatRemoteDataSourceImpl(
     private val api: ChatApi
 ) : ChatRemoteDataSource {
+
     override suspend fun getChats(): List<ChatDto> {
 
         val response = api.getChats()
@@ -23,7 +23,7 @@ class ChatRemoteDataSourceImpl(
                     title = dto.chat.title,
                     lastMessage = dto.lastMessage,
                     avatar = dto.chat.avatar,
-                    updatedAt = null
+                    updatedAt = null,
                 )
             } ?: emptyList()
         }
@@ -52,10 +52,10 @@ class ChatRemoteDataSourceImpl(
 
     override suspend fun getMessages(chatId: String): List<MessageDto> {
 
-        //TODO
         val response = api.getMessages(chatId, 100, 0)
 
         if (response.isSuccessful) {
+
             return response.body()?.map { dto ->
                 MessageDto(
                     id = dto.id,
@@ -84,7 +84,7 @@ class ChatRemoteDataSourceImpl(
                 id = dto.id,
                 text = dto.text,
                 createdAt = dto.createdAt,
-                user = dto.user
+                user = dto.user,
             )
         }
 

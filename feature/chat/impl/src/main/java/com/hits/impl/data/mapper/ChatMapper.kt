@@ -10,6 +10,7 @@ fun ChatDto.toEntity(): ChatEntity {
         id = id,
         title = title,
         lastMessage = lastMessage?.text,
+        avatar = avatar,
         updatedAt = System.currentTimeMillis()
     )
 }
@@ -19,6 +20,7 @@ fun ChatEntity.toDomain(): Chat {
         id = id,
         title = title,
         lastMessage = lastMessage,
+        avatar = avatar,
         updatedAt = updatedAt
     )
 }
