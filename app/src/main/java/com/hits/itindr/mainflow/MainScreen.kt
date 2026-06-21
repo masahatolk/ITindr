@@ -1,88 +1,170 @@
 package com.hits.itindr.mainflow
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.SizeTransform
-import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.hits.impl.ui.ChatListRoute
+import com.hits.impl.ui.ConversationRoute
 import com.hits.itindr.GradientBackground
-
-private const val SCREEN_TRANSITION_DURATION_MS = 320
+import com.hits.itindr.login.presentation.ProfileRoute
+import com.hits.itindr.mainflow.feed.FeedScreen
 
 @Composable
-fun MainScreen(viewModel: MainViewModel) {
-    val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val stateHolder = rememberSaveableStateHolder()
+fun MainScreen() {
+
+    val navController = rememberNavController()
+
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+
+    val currentRoute = currentBackStackEntry
+        ?.destination
+        ?.route
+
+    val showBottomBar =
+        currentRoute in listOf(
+            Screen.Feed.route,
+            Screen.People.route,
+            Screen.ChatList.route,
+            Screen.Profile.route,
+        )
 
     GradientBackground {
-        Column(
-            modifier = Modifier
-                .padding(WindowInsets.statusBars.asPaddingValues()),
+
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
-            AnimatedContent(
-                targetState = state.selectedIndex,
-                modifier = Modifier.weight(1f),
-                transitionSpec = {
-                    val direction = if (targetState > initialState) 1 else -1
 
-                    slideIntoContainer(
-                        towards = if (direction > 0) {
-                            AnimatedContentTransitionScope.SlideDirection.Left
+            NavHost(
+                navController = navController,
+                startDestination = Screen.Feed.route,
+
+                enterTransition = {
+                    val from =
+                        tabOrder[initialState.destination.route]
+
+                    val to =
+                        tabOrder[targetState.destination.route]
+
+                    (if (from != null && to != null && from != to) {
+
+                        if (to > from) {
+                            slideIntoContainer(
+                                AnimatedContentTransitionScope.SlideDirection.Left,
+                                animationSpec = tween(320)
+                            )
                         } else {
-                            AnimatedContentTransitionScope.SlideDirection.Right
-                        },
-                        animationSpec = tween(
-                            durationMillis = SCREEN_TRANSITION_DURATION_MS,
-                            easing = FastOutSlowInEasing,
-                        ),
-                    ).togetherWith(
-                        slideOutOfContainer(
-                            towards = if (direction > 0) {
-                                AnimatedContentTransitionScope.SlideDirection.Left
-                            } else {
-                                AnimatedContentTransitionScope.SlideDirection.Right
-                            },
-                            animationSpec = tween(
-                                durationMillis = SCREEN_TRANSITION_DURATION_MS,
-                                easing = FastOutSlowInEasing,
-                            ),
-                        )
-                    ).using(
-                        SizeTransform(clip = true),
-                    )
+                            slideIntoContainer(
+                                AnimatedContentTransitionScope.SlideDirection.Right,
+                                animationSpec = tween(320)
+                            )
+                        }
+                    } else {
+                        EnterTransition.None
+                    })
                 },
-                label = "main_screen_navigation",
-            ) { selectedIndex ->
-                val screen = screens[selectedIndex]
 
-                stateHolder.SaveableStateProvider(screen.route) {
-                    screen.content()
+                exitTransition = {
+                    val from =
+                        tabOrder[initialState.destination.route]
+
+                    val to =
+                        tabOrder[targetState.destination.route]
+
+                    (if (from != null && to != null && from != to) {
+
+                        if (to > from) {
+                            slideOutOfContainer(
+                                AnimatedContentTransitionScope.SlideDirection.Left,
+                                animationSpec = tween(320)
+                            )
+                        } else {
+                            slideOutOfContainer(
+                                AnimatedContentTransitionScope.SlideDirection.Right,
+                                animationSpec = tween(320)
+                            )
+                        }
+                    } else {
+                        ExitTransition.None
+                    })
+                }
+            ) {
+
+                composable(Screen.Feed.route) {
+                    FeedScreen()
+                }
+
+                composable(Screen.People.route) {
+                    PeopleScreen()
+                }
+
+                composable(Screen.ChatList.route) {
+                    ChatListRoute(
+                        onOpenChat = { chat ->
+                            navController.navigate(
+                                Screen.Conversation.createRoute(chat)
+                            )
+                        }
+                    )
+                }
+
+                composable(
+                    route = Screen.Conversation.route
+                ) { backStackEntry ->
+
+                    val chatId =
+                        backStackEntry.arguments
+                            ?.getString("chatId")
+                            .orEmpty()
+
+                    val title =
+                        backStackEntry.arguments
+                            ?.getString("chatTitle")
+                            .orEmpty()
+
+                    ConversationRoute(
+                        chatId = chatId,
+                        title = title,
+                        onBack = {
+                            navController.popBackStack()
+                        }
+                    )
+                }
+
+                composable(Screen.Profile.route) {
+                    ProfileRoute()
                 }
             }
 
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
+            if (showBottomBar) {
+
                 BottomNavigation(
-                    selectedIndex = state.selectedIndex,
-                    onSelectItem = { index ->
-                        viewModel.onIntent(MainIntent.SelectTab(index))
-                    },
+                    modifier = Modifier.align(
+                        Alignment.BottomCenter
+                    ),
+                    selectedRoute = currentRoute,
+                    onNavigate = { route ->
+                        navController.navigate(route){
+
+                            popUpTo(
+                                navController.graph.startDestinationId
+                            )
+
+                            launchSingleTop = true
+
+                            restoreState = true
+                        }
+                    }
                 )
             }
         }

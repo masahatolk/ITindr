@@ -2,6 +2,7 @@ package com.hits.impl.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
@@ -20,6 +22,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hits.api.model.Chat
+import com.hits.impl.ui.components.ChatListItem
+import com.hits.impl.ui.components.FullScreenLoader
 
 
 @Composable
@@ -31,10 +35,11 @@ fun ChatListScreen(
     modifier: Modifier = Modifier,
 ) {
 
-    Box(
+    Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = 24.dp, vertical = 16.dp),
+            .padding(start = 24.dp, end = 24.dp, top = 16.dp)
+            .systemBarsPadding(),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -50,7 +55,6 @@ fun ChatListScreen(
             state.chats.isEmpty() -> Text(text = "Чатов пока нет", color = Color.White)
             else -> LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
-                contentPadding = PaddingValues(bottom = 96.dp),
             ) {
                 items(state.chats, key = { it.id }) { chat ->
                     ChatListItem(chat = chat, onClick = { onOpenChat(chat) })

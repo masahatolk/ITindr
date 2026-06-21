@@ -1,7 +1,15 @@
 package com.hits.core_auth
 
 interface TokenStore {
-    fun getToken(): String?
-    fun saveToken(token: String)
+
+    fun getAccessToken(): String?
+
+    fun getRefreshToken(): String?
+
+    fun saveTokens(
+        accessToken: String,
+        refreshToken: String
+    )
+
     fun clearToken()
 }

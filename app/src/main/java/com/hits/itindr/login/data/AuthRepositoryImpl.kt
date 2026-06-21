@@ -8,15 +8,42 @@ class AuthRepositoryImpl(
     private val tokenStore: TokenStore,
 ) : AuthRepository {
     override suspend fun login(email: String, password: String) {
-        tokenStore.saveToken(remoteDataSource.login(email, password).accessToken)
+        val response = remoteDataSource.login(email, password)
+
+        tokenStore.saveTokens(
+            response.accessToken,
+            response.refreshToken
+        )
     }
 
     override suspend fun register(email: String, password: String) {
-        tokenStore.saveToken(remoteDataSource.register(email, password).accessToken)
+        val response = remoteDataSource.register(email, password)
+
+        tokenStore.saveTokens(
+            response.accessToken,
+            response.refreshToken
+        )
     }
 
     override suspend fun logout() {
         remoteDataSource.logout()
         tokenStore.clearToken()
+    }
+
+    override suspend fun refresh(): Boolean {
+        val refreshToken = tokenStore.getRefreshToken() ?: return false
+
+        return try {
+            val response = remoteDataSource.refresh(refreshToken)
+
+            tokenStore.saveTokens(
+                response.accessToken,
+                response.refreshToken
+            )
+            true
+        } catch (e: Exception) {
+            tokenStore.clearToken()
+            false
+        }
     }
 }

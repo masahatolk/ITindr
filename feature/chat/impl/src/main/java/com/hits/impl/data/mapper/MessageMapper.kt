@@ -14,7 +14,7 @@ fun MessageDto.toEntity(chatId: String): MessageEntity {
         chatId = chatId,
         text = text,
         createdAt = parseDate(createdAt),
-        isOutgoing = false,
+        userId = user?.userId
     )
 }
 
@@ -24,7 +24,7 @@ fun MessageEntity.toDomain(): ChatMessage {
         chatId = chatId,
         text = text,
         createdAt = createdAt,
-        isOutgoing = isOutgoing,
-        senderName = null
+        senderName = null,
+        userId = null,
     )
 }

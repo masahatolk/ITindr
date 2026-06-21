@@ -6,4 +6,5 @@ interface AuthRemoteDataSource {
     suspend fun login(email: String, password: String): AuthResponse
     suspend fun register(email: String, password: String): AuthResponse
     suspend fun logout()
+    suspend fun refresh(refreshToken: String): AuthResponse
 }

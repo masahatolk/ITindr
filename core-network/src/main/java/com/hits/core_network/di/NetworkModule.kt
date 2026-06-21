@@ -1,12 +1,14 @@
 package com.hits.core_network.di
 
+import com.hits.core_network.NetworkConfig
+import com.hits.core_network.authenticator.TokenAuthenticator
 import com.hits.core_network.interceptor.AuthInterceptor
-import com.hits.core_network.interceptor.UnauthorizedInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 
@@ -17,7 +19,10 @@ val networkModule = module {
     }
 
     single {
-        UnauthorizedInterceptor(get())
+        TokenAuthenticator(
+            tokenStore = get(),
+            authApi = get(named("refreshApi"))
+        )
     }
 
     single {
@@ -26,10 +31,16 @@ val networkModule = module {
         }
     }
 
-    single {
+    single(named("mainClient")) {
         OkHttpClient.Builder()
             .addInterceptor(get<AuthInterceptor>())
-            .addInterceptor(get<UnauthorizedInterceptor>())
+            .authenticator(get<TokenAuthenticator>())
+            .addInterceptor(get<HttpLoggingInterceptor>())
+            .build()
+    }
+
+    single(named("refreshClient")) {
+        OkHttpClient.Builder()
             .addInterceptor(get<HttpLoggingInterceptor>())
             .build()
     }
@@ -40,12 +51,26 @@ val networkModule = module {
         }
     }
 
-    single {
+    single(named("mainRetrofit")) {
         Retrofit.Builder()
-            .baseUrl("http://158.160.26.231:18080/itindr/api/mobile/v1/")
-            .client(get())
+            .baseUrl(NetworkConfig.BASE_URL)
+            .client(get(named("mainClient")))
             .addConverterFactory(
-                get<Json>().asConverterFactory("application/json".toMediaType())
+                get<Json>().asConverterFactory(
+                    "application/json".toMediaType()
+                )
+            )
+            .build()
+    }
+
+    single(named("refreshRetrofit")) {
+        Retrofit.Builder()
+            .baseUrl(NetworkConfig.BASE_URL)
+            .client(get(named("refreshClient")))
+            .addConverterFactory(
+                get<Json>().asConverterFactory(
+                    "application/json".toMediaType()
+                )
             )
             .build()
     }

@@ -23,46 +23,65 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.hits.itindr.R
+import com.hits.core_ui.R
 
 @Composable
 fun BottomNavigation(
-    selectedIndex: Int,
-    onSelectItem: (Int) -> Unit
+    selectedRoute: String?,
+    onNavigate: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    val items = listOf(
-        R.drawable.feed,
-        R.drawable.people,
-        R.drawable.chat,
-        R.drawable.profile
+    val bottomItems = listOf(
+        BottomItem(
+            Screen.Feed.route,
+            R.drawable.feed,
+            "Поток"
+        ),
+        BottomItem(
+            Screen.People.route,
+            R.drawable.people,
+            "Люди"
+        ),
+        BottomItem(
+            Screen.ChatList.route,
+            R.drawable.chat,
+            "Чаты"
+        ),
+        BottomItem(
+            Screen.Profile.route,
+            R.drawable.profile,
+            "Профиль"
+        ),
     )
 
-    val labels = listOf("Поток", "Люди", "Чаты", "Профиль")
-
     SubcomposeLayout(
-        modifier = Modifier
+        modifier = modifier
             .padding(bottom = 24.dp)
             .clip(RoundedCornerShape(32.dp))
             .background(colorResource(id = R.color.bottom_nav_gray))
             .padding(8.dp),
     ) { constraints ->
 
-        val widths = items.indices.map { selected ->
+        val widths = bottomItems.indices.map { selected ->
 
             val placeable = subcompose("case_$selected") {
+
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    items.forEachIndexed { index, icon ->
+                    bottomItems.forEachIndexed { index, item ->
+
                         NavItem(
-                            icon = icon,
-                            label = labels[index],
+                            icon = item.icon,
+                            label = item.label,
                             isSelected = index == selected,
                             onClick = {}
                         )
                     }
                 }
-            }.first().measure(constraints)
+            }
+                .first()
+                .measure(constraints)
 
             placeable.width
         }
@@ -70,22 +89,34 @@ fun BottomNavigation(
         val maxWidth = widths.max()
 
         val finalPlaceable = subcompose("final") {
+
             Row(
-                modifier = Modifier.width(with(density) { maxWidth.toDp() }),
+                modifier = Modifier.width(
+                    with(density) { maxWidth.toDp() }
+                ),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                items.forEachIndexed { index, icon ->
+
+                bottomItems.forEach { item ->
+
                     NavItem(
-                        icon = icon,
-                        label = labels[index],
-                        isSelected = index == selectedIndex,
-                        onClick = { onSelectItem(index) }
+                        icon = item.icon,
+                        label = item.label,
+                        isSelected = selectedRoute == item.route,
+                        onClick = {
+                            onNavigate(item.route)
+                        }
                     )
                 }
             }
-        }.first().measure(constraints)
+        }
+            .first()
+            .measure(constraints)
 
-        layout(finalPlaceable.width, finalPlaceable.height) {
+        layout(
+            finalPlaceable.width,
+            finalPlaceable.height
+        ) {
             finalPlaceable.place(0, 0)
         }
     }
@@ -135,3 +166,9 @@ fun NavItem(
         }
     }
 }
+
+data class BottomItem(
+    val route: String,
+    val icon: Int,
+    val label: String,
+)

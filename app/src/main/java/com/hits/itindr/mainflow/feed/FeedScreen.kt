@@ -4,12 +4,11 @@ import android.app.Activity
 import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarHost
@@ -27,7 +26,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.hits.itindr.R
+import com.hits.core_ui.R
 import com.hits.itindr.R.string.no_cards
 import com.hits.itindr.StartActivity
 import com.hits.itindr.mainflow.feed.swipeableCards.state.rememberSwipeableCardsState
@@ -48,7 +47,8 @@ fun FeedScreen(
     val profiles = state.profiles
     val swipeableCardsState = rememberSwipeableCardsState(itemCount = { profiles.size })
     val currentProfile = profiles.getOrNull(swipeableCardsState.currentCardIndex)
-    val hasCardsToShow = currentProfile != null || swipeableCardsState.swipingVisibleCards.isNotEmpty()
+    val hasCardsToShow =
+        currentProfile != null || swipeableCardsState.swipingVisibleCards.isNotEmpty()
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
 
@@ -76,7 +76,12 @@ fun FeedScreen(
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 84.dp)
+            .systemBarsPadding(),
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -122,7 +127,7 @@ fun FeedScreen(
                         LazySwipeableCards(
                             modifier = Modifier
                                 .fillMaxWidth(),
-                                //.height(maxHeight),
+                            //.height(maxHeight),
                             state = swipeableCardsState,
                             properties = SwipeableCardsProperties(
                                 padding = 0.dp,
@@ -131,8 +136,17 @@ fun FeedScreen(
                             onSwipe = { profile, direction ->
                                 Log.d(FEED_LOG_TAG, "Swiped ${profile.name} to $direction")
                                 when (direction) {
-                                    SwipeableCardDirection.Right -> viewModel.onIntent(FeedIntent.Like(profile))
-                                    SwipeableCardDirection.Left -> viewModel.onIntent(FeedIntent.Dislike(profile))
+                                    SwipeableCardDirection.Right -> viewModel.onIntent(
+                                        FeedIntent.Like(
+                                            profile
+                                        )
+                                    )
+
+                                    SwipeableCardDirection.Left -> viewModel.onIntent(
+                                        FeedIntent.Dislike(
+                                            profile
+                                        )
+                                    )
                                 }
                             },
                         ) {

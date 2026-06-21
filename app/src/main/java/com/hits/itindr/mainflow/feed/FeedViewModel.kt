@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hits.itindr.mainflow.feed.domain.FeedRepository
 import com.hits.core_network.ApiException
+import com.hits.itindr.domain.usecase.LikeProfileUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -11,7 +12,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class FeedViewModel(
-    private val repository: FeedRepository
+    private val repository: FeedRepository,
+    private val likeProfileUseCase: LikeProfileUseCase,
 ) : ViewModel()
 {
     private val _uiState = MutableStateFlow(FeedUiState(isLoading = true))
@@ -43,18 +45,24 @@ class FeedViewModel(
     }
 
     private fun sendLike(profileId: String) {
-        viewModelScope.launch {
-            runCatching { repository.likeProfile(profileId) }
-                .onSuccess { reactionResult ->
-                    if (reactionResult.isMutual) {
-                        _uiState.update { state ->
-                            state.copy(mutualMatchMessage = "Ваши интерфейсы подошли друг другу")
-                        }
+    viewModelScope.launch {
+
+        runCatching {
+            likeProfileUseCase(profileId)
+        }
+            .onSuccess { isMutual ->
+
+                if (isMutual) {
+                    _uiState.update {
+                        it.copy(
+                            mutualMatchMessage = "Ваши интерфейсы подошли друг другу"
+                        )
                     }
                 }
-                .onFailure(::handleError)
-        }
+            }
+            .onFailure(::handleError)
     }
+}
 
     private fun sendDislike(profileId: String) {
         viewModelScope.launch {

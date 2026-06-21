@@ -1,20 +1,27 @@
 package com.hits.itindr.mainflow
 
-import androidx.compose.runtime.Composable
-import com.hits.impl.ui.ChatScreen
-import com.hits.itindr.login.presentation.ProfileRoute
-import com.hits.itindr.mainflow.feed.FeedScreen
+import android.net.Uri
+import com.hits.api.model.Chat
 
-sealed class Screen(val route: String, val content: @Composable () -> Unit) {
-    data object Feed : Screen("feed", { FeedScreen() })
-    data object People : Screen("people", { PeopleScreen() })
-    data object Chat : Screen("chat", { ChatScreen() })
-    data object Profile : Screen("profile", { ProfileRoute() })
+sealed class Screen(val route: String) {
+
+    data object Feed : Screen("feed")
+
+    data object People : Screen("people")
+
+    data object ChatList : Screen("chat_list")
+
+    data object Conversation : Screen("conversation/{chatId}/{chatTitle}") {
+        fun createRoute(chat: Chat) =
+            "conversation/${chat.id}/${Uri.encode(chat.title)}"
+    }
+
+    data object Profile : Screen("profile")
 }
 
-val screens = listOf(
-    Screen.Feed,
-    Screen.People,
-    Screen.Chat,
-    Screen.Profile
+val tabOrder = mapOf(
+    Screen.Feed.route to 0,
+    Screen.People.route to 1,
+    Screen.ChatList.route to 2,
+    Screen.Profile.route to 3,
 )

@@ -14,5 +14,5 @@ data class MessageEntity(
     val chatId: String,
     val text: String,
     val createdAt: Long,
-    val isOutgoing: Boolean,
+    val userId: String?,
 )

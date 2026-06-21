@@ -43,11 +43,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import coil.compose.AsyncImage
-import com.hits.itindr.R
+import com.hits.core_ui.R
 import com.hits.itindr.TagFlowView
 import com.hits.itindr.TagItem
 import com.hits.itindr.mainflow.feed.swipeableCards.Profile
 import kotlin.math.roundToInt
+import com.hits.itindr.R.style.SwipeableProfileTagFlowView
+
 
 private const val CARD_CORNER_RADIUS = 32
 private const val DETAILS_DRAG_RANGE = 240f
@@ -227,7 +229,7 @@ private fun ProfileTagsFlow(
     AndroidView(
         modifier = modifier,
         factory = { context ->
-            TagFlowView(ContextThemeWrapper(context, R.style.SwipeableProfileTagFlowView)).apply {
+            TagFlowView(ContextThemeWrapper(context, SwipeableProfileTagFlowView)).apply {
                 setOnTouchListener { _, _ -> true }
                 isClickable = false
                 isFocusable = false

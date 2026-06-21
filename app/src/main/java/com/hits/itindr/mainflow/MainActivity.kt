@@ -14,9 +14,7 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
-            val viewModel: MainViewModel = viewModel()
-
-            MainScreen(viewModel = viewModel)
+            MainScreen()
         }
     }
 }

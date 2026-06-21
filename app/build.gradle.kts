@@ -61,7 +61,9 @@ dependencies {
     implementation(project(":core-network"))
     implementation(project(":core-database"))
     implementation(project(":core-auth"))
+    implementation(project(":core-ui"))
     implementation(project(":feature:chat:impl"))
+    implementation(project(":feature:chat:api"))
     implementation(libs.coil.compose)
 
     implementation(libs.androidx.compose.ui.test.junit4)

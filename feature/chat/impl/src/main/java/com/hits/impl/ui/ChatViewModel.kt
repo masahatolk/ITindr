@@ -1,5 +1,6 @@
 package com.hits.impl.ui
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hits.api.model.Chat
@@ -24,16 +25,25 @@ class ChatViewModel(
     fun onIntent(intent: ChatIntent) {
         when (intent) {
             ChatIntent.LoadChats -> loadChats()
-            is ChatIntent.OpenChat -> openChat(intent.chat)
-            ChatIntent.CloseChat -> _uiState.update { it.copy(selectedChat = null, messages = emptyList(), messageDraft = "") }
-            is ChatIntent.MessageDraftChanged -> _uiState.update { it.copy(messageDraft = intent.text) }
-            ChatIntent.SendMessage -> sendMessage()
-            is ChatIntent.CreateChat -> createChat(intent.companionId)
-            ChatIntent.ErrorShown -> _uiState.update { it.copy(snackbarMessage = null) }
+
+            is ChatIntent.LoadMessages ->
+                loadMessages(intent.chatId)
+
+            is ChatIntent.MessageDraftChanged ->
+                _uiState.update { it.copy(messageDraft = intent.text) }
+
+            ChatIntent.SendMessage ->
+                sendMessage()
+
+            is ChatIntent.CreateChat ->
+                createChat(intent.companionId)
+
+            ChatIntent.ErrorShown ->
+                _uiState.update { it.copy(snackbarMessage = null) }
         }
     }
 
-    private fun loadChats(){
+    private fun loadChats() {
         viewModelScope.launch {
 
             _uiState.update { it.copy(isChatsLoading = true, snackbarMessage = null) }
@@ -52,23 +62,6 @@ class ChatViewModel(
         }
     }
 
-    private fun openChat(chat: Chat) {
-        _uiState.update { it.copy(selectedChat = chat, isMessagesLoading = true, snackbarMessage = null) }
-        viewModelScope.launch {
-            runCatching { repository.getMessages(chat.id) }
-                .onSuccess { result ->
-                    _uiState.update {
-                        it.copy(
-                            messages = result.value,
-                            isMessagesLoading = false,
-                            snackbarMessage = if (result.fromCache) CACHE_MESSAGES_MESSAGE else null,
-                        )
-                    }
-                }
-                .onFailure { throwable -> showError(throwable, loadingMessages = false) }
-        }
-    }
-
     // TODO
     private fun createChat(companionId: String) {
         val normalizedCompanionId = companionId.trim()
@@ -81,43 +74,95 @@ class ChatViewModel(
             _uiState.update { it.copy(isCreatingChat = true, snackbarMessage = null) }
             runCatching { repository.createChat(normalizedCompanionId) }
                 .onSuccess { chat ->
+
                     _uiState.update { state ->
                         state.copy(
-                            chats = listOf(chat) + state.chats.filterNot { it.id == chat.id },
+                            chats = listOf(chat) + state.chats,
                             isCreatingChat = false,
-                            selectedChat = chat,
                         )
                     }
-                    openChat(chat)
+
+                    loadChats()
                 }
                 .onFailure { throwable -> showError(throwable, creatingChat = false) }
         }
     }
 
     private fun sendMessage() {
+
         val state = _uiState.value
-        val chat = state.selectedChat ?: return
+
+        val chatId = state.currentChatId ?: return
+
         val text = state.messageDraft.trim()
+
         if (text.isBlank()) return
 
         viewModelScope.launch {
-            _uiState.update { it.copy(isSendingMessage = true, snackbarMessage = null) }
-            runCatching { repository.sendMessage(chat.id, text) }
-                .onSuccess { message -> appendSentMessage(chat, message) }
-                .onFailure { throwable -> showError(throwable, sendingMessage = false) }
+
+            _uiState.update {
+                it.copy(
+                    isSendingMessage = true,
+                    snackbarMessage = null,
+                )
+            }
+
+            runCatching {
+                repository.sendMessage(chatId, text)
+            }
+                .onSuccess { message ->
+                    appendSentMessage(message)
+                }
+                .onFailure {
+                    showError(
+                        it,
+                        sendingMessage = false
+                    )
+                }
         }
     }
 
-    private fun appendSentMessage(chat: Chat, message: ChatMessage) {
-        _uiState.update { state ->
-            val updatedChat = chat.copy(lastMessage = message.text, updatedAt = message.createdAt)
-            state.copy(
-                selectedChat = updatedChat,
-                chats = listOf(updatedChat) + state.chats.filterNot { it.id == updatedChat.id },
-                messages = state.messages + message.copy(isOutgoing = true),
+    private fun appendSentMessage(
+        message: ChatMessage
+    ) {
+        _uiState.update {
+            it.copy(
+                messages = it.messages + message.copy(),
                 messageDraft = "",
                 isSendingMessage = false,
             )
+        }
+    }
+
+    private fun loadMessages(chatId: String) {
+
+        _uiState.update {
+            it.copy(
+                currentChatId = chatId,
+                isMessagesLoading = true
+            )
+        }
+
+        viewModelScope.launch {
+
+            runCatching {
+                repository.getMessages(chatId)
+            }
+                .onSuccess { result ->
+
+                    _uiState.update {
+                        it.copy(
+                            messages = result.value,
+                            isMessagesLoading = false,
+                        )
+                    }
+                }
+                .onFailure {
+                    showError(
+                        it,
+                        loadingMessages = false
+                    )
+                }
         }
     }
 
@@ -134,7 +179,8 @@ class ChatViewModel(
                 isMessagesLoading = loadingMessages ?: state.isMessagesLoading,
                 isCreatingChat = creatingChat ?: state.isCreatingChat,
                 isSendingMessage = sendingMessage ?: state.isSendingMessage,
-                snackbarMessage = throwable.message?.takeIf(String::isNotBlank) ?: DEFAULT_ERROR_MESSAGE,
+                snackbarMessage = throwable.message?.takeIf(String::isNotBlank)
+                    ?: DEFAULT_ERROR_MESSAGE,
             )
         }
     }
@@ -147,8 +193,9 @@ class ChatViewModel(
 }
 
 data class ChatUiState(
+    val currentChatId: String? = null,
+    val chatTitle: String = "",
     val chats: List<Chat> = emptyList(),
-    val selectedChat: Chat? = null,
     val messages: List<ChatMessage> = emptyList(),
     val messageDraft: String = "",
     val isChatsLoading: Boolean = false,
@@ -159,9 +206,11 @@ data class ChatUiState(
 )
 
 sealed interface ChatIntent {
+    data class LoadMessages(
+        val chatId: String
+    ) : ChatIntent
+
     data object LoadChats : ChatIntent
-    data class OpenChat(val chat: Chat) : ChatIntent
-    data object CloseChat : ChatIntent
     data class MessageDraftChanged(val text: String) : ChatIntent
     data object SendMessage : ChatIntent
     data class CreateChat(val companionId: String) : ChatIntent

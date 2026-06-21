@@ -7,5 +7,6 @@ data class ChatDto(
     val id: String,
     val title: String,
     val lastMessage: MessageDto? = null,
+    val avatar: String? = null,
     val updatedAt: String?
 )

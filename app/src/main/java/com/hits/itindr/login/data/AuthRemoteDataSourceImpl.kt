@@ -1,12 +1,13 @@
 package com.hits.itindr.login.data
 
 import com.hits.core_auth.data.AuthApi
+import com.hits.core_auth.data.AuthRefreshRequest
 import com.hits.core_auth.data.AuthRequest
 import com.hits.core_auth.data.AuthResponse
 import com.hits.core_network.ApiException
 
-class AuthRemoteDataSourceImpl (
-    private val authApi: AuthApi
+class AuthRemoteDataSourceImpl(
+    private val authApi: AuthApi,
 ) : AuthRemoteDataSource {
 
     override suspend fun login(
@@ -48,12 +49,11 @@ class AuthRemoteDataSourceImpl (
         )
 
         if (response.isSuccessful) {
-
-            response.body()?.let {
-                return it
-            }
-
-            return login(email, password)
+            return response.body()
+                ?: throw ApiException(
+                    response.code(),
+                    "Пустой ответ сервера"
+                )
         }
 
         throw ApiException(
@@ -72,5 +72,27 @@ class AuthRemoteDataSourceImpl (
                 response.errorBody()?.string().orEmpty()
             )
         }
+    }
+
+    override suspend fun refresh(
+        refreshToken: String
+    ): AuthResponse {
+
+        val response = authApi.refresh(
+            AuthRefreshRequest(refreshToken)
+        )
+
+        if (response.isSuccessful) {
+            return response.body()
+                ?: throw ApiException(
+                    response.code(),
+                    "Пустой ответ сервера"
+                )
+        }
+
+        throw ApiException(
+            response.code(),
+            response.errorBody()?.string().orEmpty()
+        )
     }
 }

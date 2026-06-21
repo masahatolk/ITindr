@@ -15,7 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import com.hits.api.model.ChatMessage
-import com.hits.impl.R
+import com.hits.core_ui.R
 import com.hits.impl.ui.ChatMessageAppearanceDirector
 
 @Composable
@@ -26,8 +26,8 @@ fun MessageBubble(
     val outgoingColor = colorResource(R.color.chat_outgoing_background)
     val incomingColor = colorResource(R.color.chat_incoming_background)
 
-    val appearance = remember(message.isOutgoing) {
-        if (message.isOutgoing) {
+    val appearance = remember() {
+        if (true) {
             director.createOutgoingAppearance(outgoingColor)
         } else {
             director.createIncomingAppearance(incomingColor)
@@ -37,11 +37,25 @@ fun MessageBubble(
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement =
-            if (message.isOutgoing) Arrangement.End else Arrangement.Start
+            if (true) Arrangement.End else Arrangement.Start
     ) {
         Box(
             modifier = Modifier
-                .clip(RoundedCornerShape(appearance.cornerRadius.dp))
+                .clip(
+                    if (true) {
+                        RoundedCornerShape(
+                            topStart = appearance.cornerRadius.dp,
+                            topEnd = appearance.cornerRadius.dp,
+                            bottomStart = appearance.cornerRadius.dp
+                        )
+                    } else {
+                        RoundedCornerShape(
+                            topStart = appearance.cornerRadius.dp,
+                            topEnd = appearance.cornerRadius.dp,
+                            bottomEnd = appearance.cornerRadius.dp
+                        )
+                    }
+                )
                 .background(appearance.backgroundColor)
                 .padding(14.dp)
         ) {

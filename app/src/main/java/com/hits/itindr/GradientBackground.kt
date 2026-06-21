@@ -10,6 +10,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import com.hits.core_ui.R
 
 @Composable
 fun GradientBackground(content: @Composable () -> Unit) {

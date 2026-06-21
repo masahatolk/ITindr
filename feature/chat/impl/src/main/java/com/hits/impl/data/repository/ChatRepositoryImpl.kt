@@ -10,13 +10,12 @@ import com.hits.impl.data.local.dao.ChatDao
 import com.hits.impl.data.local.dao.MessageDao
 import com.hits.impl.data.mapper.toDomain
 import com.hits.impl.data.mapper.toEntity
-import com.hits.impl.data.remote.api.ChatApi
-import com.hits.impl.data.remote.dto.CreateChatRequest
+import com.hits.impl.data.remote.datasource.ChatRemoteDataSource
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 
 class ChatRepositoryImpl(
-    private val api: ChatApi,
+    private val remoteDataSource: ChatRemoteDataSource,
     private val chatDao: ChatDao,
     private val messageDao: MessageDao
 ) : ChatRepository {
@@ -24,7 +23,7 @@ class ChatRepositoryImpl(
     override suspend fun getChats(): CachedResult<List<Chat>> {
         return try {
 
-            val remoteChats = api.getChats()
+            val remoteChats = remoteDataSource.getChats()
 
             val entities = remoteChats.map { it.toEntity() }
             chatDao.insertChats(entities)
@@ -48,9 +47,7 @@ class ChatRepositoryImpl(
     override suspend fun createChat(companionId: String): Chat {
         return try {
 
-            val remote = api.createChat(
-                CreateChatRequest(userId = companionId)
-            )
+            val remote = remoteDataSource.createChat(companionId)
 
             val entity = remote.toEntity()
             chatDao.insertChats(listOf(entity))
@@ -66,7 +63,7 @@ class ChatRepositoryImpl(
     override suspend fun getMessages(chatId: String): CachedResult<List<ChatMessage>> {
         return try {
 
-            val remote = api.getMessages(chatId)
+            val remote = remoteDataSource.getMessages(chatId)
 
             val entities = remote.map {
                 it.toEntity(chatId)
@@ -100,7 +97,7 @@ class ChatRepositoryImpl(
 
             val body = text.toRequestBody("text/plain".toMediaType())
 
-            val remote = api.sendMessage(chatId, body)
+            val remote = remoteDataSource.sendMessage(chatId, text)
 
             val entity = remote.toEntity(chatId)
 

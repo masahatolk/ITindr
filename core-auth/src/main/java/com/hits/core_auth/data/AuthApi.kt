@@ -19,4 +19,9 @@ interface AuthApi {
 
     @DELETE("auth/logout")
     suspend fun logout(): Response<Unit>
+
+    @POST("auth/refresh")
+    suspend fun refresh(
+        @Body request: AuthRefreshRequest
+    ): Response<AuthResponse>
 }

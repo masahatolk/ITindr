@@ -4,6 +4,7 @@ data class Chat(
     val id: String,
     val title: String,
     val lastMessage: String?,
+    val avatar: String? = null,
     val updatedAt: Long,
 )
 
@@ -12,7 +13,7 @@ data class ChatMessage(
     val chatId: String,
     val text: String,
     val createdAt: Long,
-    val isOutgoing: Boolean,
+    val userId: String?,
     val senderName: String?,
 )
 

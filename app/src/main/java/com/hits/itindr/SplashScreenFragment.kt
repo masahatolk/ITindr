@@ -21,7 +21,7 @@ class SplashScreenFragment : Fragment(R.layout.fragment_splash_screen) {
 
         val navController = findNavController()
 
-        if (tokenStore.getToken().isNullOrBlank()) {
+        if (tokenStore.getAccessToken().isNullOrBlank()) {
             navController.navigate(R.id.action_splash_to_home)
         } else {
             startActivity(Intent(requireContext(), MainActivity::class.java))
