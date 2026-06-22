@@ -41,6 +41,7 @@ val networkModule = module {
 
     single(named("refreshClient")) {
         OkHttpClient.Builder()
+            .addInterceptor(get<AuthInterceptor>())
             .addInterceptor(get<HttpLoggingInterceptor>())
             .build()
     }

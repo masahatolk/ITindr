@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -38,6 +40,8 @@ fun ChatListItem(chat: Chat, onClick: () -> Unit) {
             contentDescription = null,
             placeholder = painterResource(R.drawable.default_profile_icon),
             error = painterResource(R.drawable.default_profile_icon),
+            contentScale = ContentScale.Crop,
+            alignment = Alignment.Center,
             modifier = Modifier
                 .size(80.dp)
                 .clip(RoundedCornerShape(24.dp))

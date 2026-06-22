@@ -20,7 +20,12 @@ val chatModule = module {
     }
 
     single<ChatRepository> {
-        ChatRepositoryImpl(get(), get(), get())
+        ChatRepositoryImpl(
+            get(),
+            get(),
+            get(),
+            get()
+        )
     }
 
     single<ChatRemoteDataSource> {

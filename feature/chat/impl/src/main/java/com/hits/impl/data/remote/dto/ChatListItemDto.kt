@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ChatListItemDto(
     val chat: ChatInfoDto,
-    val lastMessage: MessageDto? = null
+    val lastMessage: MessageDto?
 )

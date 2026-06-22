@@ -15,13 +15,16 @@ data class ChatMessage(
     val createdAt: Long,
     val userId: String?,
     val senderName: String?,
+    val avatar: String?,
 )
 
 data class ChatMessageUi(
     val id: String,
     val text: String,
     val isOutgoing: Boolean,
-    val senderName: String?
+    val senderName: String?,
+    val avatar: String?,
+    val createdAt: String
 )
 
 data class CachedResult<T>(

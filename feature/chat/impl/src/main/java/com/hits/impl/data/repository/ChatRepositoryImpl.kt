@@ -1,22 +1,22 @@
 package com.hits.impl.data.repository
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.hits.api.model.CachedResult
 import com.hits.api.model.Chat
 import com.hits.api.model.ChatMessage
 import com.hits.api.repository.ChatRepository
+import com.hits.core_auth.session.UserSession
 import com.hits.impl.data.local.dao.ChatDao
 import com.hits.impl.data.local.dao.MessageDao
-import com.hits.impl.data.local.entity.MessageEntity
 import com.hits.impl.data.mapper.toDomain
 import com.hits.impl.data.mapper.toEntity
 import com.hits.impl.data.remote.datasource.ChatRemoteDataSource
+import java.io.IOException
 
 class ChatRepositoryImpl(
     private val remoteDataSource: ChatRemoteDataSource,
     private val chatDao: ChatDao,
-    private val messageDao: MessageDao
+    private val messageDao: MessageDao,
+    private val userSession: UserSession,
 ) : ChatRepository {
 
     override suspend fun getChats(): CachedResult<List<Chat>> {
@@ -24,7 +24,9 @@ class ChatRepositoryImpl(
 
             val remoteChats = remoteDataSource.getChats()
 
-            val entities = remoteChats.map { it.toEntity() }
+            val currentUserId = userSession.getUserId() ?: error("User not authorized")
+
+            val entities = remoteChats.map { it.toEntity(currentUserId) }
             chatDao.insertChats(entities)
 
             CachedResult(
@@ -32,11 +34,13 @@ class ChatRepositoryImpl(
                 fromCache = false
             )
 
-        } catch (e: Exception) {
+        } catch (e: IOException) {
 
             e.printStackTrace()
 
-            val cache = chatDao.getChats()
+            val currentUserId = userSession.getUserId() ?: error("User not authorized")
+
+            val cache = chatDao.getChats(currentUserId)
 
             CachedResult(
                 value = cache.map { it.toDomain() },
@@ -50,7 +54,9 @@ class ChatRepositoryImpl(
 
             val remote = remoteDataSource.createChat(companionId)
 
-            val entity = remote.toEntity()
+            val currentUserId = userSession.getUserId() ?: error("User not authorized")
+
+            val entity = remote.toEntity(currentUserId)
             chatDao.insertChats(listOf(entity))
 
             entity.toDomain()
@@ -60,7 +66,6 @@ class ChatRepositoryImpl(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getMessages(chatId: String): CachedResult<List<ChatMessage>> {
         return try {
 
@@ -77,18 +82,17 @@ class ChatRepositoryImpl(
                 fromCache = false
             )
 
-        } catch (e: Exception) {
+        } catch (e: IOException) {
 
             val cache = messageDao.getMessages(chatId)
 
             CachedResult(
-                value = cache.map { it.toDomain() },
+                value = cache.reversed().map { it.toDomain() },
                 fromCache = true
             )
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun sendMessage(
         chatId: String,
         text: String

@@ -61,7 +61,7 @@ fun ConversationScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(
-                items = state.messages,
+                items = state.messages.reversed(),
                 key = { it.id }
             ) { message ->
                 MessageBubble(

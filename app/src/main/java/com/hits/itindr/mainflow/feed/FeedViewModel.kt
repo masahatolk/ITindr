@@ -19,10 +19,6 @@ class FeedViewModel(
     private val _uiState = MutableStateFlow(FeedUiState(isLoading = true))
     val uiState: StateFlow<FeedUiState> = _uiState.asStateFlow()
 
-    init {
-        onIntent(FeedIntent.LoadFeed)
-    }
-
     fun onIntent(intent: FeedIntent) {
         when (intent) {
             FeedIntent.LoadFeed -> loadFeed()

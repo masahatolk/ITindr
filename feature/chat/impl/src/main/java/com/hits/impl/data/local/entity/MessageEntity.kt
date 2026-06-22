@@ -15,4 +15,5 @@ data class MessageEntity(
     val text: String,
     val createdAt: Long,
     val userId: String?,
+    val avatar: String?,
 )

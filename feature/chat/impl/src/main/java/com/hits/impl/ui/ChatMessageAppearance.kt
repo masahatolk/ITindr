@@ -9,6 +9,7 @@ data class ChatMessageAppearance(
     val backgroundColor: Color,
     val textColor: Color,
     val textSize: TextUnit,
+    val textDateSize: TextUnit,
     val textWeight: FontWeight,
     val cornerRadius: Float,
 )
@@ -17,6 +18,7 @@ interface ChatMessageAppearanceBuilder {
     fun setBackgroundColor(color: Color): ChatMessageAppearanceBuilder
     fun setTextColor(color: Color): ChatMessageAppearanceBuilder
     fun setTextSize(size: TextUnit): ChatMessageAppearanceBuilder
+    fun setTextDateSize(size: TextUnit): ChatMessageAppearanceBuilder
     fun setTextWeight(weight: FontWeight): ChatMessageAppearanceBuilder
     fun setCornerRadius(radius: Float): ChatMessageAppearanceBuilder
     fun build(): ChatMessageAppearance
@@ -26,6 +28,7 @@ class DefaultChatMessageAppearanceBuilder : ChatMessageAppearanceBuilder {
     private var backgroundColor: Color = Color(0xFF2A2A2A)
     private var textColor: Color = Color.White
     private var textSize: TextUnit = 16.sp
+    private var textDateSize: TextUnit = 12.sp
     private var textWeight: FontWeight = FontWeight.Normal
     private var cornerRadius: Float = 18f
 
@@ -41,6 +44,10 @@ class DefaultChatMessageAppearanceBuilder : ChatMessageAppearanceBuilder {
         textSize = size
     }
 
+    override fun setTextDateSize(size: TextUnit): ChatMessageAppearanceBuilder = apply {
+        textDateSize = size
+    }
+
     override fun setTextWeight(weight: FontWeight): ChatMessageAppearanceBuilder = apply {
         textWeight = weight
     }
@@ -54,6 +61,7 @@ class DefaultChatMessageAppearanceBuilder : ChatMessageAppearanceBuilder {
             backgroundColor = backgroundColor,
             textColor = textColor,
             textSize = textSize,
+            textDateSize = textDateSize,
             textWeight = textWeight,
             cornerRadius = cornerRadius,
         )

@@ -1,8 +1,8 @@
 package com.hits.impl.data.remote.api
 
-import com.hits.impl.data.remote.dto.ChatDto
 import com.hits.impl.data.remote.dto.ChatListItemDto
 import com.hits.impl.data.remote.dto.CreateChatRequest
+import com.hits.impl.data.remote.dto.CreatedChatDto
 import com.hits.impl.data.remote.dto.MessageDto
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -22,7 +22,7 @@ interface ChatApi {
     @POST("chat")
     suspend fun createChat(
         @Body request: CreateChatRequest
-    ): Response<ChatDto>
+    ): Response<CreatedChatDto>
 
     @GET("chat/{chatId}/message")
     suspend fun getMessages(

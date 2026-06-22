@@ -8,6 +8,9 @@ import com.hits.api.model.ChatMessageUi
 import com.hits.api.repository.ChatRepository
 import com.hits.core_auth.session.UserSession
 import com.hits.impl.data.mapper.toUi
+import com.hits.impl.data.remote.parser.toRussianDate
+import com.hits.impl.data.validator.ChatMessageValidator
+import com.hits.impl.data.validator.ValidationResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,10 +27,6 @@ class ChatViewModel(
         )
     )
     val uiState: StateFlow<ChatUiState> = _uiState.asStateFlow()
-
-    init {
-        onIntent(ChatIntent.LoadChats)
-    }
 
     fun onIntent(intent: ChatIntent) {
         when (intent) {
@@ -57,6 +56,7 @@ class ChatViewModel(
             runCatching { repository.getChats() }
                 .onSuccess { result ->
 
+                    // TODO snackbar не показывает
                     _uiState.update {
                         it.copy(
                             chats = result.value,
@@ -89,8 +89,6 @@ class ChatViewModel(
                             isCreatingChat = false,
                         )
                     }
-
-                    loadChats()
                 }
                 .onFailure { throwable -> showError(throwable, creatingChat = false) }
         }
@@ -98,35 +96,33 @@ class ChatViewModel(
 
     private fun sendMessage() {
 
-        val state = _uiState.value
+        val chatId = _uiState.value.currentChatId ?: return
 
-        val chatId = state.currentChatId ?: return
+        when (val result = ChatMessageValidator.validate(_uiState.value.messageDraft)) {
 
-        val text = state.messageDraft.trim()
-
-        if (text.isBlank()) return
-
-        viewModelScope.launch {
-
-            _uiState.update {
-                it.copy(
-                    isSendingMessage = true,
-                    snackbarMessage = null,
-                )
+            is ValidationResult.Error -> {
+                _uiState.update {
+                    it.copy(snackbarMessage = result.message)
+                }
+                return
             }
 
-            runCatching {
-                repository.sendMessage(chatId, text)
+            is ValidationResult.Success -> {
+
+                viewModelScope.launch {
+                    _uiState.update { it.copy(isSendingMessage = true) }
+
+                    runCatching {
+                        repository.sendMessage(chatId, result.value)
+                    }
+                        .onSuccess { message ->
+                            appendSentMessage(message)
+                        }
+                        .onFailure {
+                            showError(it, sendingMessage = false)
+                        }
+                }
             }
-                .onSuccess { message ->
-                    appendSentMessage(message)
-                }
-                .onFailure {
-                    showError(
-                        it,
-                        sendingMessage = false
-                    )
-                }
         }
     }
 
@@ -167,23 +163,24 @@ class ChatViewModel(
                     val currentUserId = userSession.getUserId()
 
                     val uiMessages =
-                        result.value.map { message ->
-
-                            println("CHAT USER ID = ${message.userId}")
+                        result.value.reversed().map { message ->
 
                             ChatMessageUi(
                                 id = message.id,
                                 text = message.text,
                                 senderName = message.senderName,
-                                isOutgoing =
-                                    message.userId == currentUserId
+                                isOutgoing = message.userId == currentUserId,
+                                avatar = message.avatar,
+                                createdAt = message.createdAt.toRussianDate()
                             )
                         }
 
+                    // TODO не показывает snackbar
                     _uiState.update {
                         it.copy(
                             messages = uiMessages,
-                            isMessagesLoading = false
+                            isMessagesLoading = false,
+                            snackbarMessage = if (result.fromCache) CACHE_MESSAGES_MESSAGE else null,
                         )
                     }
                 }

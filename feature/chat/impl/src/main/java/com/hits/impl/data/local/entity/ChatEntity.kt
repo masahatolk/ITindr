@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class ChatEntity(
     @PrimaryKey
     val id: String,
+    val ownerUserId: String,
     val title: String,
     val lastMessage: String?,
     val avatar: String?,
