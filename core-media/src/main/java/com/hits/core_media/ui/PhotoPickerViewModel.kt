@@ -14,10 +14,9 @@ class PhotoPickerViewModel(
     private val repository: GalleryRepository
 ) : ViewModel() {
 
-    private val _state =
-        MutableStateFlow(
-            PhotoPickerUiState()
-        )
+    private val _state = MutableStateFlow(
+        PhotoPickerUiState()
+    )
 
     val state = _state.asStateFlow()
 
@@ -33,29 +32,74 @@ class PhotoPickerViewModel(
                 it.copy(isLoading = true)
             }
 
+            val photos = repository.loadPhotos()
+
+            _state.update {
+                it.copy(
+                    isLoading = false, photos = photos
+                )
+            }
+        }
+    }
+
+    fun reloadPhotos() {
+
+        viewModelScope.launch {
+
             val photos =
                 repository.loadPhotos()
 
             _state.update {
                 it.copy(
-                    isLoading = false,
                     photos = photos
                 )
             }
         }
     }
 
-    fun selectPhoto(uri: Uri) {
+    fun togglePhoto(
+        uri: Uri, multiSelect: Boolean, maxSelection: Int
+    ) {
 
-        _state.update {
-            it.copy(selectedPhoto = uri)
+        _state.update { state ->
+
+            val selected = state.selectedPhotos
+
+            if (uri in selected) {
+
+                state.copy(
+                    selectedPhotos = selected - uri
+                )
+
+            } else {
+
+                if (!multiSelect) {
+
+                    state.copy(
+                        selectedPhotos = setOf(uri)
+                    )
+
+                } else {
+
+                    if (selected.size >= maxSelection) {
+
+                        state
+
+                    } else {
+
+                        state.copy(
+                            selectedPhotos = selected + uri
+                        )
+                    }
+                }
+            }
         }
     }
 
     fun clearSelection() {
 
         _state.update {
-            it.copy(selectedPhoto = null)
+            it.copy(selectedPhotos = emptySet())
         }
     }
 }

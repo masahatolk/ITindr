@@ -12,7 +12,7 @@ import com.hits.impl.data.local.entity.MessageEntity
         ChatEntity::class,
         MessageEntity::class
     ],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

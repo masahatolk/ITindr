@@ -8,5 +8,5 @@ data class PhotoPickerUiState(
 
     val photos: List<GalleryPhoto> = emptyList(),
 
-    val selectedPhoto: Uri? = null,
+    val selectedPhotos: Set<Uri> = emptySet(),
 )

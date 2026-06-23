@@ -33,20 +33,15 @@ class ChatViewModel(
         when (intent) {
             ChatIntent.LoadChats -> loadChats()
 
-            is ChatIntent.LoadMessages ->
-                loadMessages(intent.chatId)
+            is ChatIntent.LoadMessages -> loadMessages(intent.chatId)
 
-            is ChatIntent.MessageDraftChanged ->
-                _uiState.update { it.copy(messageDraft = intent.text) }
+            is ChatIntent.MessageDraftChanged -> _uiState.update { it.copy(messageDraft = intent.text) }
 
-            ChatIntent.SendMessage ->
-                sendMessage()
+            ChatIntent.SendMessage -> sendMessage()
 
-            is ChatIntent.CreateChat ->
-                createChat(intent.companionId)
+            is ChatIntent.CreateChat -> createChat(intent.companionId)
 
-            ChatIntent.ErrorShown ->
-                _uiState.update { it.copy(snackbarMessage = null) }
+            ChatIntent.ErrorShown -> _uiState.update { it.copy(snackbarMessage = null) }
 
             ChatIntent.OpenAttachmentPicker -> {
                 _uiState.update {
@@ -56,36 +51,16 @@ class ChatViewModel(
                 }
             }
 
-            is ChatIntent.AddAttachments -> {
-
-                _uiState.update { state ->
-
-                    val attachments =
-                        (state.attachments +
-                                intent.uris.map(::Attachment))
-                            .distinctBy { it.uri }
-                            .take(5)
-
-                    state.copy(
-                        attachments = attachments,
-                        isAttachmentPickerVisible = true
-                    )
-                }
-            }
-
             is ChatIntent.RemoveAttachment -> {
 
                 _uiState.update { state ->
 
-                    val updated =
-                        state.attachments.filterNot {
-                            it.uri == intent.uri
-                        }
+                    val updated = state.attachments.filterNot {
+                        it.uri == intent.uri
+                    }
 
                     state.copy(
-                        attachments = updated,
-                        isAttachmentPickerVisible =
-                            updated.isNotEmpty()
+                        attachments = updated, isAttachmentPickerVisible = updated.isNotEmpty()
                     )
                 }
             }
@@ -106,8 +81,7 @@ class ChatViewModel(
         viewModelScope.launch {
 
             _uiState.update { it.copy(isChatsLoading = true, snackbarMessage = null) }
-            runCatching { repository.getChats() }
-                .onSuccess { result ->
+            runCatching { repository.getChats() }.onSuccess { result ->
 
                     // TODO snackbar не показывает
                     _uiState.update {
@@ -117,8 +91,7 @@ class ChatViewModel(
                             snackbarMessage = if (result.fromCache) CACHE_CHATS_MESSAGE else null,
                         )
                     }
-                }
-                .onFailure { throwable ->
+                }.onFailure { throwable ->
                     showError(throwable, loadingChats = false)
                 }
         }
@@ -133,8 +106,7 @@ class ChatViewModel(
 
         viewModelScope.launch {
             _uiState.update { it.copy(isCreatingChat = true, snackbarMessage = null) }
-            runCatching { repository.createChat(normalizedCompanionId) }
-                .onSuccess { chat ->
+            runCatching { repository.createChat(normalizedCompanionId) }.onSuccess { chat ->
 
                     _uiState.update { state ->
                         state.copy(
@@ -142,8 +114,7 @@ class ChatViewModel(
                             isCreatingChat = false,
                         )
                     }
-                }
-                .onFailure { throwable -> showError(throwable, creatingChat = false) }
+                }.onFailure { throwable -> showError(throwable, creatingChat = false) }
         }
     }
 
@@ -167,11 +138,9 @@ class ChatViewModel(
 
                     runCatching {
                         repository.sendMessage(chatId, result.value, _uiState.value.attachments)
-                    }
-                        .onSuccess { message ->
+                    }.onSuccess { message ->
                             appendSentMessage(message)
-                        }
-                        .onFailure {
+                        }.onFailure {
                             showError(it, sendingMessage = false)
                         }
                 }
@@ -179,14 +148,66 @@ class ChatViewModel(
         }
     }
 
+    fun sendMessageWithPhotos(
+        text: String, photos: List<String>
+    ) {
+        viewModelScope.launch {
+
+            val chatId = _uiState.value.currentChatId ?: return@launch
+
+            _uiState.update {
+                it.copy(
+                    isSendingMessage = true
+                )
+            }
+
+            try {
+
+                if (text.isNotBlank()) {
+
+                    val textMessage = repository.sendMessage(
+                        chatId = chatId, text = text, attachments = emptyList()
+                    )
+
+                    appendSentMessage(
+                        textMessage
+                    )
+                }
+
+                photos.forEach { uri ->
+
+                    val photoMessage = repository.sendMessage(
+                        chatId = chatId, text = "", attachments = listOf(
+                            Attachment(uri)
+                        )
+                    )
+
+                    appendSentMessage(
+                        photoMessage
+                    )
+                }
+
+                _uiState.update {
+                    it.copy(
+                        messageDraft = "", isSendingMessage = false
+                    )
+                }
+
+            } catch (e: Exception) {
+
+                showError(
+                    e, sendingMessage = false
+                )
+            }
+        }
+    }
+
     private fun appendSentMessage(
         message: ChatMessage
     ) {
-        val currentUserId =
-            userSession.getUserId().orEmpty()
+        val currentUserId = userSession.getUserId().orEmpty()
 
-        val uiMessage =
-            message.toUi(currentUserId)
+        val uiMessage = message.toUi(currentUserId)
 
         _uiState.update {
             it.copy(
@@ -201,8 +222,7 @@ class ChatViewModel(
 
         _uiState.update {
             it.copy(
-                currentChatId = chatId,
-                isMessagesLoading = true
+                currentChatId = chatId, isMessagesLoading = true
             )
         }
 
@@ -210,23 +230,22 @@ class ChatViewModel(
 
             runCatching {
                 repository.getMessages(chatId)
-            }
-                .onSuccess { result ->
+            }.onSuccess { result ->
 
                     val currentUserId = userSession.getUserId()
 
-                    val uiMessages =
-                        result.value.reversed().map { message ->
+                    val uiMessages = result.value.reversed().map { message ->
 
-                            ChatMessageUi(
-                                id = message.id,
-                                text = message.text,
-                                senderName = message.senderName,
-                                isOutgoing = message.userId == currentUserId,
-                                avatar = message.avatar,
-                                createdAt = message.createdAt.toRussianDate()
-                            )
-                        }
+                        ChatMessageUi(
+                            id = message.id,
+                            text = message.text,
+                            senderName = message.senderName,
+                            isOutgoing = message.userId == currentUserId,
+                            avatar = message.avatar,
+                            createdAt = message.createdAt.toRussianDate(),
+                            attachments = message.attachments,
+                        )
+                    }
 
                     // TODO не показывает snackbar
                     _uiState.update {
@@ -236,11 +255,9 @@ class ChatViewModel(
                             snackbarMessage = if (result.fromCache) CACHE_MESSAGES_MESSAGE else null,
                         )
                     }
-                }
-                .onFailure {
+                }.onFailure {
                     showError(
-                        it,
-                        loadingMessages = false
+                        it, loadingMessages = false
                     )
                 }
         }
@@ -300,10 +317,6 @@ sealed interface ChatIntent {
     data object OpenAttachmentPicker : ChatIntent
 
     data object CloseAttachmentPicker : ChatIntent
-
-    data class AddAttachments(
-        val uris: List<String>
-    ) : ChatIntent
 
     data class RemoveAttachment(
         val uri: String

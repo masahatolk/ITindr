@@ -14,7 +14,8 @@ fun MessageDto.toEntity(chatId: String): MessageEntity {
         text = text,
         createdAt = parseDate(createdAt),
         userId = user?.userId,
-        avatar = user?.avatar
+        avatar = user?.avatar,
+        attachments = attachments,
     )
 }
 
@@ -26,7 +27,8 @@ fun MessageEntity.toDomain(): ChatMessage {
         createdAt = createdAt,
         senderName = null,
         userId = userId,
-        avatar = avatar
+        avatar = avatar,
+        attachments = attachments,
     )
 }
 
@@ -40,6 +42,7 @@ fun ChatMessage.toUi(
         senderName = senderName,
         isOutgoing = userId == currentUserId,
         avatar = avatar,
-        createdAt = createdAt.toRussianDate()
+        createdAt = createdAt.toRussianDate(),
+        attachments = attachments,
     )
 }

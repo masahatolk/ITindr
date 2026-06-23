@@ -4,6 +4,7 @@ import android.Manifest
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -11,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -18,14 +20,14 @@ import androidx.navigation.NavController
 import com.hits.core_media.camera.createTempImageUri
 import com.hits.core_media.permission.galleryPermission
 import com.hits.core_media.ui.PhotoPickerViewModel
+import com.hits.core_ui.ActionButton
 import com.hits.core_ui.R
 import com.hits.core_ui.photo.PhotoPickerBottomSheet
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun EditProfileRoute(
-    navController: NavController,
-    viewModel: EditProfileViewModel = koinViewModel()
+    navController: NavController, viewModel: EditProfileViewModel = koinViewModel()
 ) {
 
     val pickerViewModel = koinViewModel<PhotoPickerViewModel>()
@@ -54,20 +56,17 @@ fun EditProfileRoute(
         }
     }
 
-    val galleryPermissionLauncher =
-        rememberLauncherForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { granted ->
+    val galleryPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
 
-            Log.d("PHOTO_PICKER", "gallery permission = $granted")
+        if (granted) {
 
-            if (granted) {
+            pickerViewModel.loadPhotos()
 
-                pickerViewModel.loadPhotos()
-
-                showPicker = true
-            }
+            showPicker = true
         }
+    }
 
     val cameraPermissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -105,7 +104,11 @@ fun EditProfileRoute(
             state = pickerState,
 
             onPhotoClick = {
-                pickerViewModel.selectPhoto(it)
+                pickerViewModel.togglePhoto(
+                    uri = it,
+                    multiSelect = false,
+                    maxSelection = 1,
+                )
             },
 
             onCameraClick = {
@@ -114,19 +117,23 @@ fun EditProfileRoute(
                 )
             },
 
-            onUsePhotoClick = {
-
-                pickerState.selectedPhoto?.let {
-
-                    viewModel.onAvatarSelected(it)
-
-                    showPicker = false
-                }
-            },
-
             onDismiss = {
                 showPicker = false
-            }
+            },
+
+            currentElement = {
+                ActionButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Использовать фото",
+                    enabled = pickerState.selectedPhotos.isNotEmpty(),
+                    onClick = {
+                        pickerState.selectedPhotos.firstOrNull()?.let {
+                            viewModel.onAvatarSelected(it)
+                            showPicker = false
+                        }
+                    },
+                )
+            },
         )
     }
 

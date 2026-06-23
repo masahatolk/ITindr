@@ -22,9 +22,3 @@ data class EditProfileUiState(
 
     val isSaving: Boolean = false,
 )
-
-enum class AvatarAction {
-    NONE,
-    UPLOAD,
-    DELETE
-}

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -16,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import com.hits.core_ui.Toolbar
 import com.hits.impl.ui.components.ChatInput
 import com.hits.impl.ui.components.MessageBubble
-import com.hits.impl.ui.components.attachment.AttachmentItem
 
 @Composable
 fun ConversationScreen(
@@ -43,25 +41,6 @@ fun ConversationScreen(
         },
 
         bottomBar = {
-            Column {
-                if (state.attachments.isNotEmpty()) {
-
-                    LazyRow {
-
-                        items(state.attachments) { attachment ->
-
-                            AttachmentItem(
-                                attachment = attachment,
-                                onRemove = {
-                                    onRemoveAttachment(
-                                        attachment.uri
-                                    )
-                                }
-                            )
-                        }
-                    }
-                }
-
                 ChatInput(
                     modifier = Modifier.imePadding(),
                     value = state.messageDraft,
@@ -70,8 +49,6 @@ fun ConversationScreen(
                     isSending = state.isSendingMessage,
                     onAttachPhoto = onOpenAttachmentPicker
                 )
-            }
-
         }
     ) { innerPadding ->
 

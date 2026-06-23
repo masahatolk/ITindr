@@ -16,6 +16,7 @@ data class ChatMessage(
     val userId: String?,
     val senderName: String?,
     val avatar: String?,
+    val attachments: List<String>
 )
 
 data class ChatMessageUi(
@@ -24,11 +25,12 @@ data class ChatMessageUi(
     val isOutgoing: Boolean,
     val senderName: String?,
     val avatar: String?,
-    val createdAt: String
+    val createdAt: String,
+    val attachments: List<String>,
 )
 
 data class Attachment(
-    val uri: String
+    val uri: String,
 )
 
 data class CachedResult<T>(
