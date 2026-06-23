@@ -2,6 +2,7 @@ package com.hits.impl.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hits.api.model.Attachment
 import com.hits.api.model.Chat
 import com.hits.api.model.ChatMessage
 import com.hits.api.model.ChatMessageUi
@@ -46,8 +47,60 @@ class ChatViewModel(
 
             ChatIntent.ErrorShown ->
                 _uiState.update { it.copy(snackbarMessage = null) }
+
+            ChatIntent.OpenAttachmentPicker -> {
+                _uiState.update {
+                    it.copy(
+                        isAttachmentPickerVisible = true
+                    )
+                }
+            }
+
+            is ChatIntent.AddAttachments -> {
+
+                _uiState.update { state ->
+
+                    val attachments =
+                        (state.attachments +
+                                intent.uris.map(::Attachment))
+                            .distinctBy { it.uri }
+                            .take(5)
+
+                    state.copy(
+                        attachments = attachments,
+                        isAttachmentPickerVisible = true
+                    )
+                }
+            }
+
+            is ChatIntent.RemoveAttachment -> {
+
+                _uiState.update { state ->
+
+                    val updated =
+                        state.attachments.filterNot {
+                            it.uri == intent.uri
+                        }
+
+                    state.copy(
+                        attachments = updated,
+                        isAttachmentPickerVisible =
+                            updated.isNotEmpty()
+                    )
+                }
+            }
+
+            ChatIntent.CloseAttachmentPicker -> {
+
+                _uiState.update {
+                    it.copy(
+                        isAttachmentPickerVisible = false
+                    )
+                }
+            }
         }
     }
+
 
     private fun loadChats() {
         viewModelScope.launch {
@@ -113,7 +166,7 @@ class ChatViewModel(
                     _uiState.update { it.copy(isSendingMessage = true) }
 
                     runCatching {
-                        repository.sendMessage(chatId, result.value)
+                        repository.sendMessage(chatId, result.value, _uiState.value.attachments)
                     }
                         .onSuccess { message ->
                             appendSentMessage(message)
@@ -230,6 +283,8 @@ data class ChatUiState(
     val isCreatingChat: Boolean = false,
     val isSendingMessage: Boolean = false,
     val snackbarMessage: String? = null,
+    val attachments: List<Attachment> = emptyList(),
+    val isAttachmentPickerVisible: Boolean = false,
 )
 
 sealed interface ChatIntent {
@@ -242,4 +297,16 @@ sealed interface ChatIntent {
     data object SendMessage : ChatIntent
     data class CreateChat(val companionId: String) : ChatIntent
     data object ErrorShown : ChatIntent
+    data object OpenAttachmentPicker : ChatIntent
+
+    data object CloseAttachmentPicker : ChatIntent
+
+    data class AddAttachments(
+        val uris: List<String>
+    ) : ChatIntent
+
+    data class RemoveAttachment(
+        val uri: String
+    ) : ChatIntent
 }
+

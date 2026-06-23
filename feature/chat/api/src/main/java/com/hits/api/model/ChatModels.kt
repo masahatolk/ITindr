@@ -27,6 +27,10 @@ data class ChatMessageUi(
     val createdAt: String
 )
 
+data class Attachment(
+    val uri: String
+)
+
 data class CachedResult<T>(
     val value: T,
     val fromCache: Boolean,

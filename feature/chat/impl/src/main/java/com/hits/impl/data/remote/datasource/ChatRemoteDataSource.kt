@@ -1,8 +1,10 @@
 package com.hits.impl.data.remote.datasource
 
+import com.hits.api.model.Attachment
 import com.hits.impl.data.remote.dto.ChatListItemDto
 import com.hits.impl.data.remote.dto.CreatedChatDto
 import com.hits.impl.data.remote.dto.MessageDto
+import okhttp3.MultipartBody
 
 interface ChatRemoteDataSource {
 
@@ -18,6 +20,7 @@ interface ChatRemoteDataSource {
 
     suspend fun sendMessage(
         chatId: String,
-        text: String
+        text: String,
+        attachments: List<MultipartBody.Part>
     ): MessageDto
 }

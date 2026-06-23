@@ -1,5 +1,7 @@
 package com.hits.impl.data.repository
 
+import android.content.Context
+import com.hits.api.model.Attachment
 import com.hits.api.model.CachedResult
 import com.hits.api.model.Chat
 import com.hits.api.model.ChatMessage
@@ -11,12 +13,14 @@ import com.hits.impl.data.mapper.toDomain
 import com.hits.impl.data.mapper.toEntity
 import com.hits.impl.data.remote.datasource.ChatRemoteDataSource
 import java.io.IOException
+import com.hits.impl.data.mapper.uriToMultipart
 
 class ChatRepositoryImpl(
     private val remoteDataSource: ChatRemoteDataSource,
     private val chatDao: ChatDao,
     private val messageDao: MessageDao,
     private val userSession: UserSession,
+    private val context: Context,
 ) : ChatRepository {
 
     override suspend fun getChats(): CachedResult<List<Chat>> {
@@ -95,12 +99,17 @@ class ChatRepositoryImpl(
 
     override suspend fun sendMessage(
         chatId: String,
-        text: String
+        text: String,
+        attachments: List<Attachment>
     ): ChatMessage {
 
         return try {
 
-            val remote = remoteDataSource.sendMessage(chatId, text)
+            val parts = attachments.map {
+
+                context.uriToMultipart(it)
+            }
+            val remote = remoteDataSource.sendMessage(chatId, text, parts)
 
             val entity = remote.toEntity(chatId)
 

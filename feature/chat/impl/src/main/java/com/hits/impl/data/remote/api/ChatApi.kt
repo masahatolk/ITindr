@@ -4,6 +4,7 @@ import com.hits.impl.data.remote.dto.ChatListItemDto
 import com.hits.impl.data.remote.dto.CreateChatRequest
 import com.hits.impl.data.remote.dto.CreatedChatDto
 import com.hits.impl.data.remote.dto.MessageDto
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -35,6 +36,7 @@ interface ChatApi {
     @POST("chat/{chatId}/message")
     suspend fun sendMessage(
         @Path("chatId") chatId: String,
-        @Part("messageText") text: RequestBody
+        @Part("messageText") text: RequestBody,
+        @Part attachments: List<MultipartBody.Part>
     ): Response<MessageDto>
 }
