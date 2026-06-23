@@ -62,6 +62,7 @@ dependencies {
     implementation(project(":core-database"))
     implementation(project(":core-auth"))
     implementation(project(":core-ui"))
+    implementation(project(":core-media"))
     implementation(project(":feature:chat:impl"))
     implementation(project(":feature:chat:api"))
     implementation(libs.coil.compose)

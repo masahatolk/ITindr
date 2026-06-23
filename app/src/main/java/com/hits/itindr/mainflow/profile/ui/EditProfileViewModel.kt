@@ -1,5 +1,6 @@
 package com.hits.itindr.mainflow.profile.ui
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hits.core_ui.TagItem
@@ -15,17 +16,14 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class EditProfileViewModel(
-    private val profileRepository: ProfileRepository,
-    private val topicRepository: TopicRepository
+    private val profileRepository: ProfileRepository, private val topicRepository: TopicRepository
 ) : ViewModel() {
 
-    private val _state =
-        MutableStateFlow(EditProfileUiState())
+    private val _state = MutableStateFlow(EditProfileUiState())
 
     val state = _state.asStateFlow()
 
-    private val _effect =
-        MutableSharedFlow<EditProfileEffect>()
+    private val _effect = MutableSharedFlow<EditProfileEffect>()
 
     val effect = _effect.asSharedFlow()
 
@@ -43,27 +41,23 @@ class EditProfileViewModel(
 
             coroutineScope {
 
-                val profileDeferred =
-                    async {
-                        profileRepository.getProfile()
-                    }
+                val profileDeferred = async {
+                    profileRepository.getProfile()
+                }
 
-                val topicsDeferred =
-                    async {
-                        topicRepository.getTopics()
-                    }
+                val topicsDeferred = async {
+                    topicRepository.getTopics()
+                }
 
-                val profile =
-                    profileDeferred.await()
+                val profile = profileDeferred.await()
 
-                val topics =
-                    topicsDeferred.await()
+                val topics = topicsDeferred.await()
 
                 _state.update { it ->
                     it.copy(
                         isLoading = false,
 
-                        avatar = profile.avatar,
+                        remoteAvatar = profile.avatar,
 
                         name = profile.name,
 
@@ -71,17 +65,43 @@ class EditProfileViewModel(
 
                         tags = topics.map {
                             TagItem(
-                                id = it.id,
-                                text = it.title
+                                id = it.id, text = it.title
                             )
                         },
 
-                        selectedIds =
-                            profile.topics
-                                .map { it.id }
-                                .toSet()
+                        selectedIds = profile.topics.map { it.id }.toSet()
                     )
                 }
+            }
+        }
+    }
+
+    fun onAvatarSelected(uri: Uri) {
+
+        _state.update {
+            it.copy(
+                localAvatarUri = uri, avatarDeleted = false
+            )
+        }
+    }
+
+    fun onDeleteAvatarClick() {
+
+        _state.update {
+
+            if (it.remoteAvatar != null) {
+
+                it.copy(
+                    localAvatarUri = null,
+                    avatarDeleted = true
+                )
+
+            } else {
+
+                it.copy(
+                    localAvatarUri = null,
+                    avatarDeleted = false
+                )
             }
         }
     }
@@ -118,12 +138,29 @@ class EditProfileViewModel(
                     topics = current.selectedIds.toList()
                 )
 
+                when {
+
+                    current.avatarDeleted -> {
+
+                        profileRepository.deleteAvatar()
+                    }
+
+                    current.localAvatarUri != null -> {
+
+                        profileRepository.uploadAvatar(
+                            current.localAvatarUri
+                        )
+                    }
+                }
+
             }.onSuccess {
 
                 _effect.emit(
                     EditProfileEffect.Close
                 )
 
+            }.onFailure {
+                // TODO показать ошибку
             }
         }
     }

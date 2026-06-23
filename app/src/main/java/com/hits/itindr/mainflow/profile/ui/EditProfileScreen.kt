@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -49,6 +50,13 @@ fun EditProfileScreen(
     onTopicsChanged: (Set<String>) -> Unit
 ) {
 
+    val avatarModel =
+        when {
+            state.avatarDeleted -> null
+            state.localAvatarUri != null -> state.localAvatarUri
+            else -> state.remoteAvatar
+        }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
@@ -68,7 +76,8 @@ fun EditProfileScreen(
                 onClick = onSave,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 24.dp, end = 24.dp, bottom = 24.dp)
+                    .padding(start = 24.dp, end = 24.dp, bottom = 24.dp),
+                enabled = true,
             )
         }
     ) { innerPadding ->
@@ -85,9 +94,9 @@ fun EditProfileScreen(
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        if (state.avatar != null) {
+                        if (avatarModel != null) {
                             AsyncImage(
-                                model = state.avatar,
+                                model = avatarModel,
                                 contentDescription = state.name,
                                 modifier = Modifier
                                     .size(80.dp)
@@ -112,18 +121,18 @@ fun EditProfileScreen(
                             }
                         }
 
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(modifier = Modifier.width(16.dp))
 
                         Column(
                             verticalArrangement = Arrangement.SpaceBetween,
                         ) {
                             AvatarAssistChip(
                                 onClick = onChangeAvatarClick,
-                                text = stringResource(if (state.avatar == null) R.string.choose_photo else R.string.change_photo),
+                                text = stringResource(if (avatarModel == null) R.string.choose_photo else R.string.change_photo),
                                 icon = painterResource(R.drawable.gallery_add)
                             )
 
-                            if (state.avatar != null) {
+                            if (avatarModel != null) {
                                 AvatarAssistChip(
                                     onClick = onDeleteAvatarClick,
                                     text = stringResource(R.string.delete_photo),

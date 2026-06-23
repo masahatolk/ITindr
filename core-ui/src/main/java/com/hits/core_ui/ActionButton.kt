@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun ActionButton(
     text: String,
+    enabled: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -26,7 +27,8 @@ fun ActionButton(
             contentColor = Color.Transparent,
             disabledContainerColor = colorResource(R.color.white_transparent50),
             disabledContentColor = Color.Transparent
-        )
+        ),
+        enabled = enabled,
     ) {
         Text(
             text = text,

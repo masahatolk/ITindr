@@ -1,11 +1,16 @@
 package com.hits.itindr.mainflow.profile.ui
 
+import android.net.Uri
 import com.hits.core_ui.TagItem
 
 data class EditProfileUiState(
     val isLoading: Boolean = false,
 
-    val avatar: String? = null,
+    val remoteAvatar: String? = null,
+
+    val localAvatarUri: Uri? = null,
+
+    val avatarDeleted: Boolean = false,
 
     val name: String = "",
 
@@ -15,5 +20,11 @@ data class EditProfileUiState(
 
     val selectedIds: Set<String> = emptySet(),
 
-    val isSaving: Boolean = false
+    val isSaving: Boolean = false,
 )
+
+enum class AvatarAction {
+    NONE,
+    UPLOAD,
+    DELETE
+}

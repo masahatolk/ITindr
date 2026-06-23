@@ -1,7 +1,9 @@
 package com.hits.core_ui
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -22,16 +24,15 @@ fun AvatarAssistChip(
     icon: Painter,
 ) {
     Button(
-        onClick = { onClick },
-        modifier = Modifier
-            .padding(horizontal = 4.dp, vertical = 4.dp),
+        onClick = onClick,
         shape = RoundedCornerShape(8.dp),
+        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
         colors = ButtonColors(
             containerColor = colorResource(R.color.white_transparent20),
             contentColor = Color.Transparent,
             disabledContainerColor = colorResource(R.color.white_transparent20),
             disabledContentColor = Color.Transparent
-        )
+        ),
     ) {
         Icon(
             painter = icon,
@@ -44,7 +45,7 @@ fun AvatarAssistChip(
         Text(
             text = text,
             style = AppTextStyles.SmallText,
-            color = Color.White
+            color = Color.White,
         )
     }
 }

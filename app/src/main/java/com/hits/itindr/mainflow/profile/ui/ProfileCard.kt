@@ -81,7 +81,9 @@ fun ProfileCard(profile: Profile, modifier: Modifier = Modifier) {
             )
         }
 
-        Spacer(Modifier.height(24.dp))
+        if (profile.topics.isNotEmpty()) {
+            Spacer(Modifier.height(24.dp))
+        }
 
         ProfileTagsFlow(
             tags = profile.topics.map { it.title },

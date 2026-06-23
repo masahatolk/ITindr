@@ -32,7 +32,7 @@ val profileModule = module {
     }
 
     single<ProfileRemoteDataSource> {
-        ProfileRemoteDataSourceImpl(get())
+        ProfileRemoteDataSourceImpl(get(), get())
     }
 
     single<ProfileRepository> {
