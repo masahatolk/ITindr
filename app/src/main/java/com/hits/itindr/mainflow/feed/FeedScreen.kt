@@ -27,7 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hits.core_ui.R
-import com.hits.itindr.R.string.no_cards
+import com.hits.core_ui.R.string.no_cards
 import com.hits.itindr.StartActivity
 import com.hits.itindr.mainflow.feed.swipeableCards.state.rememberSwipeableCardsState
 import com.hits.itindr.mainflow.feed.swipeableCards.ui.SwipeableCardDirection

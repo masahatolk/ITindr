@@ -1,4 +1,4 @@
-package com.hits.impl.ui.components
+package com.hits.core_ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,11 +13,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.hits.core_ui.CircleIconButton
-import com.hits.impl.R
 
 @Composable
-fun ChatToolbar(
+fun Toolbar(
     modifier: Modifier = Modifier,
     title: String,
     onBack: () -> Unit

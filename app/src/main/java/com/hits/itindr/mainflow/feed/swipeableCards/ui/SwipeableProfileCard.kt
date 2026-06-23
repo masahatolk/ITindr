@@ -48,7 +48,7 @@ import com.hits.itindr.TagFlowView
 import com.hits.itindr.TagItem
 import com.hits.itindr.mainflow.feed.swipeableCards.Profile
 import kotlin.math.roundToInt
-import com.hits.itindr.R.style.SwipeableProfileTagFlowView
+import com.hits.core_ui.R.style.SwipeableProfileTagFlowView
 
 
 private const val CARD_CORNER_RADIUS = 32
@@ -185,7 +185,7 @@ fun SwipeableProfileCard(
 }
 
 @Composable
-private fun rememberDrawableId(drawableName: String): Int {
+fun rememberDrawableId(drawableName: String): Int {
     val context = LocalContext.current
     return remember(drawableName, context) {
         val resolvedId = context.resources.getIdentifier(
@@ -222,7 +222,7 @@ private fun DescriptionScrollIndicator(
 }
 
 @Composable
-private fun ProfileTagsFlow(
+fun ProfileTagsFlow(
     tags: List<String>,
     modifier: Modifier = Modifier,
 ) {

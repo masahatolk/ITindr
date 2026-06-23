@@ -18,6 +18,8 @@
     <string name="background_image">background image</string>
     <string name="avatar_button">avatar button</string>
     <string name="choose_photo">Выбрать фото</string>
+    <string name="change_photo">Изменить фото</string>
+    <string name="delete_photo">Удалить фото</string>
     <string name="name">Имя</string>
     <string name="name_input_layout_text">Ваше имя</string>
     <string name="additional_info">О себе</string>

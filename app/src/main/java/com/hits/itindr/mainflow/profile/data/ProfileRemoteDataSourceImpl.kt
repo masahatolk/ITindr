@@ -30,7 +30,7 @@ class ProfileRemoteDataSourceImpl(
         name: String,
         aboutMyself: String?,
         topics: List<String>
-    ) {
+    ) : ProfileResponse {
 
         val response = profileApi.updateProfile(
             UpdateProfileRequest(
@@ -40,11 +40,17 @@ class ProfileRemoteDataSourceImpl(
             )
         )
 
-        if (!response.isSuccessful) {
-            throw ApiException(
-                response.code(),
-                response.errorBody()?.string().orEmpty()
-            )
+        if (response.isSuccessful) {
+            return response.body()
+                ?: throw ApiException(
+                    response.code(),
+                    "Пустой ответ сервера"
+                )
         }
+
+        throw ApiException(
+            response.code(),
+            response.errorBody()?.string().orEmpty()
+        )
     }
 }

@@ -10,5 +10,5 @@ interface ProfileRemoteDataSource {
         name: String,
         aboutMyself: String?,
         topics: List<String>
-    )
+    ) : ProfileResponse
 }

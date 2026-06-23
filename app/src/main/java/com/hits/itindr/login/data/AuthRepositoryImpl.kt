@@ -21,7 +21,7 @@ class AuthRepositoryImpl(
 
         val profile = profileRepository.getProfile()
 
-        userSession.saveUserId(profile.userId)
+        userSession.saveUserId(profile.id)
     }
 
     override suspend fun register(email: String, password: String) {
@@ -34,7 +34,7 @@ class AuthRepositoryImpl(
 
         val profile = profileRepository.getProfile()
 
-        userSession.saveUserId(profile.userId)
+        userSession.saveUserId(profile.id)
     }
 
     override suspend fun logout() {

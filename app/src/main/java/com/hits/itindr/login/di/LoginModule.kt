@@ -9,7 +9,6 @@ import com.hits.itindr.login.domain.LoginUseCase
 import com.hits.itindr.login.domain.LogoutUseCase
 import com.hits.itindr.login.domain.RegisterUseCase
 import com.hits.itindr.login.presentation.LoginViewModel
-import com.hits.itindr.login.presentation.ProfileViewModel
 import com.hits.itindr.login.presentation.RegisterViewModel
 import com.hits.itindr.login.presentation.RegistrationStore
 import org.koin.core.module.dsl.viewModel
@@ -64,9 +63,5 @@ val loginModule = module {
             get(),
             get()
         )
-    }
-
-    viewModel {
-        ProfileViewModel(get())
     }
 }

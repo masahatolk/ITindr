@@ -11,6 +11,7 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.withStyledAttributes
 import kotlin.math.max
+import com.hits.core_ui.R
 
 class TagFlowView @JvmOverloads constructor(
     context: Context,

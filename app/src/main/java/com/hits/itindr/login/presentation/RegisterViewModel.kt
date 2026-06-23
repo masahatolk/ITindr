@@ -2,7 +2,7 @@ package com.hits.itindr.login.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hits.itindr.R
+import com.hits.core_ui.R
 import com.hits.itindr.login.domain.AuthRepository
 import com.hits.itindr.login.domain.RegisterError
 import com.hits.itindr.login.domain.RegisterResult

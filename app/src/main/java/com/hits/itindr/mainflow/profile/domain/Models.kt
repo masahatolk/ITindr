@@ -1,0 +1,14 @@
+package com.hits.itindr.mainflow.profile.domain
+
+data class Profile(
+    val id: String,
+    val name: String,
+    val about: String,
+    val avatar: String?,
+    val topics: List<Topic>
+)
+
+data class Topic(
+    val id: String,
+    val title: String
+)

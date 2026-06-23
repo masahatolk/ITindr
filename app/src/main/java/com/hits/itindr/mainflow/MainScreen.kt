@@ -17,8 +17,9 @@ import androidx.navigation.compose.rememberNavController
 import com.hits.impl.ui.ChatListRoute
 import com.hits.impl.ui.ConversationRoute
 import com.hits.itindr.GradientBackground
-import com.hits.itindr.login.presentation.ProfileRoute
+import com.hits.itindr.mainflow.profile.ui.ProfileRoute
 import com.hits.itindr.mainflow.feed.FeedScreen
+import com.hits.itindr.mainflow.profile.ui.EditProfileRoute
 
 @Composable
 fun MainScreen() {
@@ -142,7 +143,39 @@ fun MainScreen() {
                 }
 
                 composable(Screen.Profile.route) {
-                    ProfileRoute()
+                    ProfileRoute(
+                        navController = navController
+                    )
+                }
+
+                composable(
+                    Screen.EditProfile.route
+                ) {
+                    EditProfileRoute(
+                        navController = navController
+                    )
+                }
+
+                composable(
+                    route = Screen.EditProfile.route,
+
+                    enterTransition = {
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Left,
+                            animationSpec = tween(300)
+                        )
+                    },
+
+                    exitTransition = {
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Right,
+                            animationSpec = tween(300)
+                        )
+                    },
+                ) {
+                    EditProfileRoute(
+                        navController = navController
+                    )
                 }
             }
 
