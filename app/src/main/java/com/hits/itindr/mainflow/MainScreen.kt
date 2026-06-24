@@ -19,6 +19,9 @@ import com.hits.impl.ui.ConversationRoute
 import com.hits.itindr.GradientBackground
 import com.hits.itindr.mainflow.profile.ui.ProfileRoute
 import com.hits.itindr.mainflow.feed.FeedScreen
+import com.hits.itindr.mainflow.feed.PeopleProfileRoute
+import com.hits.itindr.mainflow.feed.PeopleRoute
+import com.hits.itindr.mainflow.feed.PeopleScreen
 import com.hits.itindr.mainflow.profile.ui.EditProfileRoute
 
 @Composable
@@ -106,7 +109,15 @@ fun MainScreen() {
                 }
 
                 composable(Screen.People.route) {
-                    PeopleScreen()
+                    PeopleRoute(
+                        navController = navController
+                    )
+                }
+
+                composable(Screen.PeopleProfile.route) {
+                    PeopleProfileRoute(
+                        navController = navController
+                    )
                 }
 
                 composable(Screen.ChatList.route) {
@@ -144,14 +155,6 @@ fun MainScreen() {
 
                 composable(Screen.Profile.route) {
                     ProfileRoute(
-                        navController = navController
-                    )
-                }
-
-                composable(
-                    Screen.EditProfile.route
-                ) {
-                    EditProfileRoute(
                         navController = navController
                     )
                 }

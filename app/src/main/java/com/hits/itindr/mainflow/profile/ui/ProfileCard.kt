@@ -86,7 +86,7 @@ fun ProfileCard(profile: Profile, modifier: Modifier = Modifier) {
         }
 
         ProfileTagsFlow(
-            tags = profile.topics.map { it.title },
+            topics = profile.topics,
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight(),

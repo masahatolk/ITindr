@@ -9,6 +9,8 @@ sealed class Screen(val route: String) {
 
     data object People : Screen("people")
 
+    data object PeopleProfile : Screen("people_profile")
+
     data object ChatList : Screen("chat_list")
 
     data object Conversation : Screen("conversation/{chatId}/{chatTitle}") {
@@ -17,8 +19,7 @@ sealed class Screen(val route: String) {
     }
 
     data object Profile : Screen("profile")
-    data object EditProfile :
-        Screen("edit_profile")
+    data object EditProfile : Screen("edit_profile")
 }
 
 val tabOrder = mapOf(

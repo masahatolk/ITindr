@@ -6,16 +6,15 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -44,11 +43,12 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import coil.compose.AsyncImage
 import com.hits.core_ui.R
+import com.hits.core_ui.R.style.SwipeableProfileTagFlowView
 import com.hits.itindr.TagFlowView
 import com.hits.itindr.TagItem
-import com.hits.itindr.mainflow.feed.swipeableCards.Profile
+import com.hits.itindr.mainflow.profile.domain.Profile
+import com.hits.itindr.mainflow.profile.domain.Topic
 import kotlin.math.roundToInt
-import com.hits.core_ui.R.style.SwipeableProfileTagFlowView
 
 
 private const val CARD_CORNER_RADIUS = 32
@@ -72,21 +72,38 @@ fun SwipeableProfileCard(
         label = "details_progress",
     )
 
-    val imageResId = rememberDrawableId(profile.imageResName)
-
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(CARD_CORNER_RADIUS.dp))
             .background(colorResource(R.color.gray)),
     ) {
-        AsyncImage(
-            model = profile.imageUrl ?: imageResId,
-            contentDescription = profile.name,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop,
-            error = painterResource(id = imageResId),
-            placeholder = painterResource(id = imageResId),
-        )
+
+        // TODO вынести в функцию
+        if (profile.avatar != null) {
+            AsyncImage(
+                model = profile.avatar,
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop,
+                alignment = Alignment.Center,
+            )
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(colorResource(R.color.white_transparent30)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.avatar),
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.size(64.dp)
+                )
+            }
+        }
+
+
 
         Box(
             modifier = Modifier
@@ -136,13 +153,14 @@ fun SwipeableProfileCard(
             Spacer(modifier = Modifier.height(12.dp))
 
             ProfileTagsFlow(
-                tags = profile.tags,
+                topics = profile.topics,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(),
             )
 
-            val descriptionOffset = ((1f - animatedProgress) * DESCRIPTION_REVEAL_OFFSET).roundToInt()
+            val descriptionOffset =
+                ((1f - animatedProgress) * DESCRIPTION_REVEAL_OFFSET).roundToInt()
             Box(
                 modifier = Modifier
                     .padding(top = 20.dp)
@@ -152,7 +170,7 @@ fun SwipeableProfileCard(
                     },
             ) {
                 Text(
-                    text = profile.description,
+                    text = profile.about,
                     color = Color.White,
                     fontSize = 14.sp,
                     lineHeight = 19.sp,
@@ -162,38 +180,8 @@ fun SwipeableProfileCard(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-            ) {
-                CardActionButton(
-                    color = colorResource(R.color.red),
-                    icon = painterResource(id = R.drawable.close),
-                    onClick = onDislike,
-                    modifier = Modifier.weight(1f),
-                )
-
-                CardActionButton(
-                    color = colorResource(R.color.green),
-                    icon = painterResource(id = R.drawable.like),
-                    onClick = onLike,
-                    modifier = Modifier.weight(1f),
-                )
-            }
+            ReactionPanel(onLike, onDislike)
         }
-    }
-}
-
-@Composable
-fun rememberDrawableId(drawableName: String): Int {
-    val context = LocalContext.current
-    return remember(drawableName, context) {
-        val resolvedId = context.resources.getIdentifier(
-            drawableName,
-            "drawable",
-            context.packageName,
-        )
-        if (resolvedId != 0) resolvedId else R.drawable.logo
     }
 }
 
@@ -223,7 +211,7 @@ private fun DescriptionScrollIndicator(
 
 @Composable
 fun ProfileTagsFlow(
-    tags: List<String>,
+    topics: List<Topic>,
     modifier: Modifier = Modifier,
 ) {
     AndroidView(
@@ -236,10 +224,10 @@ fun ProfileTagsFlow(
             }
         },
         update = { view ->
-            view.tags = tags.map { tag ->
+            view.tags = topics.map { tag ->
                 TagItem(
-                    id = tag,
-                    text = tag
+                    id = tag.id,
+                    text = tag.title,
                 )
             }
         },
@@ -247,7 +235,7 @@ fun ProfileTagsFlow(
 }
 
 @Composable
-private fun CardActionButton(
+fun CardActionButton(
     color: Color,
     icon: Painter,
     onClick: () -> Unit,

@@ -1,6 +1,7 @@
 package com.hits.itindr.mainflow.feed
 
-import com.hits.itindr.mainflow.feed.swipeableCards.Profile
+import com.hits.itindr.mainflow.profile.domain.Profile
+
 
 sealed interface FeedIntent {
     data object LoadFeed : FeedIntent

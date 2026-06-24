@@ -3,11 +3,38 @@ package com.hits.itindr.mainflow.feed.data
 import com.hits.core_network.ApiException
 import com.hits.itindr.mainflow.feed.data.network.FeedApi
 import com.hits.itindr.mainflow.feed.domain.ReactionResult
-import com.hits.itindr.mainflow.feed.swipeableCards.Profile
+import com.hits.itindr.mainflow.profile.domain.Profile
+import com.hits.itindr.mainflow.profile.domain.Topic
 
 class FeedRemoteDataSourceImpl(
     private val api: FeedApi
 ) : FeedRemoteDataSource {
+    override suspend fun getAllUsers(
+        limit: Int, offset: Int
+    ): List<Profile> {
+        val response = api.getAllUsers(
+            limit,
+            offset,
+        )
+
+        if (!response.isSuccessful) {
+            throw ApiException(
+                response.code(), response.errorBody()?.string().orEmpty()
+            )
+        }
+
+        return response.body()?.map { dto ->
+            Profile(
+                id = dto.userId,
+                name = dto.name,
+                about = dto.aboutMyself.orEmpty(),
+                avatar = dto.avatar,
+                topics = dto.topics.map {
+                    Topic(it.id, it.title)
+                }
+            )
+        } ?: emptyList()
+    }
 
     override suspend fun getProfiles(): List<Profile> {
 
@@ -15,23 +42,20 @@ class FeedRemoteDataSourceImpl(
 
         if (!response.isSuccessful) {
             throw ApiException(
-                response.code(),
-                response.errorBody()?.string().orEmpty()
+                response.code(), response.errorBody()?.string().orEmpty()
             )
         }
 
-        return response.body()
-            ?.map { dto ->
-                Profile(
-                    id = dto.userId,
-                    name = dto.name,
-                    description = dto.aboutMyself.orEmpty(),
-                    imageResName = "photo",
-                    imageUrl = dto.avatar,
-                    tags = dto.topics.map { it.title }
-                )
-            }
-            ?: emptyList()
+        return response.body()?.map { dto ->
+            Profile(
+                id = dto.userId,
+                name = dto.name,
+                about = dto.aboutMyself.orEmpty(),
+                avatar = dto.avatar,
+                topics = dto.topics.map {
+                    Topic(it.id, it.title)
+                })
+        } ?: emptyList()
     }
 
     override suspend fun likeProfile(
@@ -42,8 +66,7 @@ class FeedRemoteDataSourceImpl(
 
         if (!response.isSuccessful) {
             throw ApiException(
-                response.code(),
-                response.errorBody()?.string().orEmpty()
+                response.code(), response.errorBody()?.string().orEmpty()
             )
         }
 
@@ -60,8 +83,7 @@ class FeedRemoteDataSourceImpl(
 
         if (!response.isSuccessful) {
             throw ApiException(
-                response.code(),
-                response.errorBody()?.string().orEmpty()
+                response.code(), response.errorBody()?.string().orEmpty()
             )
         }
 

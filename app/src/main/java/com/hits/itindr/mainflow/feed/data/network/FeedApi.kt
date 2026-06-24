@@ -4,8 +4,15 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface FeedApi {
+
+    @GET("user")
+    suspend fun getAllUsers(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int,
+    ): Response<List<UserProfileDto>>
 
     @GET("user/feed")
     suspend fun getFeed(): Response<List<UserProfileDto>>

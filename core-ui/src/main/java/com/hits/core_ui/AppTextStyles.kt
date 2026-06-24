@@ -7,7 +7,12 @@ import androidx.compose.ui.text.TextStyle
 object AppTextStyles {
 
     val Header = TextStyle(
-        fontSize = 24.sp,
+        fontSize = 40.sp,
+        fontWeight = FontWeight.Bold
+    )
+
+    val SmallHeader = TextStyle(
+        fontSize = 20.sp,
         fontWeight = FontWeight.Bold
     )
 

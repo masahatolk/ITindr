@@ -3,6 +3,7 @@ package com.hits.itindr.mainflow.feed.di
 import com.hits.core_auth.data.AuthApi
 import com.hits.itindr.domain.usecase.LikeProfileUseCase
 import com.hits.itindr.mainflow.feed.FeedViewModel
+import com.hits.itindr.mainflow.feed.PeopleViewModel
 import com.hits.itindr.mainflow.feed.data.FeedRemoteDataSource
 import com.hits.itindr.mainflow.feed.data.FeedRemoteDataSourceImpl
 import com.hits.itindr.mainflow.feed.data.FeedRepositoryImpl
@@ -30,6 +31,10 @@ val feedModule = module {
 
     viewModel {
         FeedViewModel(get(), get())
+    }
+
+    viewModel {
+        PeopleViewModel(get(), get())
     }
 
     factory {
