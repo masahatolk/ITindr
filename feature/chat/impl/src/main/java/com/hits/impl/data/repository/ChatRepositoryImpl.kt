@@ -1,6 +1,7 @@
 package com.hits.impl.data.repository
 
 import android.content.Context
+import android.util.Log
 import com.hits.api.model.Attachment
 import com.hits.api.model.CachedResult
 import com.hits.api.model.Chat

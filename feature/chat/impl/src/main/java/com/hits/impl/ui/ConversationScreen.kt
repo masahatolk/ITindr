@@ -24,7 +24,6 @@ fun ConversationScreen(
     onOpenAttachmentPicker: () -> Unit,
     onDraftChanged: (String) -> Unit,
     onSend: () -> Unit,
-    onRemoveAttachment: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(

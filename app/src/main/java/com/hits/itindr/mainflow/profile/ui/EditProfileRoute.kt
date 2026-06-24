@@ -144,7 +144,6 @@ fun EditProfileRoute(
         },
         onSave = viewModel::onSaveClick,
         onChangeAvatarClick = {
-            Log.d("PHOTO_PICKER", "chip clicked")
 
             pickerViewModel.clearSelection()
 

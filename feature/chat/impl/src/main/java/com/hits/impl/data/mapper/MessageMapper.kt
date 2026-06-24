@@ -11,7 +11,7 @@ fun MessageDto.toEntity(chatId: String): MessageEntity {
     return MessageEntity(
         id = id,
         chatId = chatId,
-        text = text,
+        text = text.orEmpty(),
         createdAt = parseDate(createdAt),
         userId = user?.userId,
         avatar = user?.avatar,

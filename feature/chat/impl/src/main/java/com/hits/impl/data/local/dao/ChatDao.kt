@@ -10,11 +10,11 @@ import com.hits.impl.data.local.entity.ChatEntity
 interface ChatDao {
 
     @Query("""
-    SELECT *
-    FROM chats
-    WHERE ownerUserId = :userId
-    ORDER BY updatedAt DESC
-""")
+        SELECT *
+        FROM chats
+        WHERE ownerUserId = :userId
+        ORDER BY updatedAt DESC
+    """)
     suspend fun getChats(userId: String): List<ChatEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

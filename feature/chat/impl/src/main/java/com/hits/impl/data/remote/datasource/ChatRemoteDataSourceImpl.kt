@@ -43,14 +43,7 @@ class ChatRemoteDataSourceImpl(
 
         if (response.isSuccessful) {
 
-            return response.body()?.map { dto ->
-                MessageDto(
-                    id = dto.id,
-                    text = dto.text,
-                    createdAt = dto.createdAt,
-                    user = dto.user,
-                )
-            } ?: emptyList()
+            return response.body() ?: emptyList()
         }
 
         throw Exception(response.errorBody()?.string().orEmpty())

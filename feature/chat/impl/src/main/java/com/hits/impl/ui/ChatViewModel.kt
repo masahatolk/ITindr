@@ -1,5 +1,6 @@
 package com.hits.impl.ui
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hits.api.model.Attachment
@@ -42,43 +43,18 @@ class ChatViewModel(
             is ChatIntent.CreateChat -> createChat(intent.companionId)
 
             ChatIntent.ErrorShown -> _uiState.update { it.copy(snackbarMessage = null) }
-
-            ChatIntent.OpenAttachmentPicker -> {
-                _uiState.update {
-                    it.copy(
-                        isAttachmentPickerVisible = true
-                    )
-                }
-            }
-
-            is ChatIntent.RemoveAttachment -> {
-
-                _uiState.update { state ->
-
-                    val updated = state.attachments.filterNot {
-                        it.uri == intent.uri
-                    }
-
-                    state.copy(
-                        attachments = updated, isAttachmentPickerVisible = updated.isNotEmpty()
-                    )
-                }
-            }
-
-            ChatIntent.CloseAttachmentPicker -> {
-
-                _uiState.update {
-                    it.copy(
-                        isAttachmentPickerVisible = false
-                    )
-                }
-            }
         }
     }
 
 
     private fun loadChats() {
         viewModelScope.launch {
+
+
+            Log.d(
+                "CHAT_DEBUG",
+                "getChats failed",
+            )
 
             _uiState.update { it.copy(isChatsLoading = true, snackbarMessage = null) }
             runCatching { repository.getChats() }.onSuccess { result ->
@@ -92,6 +68,7 @@ class ChatViewModel(
                         )
                     }
                 }.onFailure { throwable ->
+
                     showError(throwable, loadingChats = false)
                 }
         }
@@ -301,7 +278,6 @@ data class ChatUiState(
     val isSendingMessage: Boolean = false,
     val snackbarMessage: String? = null,
     val attachments: List<Attachment> = emptyList(),
-    val isAttachmentPickerVisible: Boolean = false,
 )
 
 sealed interface ChatIntent {
@@ -314,12 +290,5 @@ sealed interface ChatIntent {
     data object SendMessage : ChatIntent
     data class CreateChat(val companionId: String) : ChatIntent
     data object ErrorShown : ChatIntent
-    data object OpenAttachmentPicker : ChatIntent
-
-    data object CloseAttachmentPicker : ChatIntent
-
-    data class RemoveAttachment(
-        val uri: String
-    ) : ChatIntent
 }
 

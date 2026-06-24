@@ -13,7 +13,7 @@ fun ChatListItemDto.toEntity(
         id = chat.id,
         title = chat.title,
         avatar = chat.avatar,
-        lastMessage = lastMessage?.text,
+        lastMessage = if (lastMessage?.attachments != null && lastMessage.text == null) "Фото" else lastMessage?.text,
         updatedAt = System.currentTimeMillis(),
         ownerUserId = currentUserId
     )
@@ -34,10 +34,6 @@ fun CreatedChatDto.toEntity(
 
 fun ChatEntity.toDomain(): Chat {
     return Chat(
-        id = id,
-        title = title,
-        lastMessage = lastMessage,
-        avatar = avatar,
-        updatedAt = updatedAt
+        id = id, title = title, lastMessage = lastMessage, avatar = avatar, updatedAt = updatedAt
     )
 }

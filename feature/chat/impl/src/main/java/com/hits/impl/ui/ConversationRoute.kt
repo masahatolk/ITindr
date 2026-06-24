@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hits.core_media.camera.createTempImageUri
 import com.hits.core_media.gallery.saveImageToGallery
+import com.hits.core_media.permission.galleryPermission
 import com.hits.core_media.ui.PhotoPickerViewModel
 import com.hits.core_ui.photo.PhotoPickerBottomSheet
 import com.hits.impl.ui.components.ChatInput
@@ -35,8 +36,8 @@ fun ConversationRoute(
     var showPicker by rememberSaveable { mutableStateOf(false) }
 
     val context = LocalContext.current
-    val cameraUri = remember {
-        createTempImageUri(context)
+    var cameraUri by remember {
+        mutableStateOf(createTempImageUri(context))
     }
 
     val takePhotoLauncher = rememberLauncherForActivityResult(
@@ -50,9 +51,7 @@ fun ConversationRoute(
             pickerViewModel.reloadPhotos()
 
             pickerViewModel.togglePhoto(
-                uri = galleryUri,
-                multiSelect = true,
-                maxSelection = 5
+                uri = galleryUri, multiSelect = true, maxSelection = 5
             )
 
             showPicker = true
@@ -71,16 +70,17 @@ fun ConversationRoute(
         }
     }
 
-    val cameraPermissionLauncher =
-        rememberLauncherForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { granted ->
+    val cameraPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
 
-            if (granted) {
+        if (granted) {
 
-                takePhotoLauncher.launch(cameraUri)
-            }
+            cameraUri = createTempImageUri(context)
+
+            takePhotoLauncher.launch(cameraUri)
         }
+    }
 
     if (showPicker) {
 
@@ -89,9 +89,7 @@ fun ConversationRoute(
 
             onPhotoClick = {
                 pickerViewModel.togglePhoto(
-                    uri = it,
-                    multiSelect = true,
-                    maxSelection = 5
+                    uri = it, multiSelect = true, maxSelection = 5
                 )
             },
 
@@ -133,21 +131,27 @@ fun ConversationRoute(
         )
     }
 
-    ConversationScreen(state = state, title = title, onBack = onBack, onOpenAttachmentPicker = {
-        viewModel.onIntent(
-            ChatIntent.OpenAttachmentPicker
-        )
-    }, onRemoveAttachment = {
-        viewModel.onIntent(
-            ChatIntent.RemoveAttachment(it)
-        )
-    }, onDraftChanged = {
-        viewModel.onIntent(
-            ChatIntent.MessageDraftChanged(it)
-        )
-    }, onSend = {
-        viewModel.onIntent(
-            ChatIntent.SendMessage
-        )
-    })
+    ConversationScreen(
+        state = state,
+        title = title,
+        onBack = onBack,
+        onOpenAttachmentPicker = {
+
+            pickerViewModel.clearSelection()
+
+            galleryPermissionLauncher.launch(
+                galleryPermission()
+            )
+        },
+        onDraftChanged = {
+            viewModel.onIntent(
+                ChatIntent.MessageDraftChanged(it)
+            )
+        },
+        onSend = {
+            viewModel.onIntent(
+                ChatIntent.SendMessage
+            )
+        },
+    )
 }
