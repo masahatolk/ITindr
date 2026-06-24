@@ -69,6 +69,7 @@ class ChatRemoteDataSourceImpl(
                 text = dto.text,
                 createdAt = dto.createdAt,
                 user = dto.user,
+                attachments = dto.attachments
             )
         }
 
