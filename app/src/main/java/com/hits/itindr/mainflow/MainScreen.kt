@@ -7,58 +7,63 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.hits.api.model.Chat
 import com.hits.impl.ui.ChatListRoute
 import com.hits.impl.ui.ConversationRoute
 import com.hits.itindr.GradientBackground
-import com.hits.itindr.mainflow.profile.ui.ProfileRoute
 import com.hits.itindr.mainflow.feed.FeedScreen
 import com.hits.itindr.mainflow.feed.PeopleProfileRoute
 import com.hits.itindr.mainflow.feed.PeopleRoute
-import com.hits.itindr.mainflow.feed.PeopleScreen
+import com.hits.itindr.mainflow.match.MatchOverlay
+import com.hits.itindr.mainflow.match.MatchStore
 import com.hits.itindr.mainflow.profile.ui.EditProfileRoute
+import com.hits.itindr.mainflow.profile.ui.ProfileRoute
+import org.koin.compose.koinInject
 
 @Composable
 fun MainScreen() {
 
     val navController = rememberNavController()
 
+    val matchStore: MatchStore = koinInject()
+
+    val matchData by matchStore.matchData.collectAsState()
+
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
 
-    val currentRoute = currentBackStackEntry
-        ?.destination
-        ?.route
+    val currentRoute = currentBackStackEntry?.destination?.route
 
-    val showBottomBar =
-        currentRoute in listOf(
-            Screen.Feed.route,
-            Screen.People.route,
-            Screen.ChatList.route,
-            Screen.Profile.route,
-        )
+    val showBottomBar = currentRoute in listOf(
+        Screen.Feed.route,
+        Screen.People.route,
+        Screen.ChatList.route,
+        Screen.Profile.route,
+    )
 
-    GradientBackground {
+    GradientBackground(
+        alpha = 1f
+    ) {
 
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
 
             NavHost(
-                navController = navController,
-                startDestination = Screen.Feed.route,
+                navController = navController, startDestination = Screen.Feed.route,
 
                 enterTransition = {
-                    val from =
-                        tabOrder[initialState.destination.route]
+                    val from = tabOrder[initialState.destination.route]
 
-                    val to =
-                        tabOrder[targetState.destination.route]
+                    val to = tabOrder[targetState.destination.route]
 
                     (if (from != null && to != null && from != to) {
 
@@ -79,11 +84,9 @@ fun MainScreen() {
                 },
 
                 exitTransition = {
-                    val from =
-                        tabOrder[initialState.destination.route]
+                    val from = tabOrder[initialState.destination.route]
 
-                    val to =
-                        tabOrder[targetState.destination.route]
+                    val to = tabOrder[targetState.destination.route]
 
                     (if (from != null && to != null && from != to) {
 
@@ -101,11 +104,10 @@ fun MainScreen() {
                     } else {
                         ExitTransition.None
                     })
-                }
-            ) {
+                }) {
 
                 composable(Screen.Feed.route) {
-                    FeedScreen()
+                    FeedScreen(navController = navController)
                 }
 
                 composable(Screen.People.route) {
@@ -126,31 +128,35 @@ fun MainScreen() {
                             navController.navigate(
                                 Screen.Conversation.createRoute(chat)
                             )
-                        }
-                    )
+                        })
                 }
 
                 composable(
-                    route = Screen.Conversation.route
+                    route = Screen.Conversation.route,
+
+                    enterTransition = {
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Left,
+                            animationSpec = tween(300)
+                        )
+                    },
+
+                    exitTransition = {
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Right,
+                            animationSpec = tween(300)
+                        )
+                    },
                 ) { backStackEntry ->
 
-                    val chatId =
-                        backStackEntry.arguments
-                            ?.getString("chatId")
-                            .orEmpty()
+                    val chatId = backStackEntry.arguments?.getString("chatId").orEmpty()
 
-                    val title =
-                        backStackEntry.arguments
-                            ?.getString("chatTitle")
-                            .orEmpty()
+                    val title = backStackEntry.arguments?.getString("chatTitle").orEmpty()
 
                     ConversationRoute(
-                        chatId = chatId,
-                        title = title,
-                        onBack = {
+                        chatId = chatId, title = title, onBack = {
                             navController.popBackStack()
-                        }
-                    )
+                        })
                 }
 
                 composable(Screen.Profile.route) {
@@ -187,10 +193,8 @@ fun MainScreen() {
                 BottomNavigation(
                     modifier = Modifier.align(
                         Alignment.BottomCenter
-                    ),
-                    selectedRoute = currentRoute,
-                    onNavigate = { route ->
-                        navController.navigate(route){
+                    ), selectedRoute = currentRoute, onNavigate = { route ->
+                        navController.navigate(route) {
 
                             popUpTo(
                                 navController.graph.startDestinationId
@@ -200,8 +204,34 @@ fun MainScreen() {
 
                             restoreState = true
                         }
-                    }
-                )
+                    })
+            }
+
+            matchData?.let { match ->
+
+                MatchOverlay(
+                    matchData = match,
+
+                    onDismiss = {
+                        matchStore.dismissMatch()
+                    },
+
+                    onMessageClick = {
+
+                        navController.navigate(
+                            Screen.Conversation.createRoute(
+                                Chat(
+                                    id = match.chatId,
+                                    title = match.chatTitle,
+                                    avatar = null,
+                                    lastMessage = null,
+                                    updatedAt = 0L
+                                )
+                            )
+                        )
+
+                        matchStore.dismissMatch()
+                    })
             }
         }
     }

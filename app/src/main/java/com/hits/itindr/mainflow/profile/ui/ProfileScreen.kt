@@ -85,10 +85,10 @@ fun ProfileScreen(
                     modifier = Modifier
                         .padding(
                             PaddingValues(
-                                start = 16.dp,
-                                end = 16.dp,
-                                top = innerPadding.calculateTopPadding() + 16.dp,
-                                bottom = innerPadding.calculateBottomPadding() + 16.dp
+                                start = 24.dp,
+                                end = 24.dp,
+                                top = innerPadding.calculateTopPadding() + 24.dp,
+                                bottom = innerPadding.calculateBottomPadding() + 100.dp
                             )
                         ),
                 )

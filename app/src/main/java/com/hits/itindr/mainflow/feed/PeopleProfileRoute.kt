@@ -7,6 +7,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.navigation.NavController
+import com.hits.api.model.Chat
+import com.hits.itindr.mainflow.Screen
 import com.hits.itindr.mainflow.profile.domain.Profile
 import org.koin.androidx.compose.koinViewModel
 
@@ -54,7 +56,7 @@ fun PeopleProfileRoute(
             navController.popBackStack()
         },
         onLike = {
-            viewModel.likeProfile(profile.id)
+            viewModel.likeProfile(profile)
         },
         onDislike = {
             viewModel.dislikeProfile(profile.id)

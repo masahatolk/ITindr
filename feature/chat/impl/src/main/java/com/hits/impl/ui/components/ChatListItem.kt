@@ -78,7 +78,9 @@ fun ChatListItem(chat: Chat, onClick: () -> Unit) {
                 text = chat.title,
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
-                fontSize = 18.sp
+                fontSize = 18.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
 
             Spacer(modifier = Modifier.height(4.dp))

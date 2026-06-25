@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.hits.core_ui.Toolbar
 import com.hits.itindr.mainflow.feed.swipeableCards.ui.ReactionPanel
+import com.hits.itindr.mainflow.match.MatchData
 import com.hits.itindr.mainflow.profile.domain.Profile
 import com.hits.itindr.mainflow.profile.ui.ProfileCard
 
@@ -25,42 +26,47 @@ fun PeopleUserCard(
     snackbarHostState: SnackbarHostState,
 ) {
 
-    Scaffold(
-        modifier = Modifier
-            .fillMaxSize(),
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
 
-        containerColor = Color.Transparent,
-
-        topBar = {
-            Toolbar(
-                title = "",
-                onBack = onBack
-            )
-        },
-
-        bottomBar = {
-            Box(
-                modifier = Modifier.padding(24.dp)
-            ){
-                ReactionPanel(onLike, onDislike)
-            }
-        },
-        snackbarHost = {
-            SnackbarHost(snackbarHostState)
-        }
-    ) { innerPadding ->
-
-        ProfileCard(
-            profile = profile,
+        Scaffold(
             modifier = Modifier
-                .padding(
-                    PaddingValues(
-                        start = 24.dp,
-                        end = 24.dp,
-                        top = innerPadding.calculateTopPadding() + 16.dp,
-                        bottom = innerPadding.calculateBottomPadding() + 100.dp
-                    )
-                ),
-        )
+                .fillMaxSize(),
+
+            containerColor = Color.Transparent,
+
+            topBar = {
+                Toolbar(
+                    title = "",
+                    onBack = onBack
+                )
+            },
+
+            bottomBar = {
+                Box(
+                    modifier = Modifier.padding(24.dp)
+                ) {
+                    ReactionPanel(onLike, onDislike)
+                }
+            },
+            snackbarHost = {
+                SnackbarHost(snackbarHostState)
+            }
+        ) { innerPadding ->
+
+            ProfileCard(
+                profile = profile,
+                modifier = Modifier
+                    .padding(
+                        PaddingValues(
+                            start = 24.dp,
+                            end = 24.dp,
+                            top = innerPadding.calculateTopPadding() + 16.dp,
+                            bottom = innerPadding.calculateBottomPadding() + 100.dp
+                        )
+                    ),
+            )
+        }
     }
 }

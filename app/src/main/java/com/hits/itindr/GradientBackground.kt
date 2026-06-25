@@ -1,20 +1,26 @@
 package com.hits.itindr
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import com.hits.core_ui.R
 
+@SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
-fun GradientBackground(content: @Composable () -> Unit) {
-    BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+fun GradientBackground(
+    alpha: Float,
+    content: @Composable () -> Unit
+) {
+    BoxWithConstraints(modifier = Modifier.fillMaxSize().alpha(alpha)) {
         val width = constraints.maxWidth.toFloat()
         val height = constraints.maxHeight.toFloat()
         val maxDim = maxOf(width, height)

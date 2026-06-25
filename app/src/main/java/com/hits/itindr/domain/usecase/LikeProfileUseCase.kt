@@ -1,6 +1,7 @@
 package com.hits.itindr.domain.usecase
 
 import com.hits.api.repository.ChatRepository
+import com.hits.itindr.mainflow.feed.LikeProfileResult
 import com.hits.itindr.mainflow.feed.domain.FeedRepository
 
 class LikeProfileUseCase(
@@ -8,14 +9,17 @@ class LikeProfileUseCase(
     private val chatRepository: ChatRepository,
 ) {
 
-    suspend operator fun invoke(userId: String): Boolean {
+    suspend operator fun invoke(userId: String): LikeProfileResult {
 
         val result = feedRepository.likeProfile(userId)
 
+
         if (result.isMutual) {
-            chatRepository.createChat(userId)
+            val chat = chatRepository.createChat(userId)
+
+            return LikeProfileResult.Mutual(chat)
         }
 
-        return result.isMutual
+        return LikeProfileResult.Success
     }
 }

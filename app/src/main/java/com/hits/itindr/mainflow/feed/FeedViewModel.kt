@@ -2,9 +2,13 @@ package com.hits.itindr.mainflow.feed
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hits.itindr.mainflow.feed.domain.FeedRepository
 import com.hits.core_network.ApiException
 import com.hits.itindr.domain.usecase.LikeProfileUseCase
+import com.hits.itindr.mainflow.feed.domain.FeedRepository
+import com.hits.itindr.mainflow.match.MatchData
+import com.hits.itindr.mainflow.match.MatchStore
+import com.hits.itindr.mainflow.profile.data.ProfileRepository
+import com.hits.itindr.mainflow.profile.domain.Profile
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,18 +18,38 @@ import kotlinx.coroutines.launch
 class FeedViewModel(
     private val repository: FeedRepository,
     private val likeProfileUseCase: LikeProfileUseCase,
-) : ViewModel()
-{
+    private val profileRepository: ProfileRepository,
+    private val matchStore: MatchStore,
+) : ViewModel() {
     private val _uiState = MutableStateFlow(FeedUiState(isLoading = true))
     val uiState: StateFlow<FeedUiState> = _uiState.asStateFlow()
+    private var currentProfile: Profile? = null
+
+    init {
+        loadCurrentProfile()
+    }
+
+    private fun loadCurrentProfile() {
+
+        viewModelScope.launch {
+
+            runCatching {
+
+                profileRepository.getProfile()
+
+            }.onSuccess {
+
+                currentProfile = it
+            }
+        }
+    }
 
     fun onIntent(intent: FeedIntent) {
         when (intent) {
             FeedIntent.LoadFeed -> loadFeed()
-            is FeedIntent.Like -> sendLike(intent.profile.id)
+            is FeedIntent.Like -> sendLike(intent.profile)
             is FeedIntent.Dislike -> sendDislike(intent.profile.id)
             FeedIntent.ErrorShown -> _uiState.update { it.copy(errorMessage = null) }
-            FeedIntent.MutualMatchShown -> _uiState.update { it.copy(mutualMatchMessage = null) }
         }
     }
 
@@ -40,25 +64,35 @@ class FeedViewModel(
         }
     }
 
-    private fun sendLike(profileId: String) {
-    viewModelScope.launch {
+    private fun sendLike(profile: Profile) {
+        viewModelScope.launch {
 
-        runCatching {
-            likeProfileUseCase(profileId)
-        }
-            .onSuccess { isMutual ->
+            runCatching {
 
-                if (isMutual) {
-                    _uiState.update {
-                        it.copy(
-                            mutualMatchMessage = "Ваши интерфейсы подошли друг другу"
+                likeProfileUseCase(profile.id)
+
+            }.onSuccess { result ->
+
+                when (result) {
+
+                    is LikeProfileResult.Success -> Unit
+
+                    is LikeProfileResult.Mutual -> {
+
+                        matchStore.showMatch(
+                            MatchData(
+                                chatId = result.chat.id,
+                                chatTitle = result.chat.title,
+                                currentUserAvatar = currentProfile?.avatar,
+                                matchedUser = profile
+                            )
                         )
                     }
                 }
-            }
-            .onFailure(::handleError)
+
+            }.onFailure(::handleError)
+        }
     }
-}
 
     private fun sendDislike(profileId: String) {
         viewModelScope.launch {

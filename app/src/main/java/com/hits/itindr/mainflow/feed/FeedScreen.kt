@@ -26,6 +26,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.hits.core_ui.R
 import com.hits.core_ui.R.string.no_cards
 import com.hits.itindr.StartActivity
@@ -41,6 +42,7 @@ private const val FEED_LOG_TAG = "FeedScreen"
 
 @Composable
 fun FeedScreen(
+    navController: NavController,
     viewModel: FeedViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -60,12 +62,6 @@ fun FeedScreen(
         state.errorMessage?.let { message ->
             snackbarHostState.showSnackbar(message)
             viewModel.onIntent(FeedIntent.ErrorShown)
-        }
-    }
-    LaunchedEffect(state.mutualMatchMessage) {
-        state.mutualMatchMessage?.let { message ->
-            snackbarHostState.showSnackbar(message)
-            viewModel.onIntent(FeedIntent.MutualMatchShown)
         }
     }
 

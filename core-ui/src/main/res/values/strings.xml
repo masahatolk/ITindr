@@ -20,11 +20,13 @@
     <string name="choose_photo">Выбрать фото</string>
     <string name="change_photo">Изменить фото</string>
     <string name="delete_photo">Удалить фото</string>
+    <string name="write_message">Написать сообщение</string>
     <string name="name">Имя</string>
     <string name="name_input_layout_text">Ваше имя</string>
     <string name="additional_info">О себе</string>
     <string name="additional_info_input_layout_text">Опишите себя</string>
     <string name="interests">Укажите интересы</string>
+    <string name="interfaces_matched">Ваши интерфейсы подошли \nдруг другу</string>
     <string name="main_activity">Main Activity</string>
     <string name="logo_base_image">logo base image</string>
     <string name="logo_dot_image">logo dot image</string>

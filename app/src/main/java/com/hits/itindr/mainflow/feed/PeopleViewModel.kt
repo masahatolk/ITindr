@@ -2,9 +2,13 @@ package com.hits.itindr.mainflow.feed
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hits.api.model.Chat
 import com.hits.core_network.ApiException
 import com.hits.itindr.domain.usecase.LikeProfileUseCase
 import com.hits.itindr.mainflow.feed.domain.FeedRepository
+import com.hits.itindr.mainflow.match.MatchData
+import com.hits.itindr.mainflow.match.MatchStore
+import com.hits.itindr.mainflow.profile.data.ProfileRepository
 import com.hits.itindr.mainflow.profile.domain.Profile
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,8 +16,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class PeopleViewModel(
-    private val repository: FeedRepository,
+    private val feedRepository: FeedRepository,
+    private val profileRepository: ProfileRepository,
     private val likeProfileUseCase: LikeProfileUseCase,
+    private val matchStore: MatchStore,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(PeopleUiState())
@@ -26,8 +32,12 @@ class PeopleViewModel(
 
     private var isEndReached = false
 
+    private var currentProfile: Profile? = null
+
     init {
         loadNextPage()
+
+        loadCurrentProfile()
     }
 
     fun loadNextPage() {
@@ -44,7 +54,7 @@ class PeopleViewModel(
 
             runCatching {
 
-                repository.getAllUsers(
+                feedRepository.getAllUsers(
                     limit = limit, offset = offset
                 )
 
@@ -73,24 +83,39 @@ class PeopleViewModel(
         }
     }
 
-    fun likeProfile(userId: String) {
+    fun likeProfile(profile: Profile) {
 
         viewModelScope.launch {
 
             runCatching {
 
-                likeProfileUseCase(userId)
+                likeProfileUseCase(profile.id)
 
-            }.onSuccess { isMutual ->
+            }.onSuccess { result ->
 
-                _state.update {
+                when(result) {
 
-                    it.copy(
-                        snackbarMessage = if (isMutual) "Ваши интерфейсы подошли друг другу"
-                        else "Лайк отправлен",
-                    )
+                    is LikeProfileResult.Success -> {
+
+                        _state.update {
+                            it.copy(
+                                snackbarMessage = "Лайк отправлен"
+                            )
+                        }
+                    }
+
+                    is LikeProfileResult.Mutual -> {
+
+                        matchStore.showMatch(
+                            MatchData(
+                                chatId = result.chat.id,
+                                chatTitle = result.chat.title,
+                                currentUserAvatar = currentProfile?.avatar,
+                                matchedUser = profile
+                            )
+                        )
+                    }
                 }
-
             }.onFailure(::handleReactionError)
         }
     }
@@ -101,7 +126,7 @@ class PeopleViewModel(
 
             runCatching {
 
-                repository.dislikeProfile(userId)
+                feedRepository.dislikeProfile(userId)
 
             }.onSuccess {
 
@@ -158,4 +183,28 @@ class PeopleViewModel(
             )
         }
     }
+
+    private fun loadCurrentProfile() {
+
+        viewModelScope.launch {
+
+            runCatching {
+
+                profileRepository.getProfile()
+
+            }.onSuccess {
+
+                currentProfile = it
+            }
+        }
+    }
+}
+
+sealed interface LikeProfileResult {
+
+    data object Success : LikeProfileResult
+
+    data class Mutual(
+        val chat: Chat
+    ) : LikeProfileResult
 }
