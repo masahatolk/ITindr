@@ -67,6 +67,11 @@
         <item name="android:background">@drawable/rounded_transparent30_button</item>
     </style>
 
+    <style name="AvatarShape">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">24dp</item>
+    </style>
+
     <style name="TransparentBadge">
         <item name="android:background">@drawable/rounded_transparent20_button</item>
         <item name="android:textSize">14sp</item>

@@ -63,7 +63,7 @@
 
     <fragment
         android:id="@+id/info"
-        android:name="com.hits.itindr.InfoFragment"
+        android:name="com.hits.itindr.login.presentation.InfoFragment"
         android:label="InfoFragment">
 
     </fragment>

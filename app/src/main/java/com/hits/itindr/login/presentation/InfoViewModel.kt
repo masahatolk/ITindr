@@ -1,21 +1,19 @@
-package com.hits.itindr
+package com.hits.itindr.login.presentation
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hits.itindr.login.domain.AuthRepository
+import com.hits.itindr.TagItem
 import com.hits.itindr.mainflow.profile.data.ProfileRepository
-import com.hits.itindr.login.presentation.RegistrationStore
 import com.hits.itindr.mainflow.profile.data.TopicRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class InfoViewModel(
-    private val authRepository: AuthRepository,
     private val profileRepository: ProfileRepository,
     private val topicRepository: TopicRepository,
-    private val registrationStore: RegistrationStore
 ) : ViewModel() {
 
     private val _topics = MutableStateFlow<List<TagItem>>(emptyList())
@@ -67,6 +65,29 @@ class InfoViewModel(
 
             } catch (e: Exception) {
                 e.printStackTrace()
+            }
+        }
+    }
+
+    fun uploadAvatar(
+        avatar: Uri,
+        onSuccess: () -> Unit,
+        onError: () -> Unit
+    ) {
+
+        viewModelScope.launch {
+
+            try {
+
+                profileRepository.uploadAvatar(
+                    avatar
+                )
+
+                onSuccess()
+
+            } catch (e: Exception) {
+
+                onError()
             }
         }
     }
