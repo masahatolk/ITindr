@@ -1,4 +1,4 @@
-package com.hits.itindr
+package com.hits.core_ui
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
@@ -12,7 +12,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
-import com.hits.core_ui.R
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable

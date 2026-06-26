@@ -1,6 +1,8 @@
 package com.hits.impl.di
 
 import com.hits.api.repository.FeedRepository
+import com.hits.impl.data.LikeProfileUseCase
+import com.hits.impl.data.MatchStore
 import com.hits.impl.data.remote.api.FeedApi
 import com.hits.impl.data.remote.datasource.FeedRemoteDataSource
 import com.hits.impl.data.remote.datasource.FeedRemoteDataSourceImpl

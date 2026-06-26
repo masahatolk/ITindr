@@ -1,6 +1,7 @@
 package com.hits.impl.data.usecase
 
 import android.util.Log
+import com.hits.api.repository.AuthRepository
 
 class LoginUseCase(
     private val authRepository: AuthRepository,

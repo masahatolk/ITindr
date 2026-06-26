@@ -1,4 +1,4 @@
-package com.hits.itindr.mainflow.match.avatars
+package com.hits.impl.ui.match.avatars
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxWidth

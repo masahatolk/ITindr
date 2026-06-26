@@ -1,5 +1,7 @@
 package com.hits.impl.data.usecase
 
+import com.hits.api.repository.AuthRepository
+
 class RegisterUseCase(private val authRepository: AuthRepository) {
 
     fun validate(

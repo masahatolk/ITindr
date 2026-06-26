@@ -4,9 +4,9 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hits.itindr.TagItem
-import com.hits.itindr.mainflow.profile.data.ProfileRepository
-import com.hits.itindr.mainflow.profile.data.TopicRepository
+import com.hits.api.repository.ProfileRepository
+import com.hits.api.repository.TopicRepository
+import com.hits.core_ui.TopicItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -16,7 +16,7 @@ class InfoViewModel(
     private val topicRepository: TopicRepository,
 ) : ViewModel() {
 
-    private val _topics = MutableStateFlow<List<TagItem>>(emptyList())
+    private val _topics = MutableStateFlow<List<TopicItem>>(emptyList())
     val topics = _topics.asStateFlow()
 
     fun saveProfile(
@@ -57,7 +57,7 @@ class InfoViewModel(
 
                 _topics.value =
                     topics.map {
-                        TagItem(
+                        TopicItem(
                             id = it.id,
                             text = it.title
                         )

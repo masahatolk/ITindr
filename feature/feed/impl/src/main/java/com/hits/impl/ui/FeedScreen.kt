@@ -40,7 +40,6 @@ private const val FEED_LOG_TAG = "FeedScreen"
 
 @Composable
 fun FeedScreen(
-    navController: NavController,
     viewModel: FeedViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -65,7 +64,7 @@ fun FeedScreen(
 
     LaunchedEffect(state.isTokenExpired) {
         if (state.isTokenExpired) {
-            context.startActivity(Intent(context, StartActivity::class.java))
+            context.startActivity(Intent(context, Class.forName("com.hits.itindr.mainflow.StartActivity")::class.java))
             (context as? Activity)?.finish()
         }
     }

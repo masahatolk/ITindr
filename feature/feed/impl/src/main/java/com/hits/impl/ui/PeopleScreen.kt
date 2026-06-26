@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import com.hits.api.model.User
 import com.hits.core_ui.AppTextStyles
 import com.hits.core_ui.R
-import com.hits.itindr.mainflow.profile.domain.Profile
 
 @Composable
 fun PeopleScreen(

@@ -30,10 +30,19 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
     implementation(project(":feature:auth:api"))
+    implementation(project(":core-network"))
+    implementation(project(":core-auth"))
+    implementation(project(":core-ui"))
+    implementation(project(":core-media"))
+    implementation(project(":feature:topic:api"))
+    implementation(project(":feature:profile:api"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -44,10 +53,14 @@ dependencies {
 
     implementation(libs.androidx.material3)
 
+    implementation(libs.androidx.navigation.compose)
+
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
 
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.serialization)
     implementation(libs.logging.interceptor)
+
+    implementation(libs.coil.compose)
 }

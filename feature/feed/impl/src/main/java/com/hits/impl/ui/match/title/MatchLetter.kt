@@ -1,4 +1,4 @@
-package com.hits.itindr.mainflow.match.title
+package com.hits.impl.ui.match.title
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween

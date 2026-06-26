@@ -8,6 +8,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import com.hits.core_ui.applyStatusBarPadding
+import com.hits.impl.R
+import com.hits.impl.databinding.FragmentRegisterBinding
 import com.hits.itindr.R
 import com.hits.itindr.applyStatusBarPadding
 import com.hits.itindr.databinding.FragmentRegisterBinding

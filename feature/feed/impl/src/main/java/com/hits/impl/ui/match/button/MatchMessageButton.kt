@@ -1,4 +1,4 @@
-package com.hits.itindr.mainflow.match.button
+package com.hits.impl.ui.match.button
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn

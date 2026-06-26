@@ -2,11 +2,11 @@ package com.hits.impl.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hits.api.repository.AuthRepository
 import com.hits.core_ui.R
-import com.hits.itindr.login.domain.AuthRepository
-import com.hits.itindr.login.domain.RegisterError
-import com.hits.itindr.login.domain.RegisterResult
-import com.hits.itindr.login.domain.RegisterUseCase
+import com.hits.impl.data.usecase.RegisterError
+import com.hits.impl.data.usecase.RegisterResult
+import com.hits.impl.data.usecase.RegisterUseCase
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow

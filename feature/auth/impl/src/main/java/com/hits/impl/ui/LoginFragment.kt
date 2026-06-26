@@ -9,10 +9,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
-import com.hits.itindr.R
-import com.hits.itindr.applyStatusBarPadding
-import com.hits.itindr.databinding.FragmentLoginBinding
-import com.hits.itindr.mainflow.MainActivity
+import com.hits.core_ui.applyStatusBarPadding
+import com.hits.impl.R
+import com.hits.impl.databinding.FragmentLoginBinding
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -54,7 +53,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun openMain() {
-        startActivity(Intent(requireContext(), MainActivity::class.java))
+        startActivity(Intent(requireContext(), Class.forName("com.hits.itindr.mainflow.MainActivity")::class.java))
         requireActivity().finish()
     }
 

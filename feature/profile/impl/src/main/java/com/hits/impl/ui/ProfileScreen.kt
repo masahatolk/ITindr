@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hits.core_ui.CircleIconButton
+import com.hits.core_ui.UserCard
 import com.hits.core_ui.R.drawable.edit
 import com.hits.core_ui.R.drawable.logout
 import com.hits.core_ui.R
@@ -79,8 +80,11 @@ fun ProfileScreen(
 
             state.profile != null -> {
 
-                ProfileCard(
-                    profile = state.profile,
+                UserCard(
+                    name = state.profile.name,
+                    about = state.profile.about,
+                    avatar = state.profile.avatar,
+                    topics = state.profile.topics,
                     modifier = Modifier
                         .padding(
                             PaddingValues(

@@ -1,4 +1,4 @@
-package com.hits.itindr
+package com.hits.core_ui
 
 import android.view.View
 import androidx.core.view.ViewCompat

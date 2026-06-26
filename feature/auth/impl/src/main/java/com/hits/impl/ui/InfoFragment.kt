@@ -19,11 +19,10 @@ import com.hits.core_media.camera.createTempImageUri
 import com.hits.core_media.permission.galleryPermission
 import com.hits.core_media.ui.PhotoPickerViewModel
 import com.hits.core_ui.ActionButton
+import com.hits.core_ui.applyStatusBarPadding
 import com.hits.core_ui.photo.PhotoPickerBottomSheet
-import com.hits.itindr.R
-import com.hits.itindr.applyStatusBarPadding
-import com.hits.itindr.databinding.FragmentInfoBinding
-import com.hits.itindr.mainflow.MainActivity
+import com.hits.impl.R
+import com.hits.impl.databinding.FragmentInfoBinding
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -242,7 +241,7 @@ class InfoFragment : Fragment(R.layout.fragment_info) {
     }
 
     private fun openMain() {
-        startActivity(Intent(requireContext(), MainActivity::class.java))
+        startActivity(Intent(requireContext(), Class.forName("com.hits.itindr.mainflow.MainActivity")::class.java))
         requireActivity().finish()
     }
 

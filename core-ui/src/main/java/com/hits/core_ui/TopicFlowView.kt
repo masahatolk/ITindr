@@ -10,6 +10,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.withStyledAttributes
+import kotlin.math.max
 
 class TopicFlowView @JvmOverloads constructor(
     context: Context,

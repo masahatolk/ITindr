@@ -39,6 +39,8 @@ android {
 dependencies {
     implementation(project(":feature:feed:api"))
     implementation(project(":feature:topic:api"))
+    implementation(project(":feature:chat:api"))
+    implementation(project(":feature:profile:api"))
     implementation(project(":feature:topic:impl"))
     implementation(project(":core-ui"))
     implementation(project(":core-network"))

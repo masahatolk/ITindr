@@ -1,4 +1,4 @@
-package com.hits.impl.ui
+package com.hits.core_ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -27,13 +27,16 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.hits.api.model.Profile
-import com.hits.core_ui.AppTextStyles
-import com.hits.core_ui.R
-import kotlin.collections.isNotEmpty
+import com.hits.api.model.Topic
 
 @Composable
-fun ProfileCard(profile: Profile, modifier: Modifier = Modifier) {
+fun UserCard(
+    name: String,
+    about: String,
+    avatar: String?,
+    topics: List<Topic>,
+    modifier: Modifier = Modifier
+) {
 
     Column(
         modifier = modifier
@@ -45,10 +48,10 @@ fun ProfileCard(profile: Profile, modifier: Modifier = Modifier) {
                 .clip(RoundedCornerShape(32.dp)),
             contentAlignment = Alignment.BottomStart
         ) {
-            if (profile.avatar != null) {
+            if (avatar != null) {
                 AsyncImage(
-                    model = profile.avatar,
-                    contentDescription = profile.name,
+                    model = avatar,
+                    contentDescription = name,
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop,
                     alignment = Alignment.Center,
@@ -72,7 +75,7 @@ fun ProfileCard(profile: Profile, modifier: Modifier = Modifier) {
             Text(
                 modifier = Modifier
                     .padding(24.dp),
-                text = profile.name,
+                text = name,
                 color = Color.White,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
@@ -81,12 +84,12 @@ fun ProfileCard(profile: Profile, modifier: Modifier = Modifier) {
             )
         }
 
-        if (profile.topics.isNotEmpty()) {
+        if (topics.isNotEmpty()) {
             Spacer(Modifier.height(24.dp))
         }
 
         ProfileTagsFlow(
-            topics = profile.topics,
+            topics = topics,
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight(),
@@ -95,7 +98,7 @@ fun ProfileCard(profile: Profile, modifier: Modifier = Modifier) {
         Spacer(Modifier.height(24.dp))
 
         Text(
-            text = profile.about,
+            text = about,
             color = Color.White,
             style = AppTextStyles.InputText,
         )

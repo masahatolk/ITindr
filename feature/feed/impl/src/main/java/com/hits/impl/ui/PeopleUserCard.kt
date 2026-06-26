@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.hits.api.model.User
 import com.hits.core_ui.Toolbar
+import com.hits.core_ui.UserCard
 import com.hits.impl.ui.swipeableCards.ui.ReactionPanel
 
 @Composable
@@ -53,8 +54,11 @@ fun PeopleUserCard(
             }
         ) { innerPadding ->
 
-            ProfileCard(
-                profile = profile,
+            UserCard(
+                name = profile.name,
+                about = profile.about,
+                avatar = profile.avatar,
+                topics = profile.topics,
                 modifier = Modifier
                     .padding(
                         PaddingValues(

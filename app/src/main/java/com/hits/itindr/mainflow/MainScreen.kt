@@ -18,9 +18,14 @@ import androidx.navigation.compose.rememberNavController
 import com.hits.api.model.Chat
 import com.hits.impl.ui.ChatListRoute
 import com.hits.impl.ui.ConversationRoute
-import com.hits.itindr.GradientBackground
-import com.hits.itindr.mainflow.match.MatchOverlay
-import com.hits.itindr.mainflow.match.MatchStore
+import com.hits.impl.ui.EditProfileRoute
+import com.hits.impl.ui.FeedScreen
+import com.hits.impl.ui.PeopleProfileRoute
+import com.hits.impl.ui.PeopleRoute
+import com.hits.impl.ui.ProfileRoute
+import com.hits.core_ui.GradientBackground
+import com.hits.impl.ui.match.MatchOverlay
+import com.hits.impl.data.MatchStore
 import org.koin.compose.koinInject
 
 @Composable
@@ -101,7 +106,7 @@ fun MainScreen() {
                 }) {
 
                 composable(Screen.Feed.route) {
-                    FeedScreen(navController = navController)
+                    FeedScreen()
                 }
 
                 composable(Screen.People.route) {

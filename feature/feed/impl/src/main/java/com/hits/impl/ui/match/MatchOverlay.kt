@@ -1,4 +1,4 @@
-package com.hits.itindr.mainflow.match
+package com.hits.impl.ui.match
 
 import android.util.Log
 import androidx.compose.animation.core.Animatable
@@ -19,11 +19,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.hits.itindr.GradientBackground
-import com.hits.itindr.mainflow.match.avatars.MatchAvatars
-import com.hits.itindr.mainflow.match.button.MatchMessageButton
-import com.hits.itindr.mainflow.match.title.MatchTitle
-import com.hits.itindr.mainflow.match.title.SmallTitle
+import com.hits.api.model.MatchData
+import com.hits.core_ui.GradientBackground
+import com.hits.impl.ui.match.avatars.MatchAvatars
+import com.hits.impl.ui.match.button.MatchMessageButton
+import com.hits.impl.ui.match.title.MatchTitle
+import com.hits.impl.ui.match.title.SmallTitle
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

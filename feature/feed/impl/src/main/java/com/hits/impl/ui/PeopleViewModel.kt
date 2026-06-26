@@ -1,9 +1,16 @@
 package com.hits.impl.ui
 
-import android.provider.ContactsContract
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hits.api.model.MatchData
+import com.hits.api.model.Profile
 import com.hits.api.model.User
+import com.hits.api.repository.FeedRepository
+import com.hits.api.repository.ProfileRepository
+import com.hits.core_network.ApiException
+import com.hits.impl.data.LikeProfileResult
+import com.hits.impl.data.LikeProfileUseCase
+import com.hits.impl.data.MatchStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -26,7 +33,7 @@ class PeopleViewModel(
 
     private var isEndReached = false
 
-    private var currentProfile: ContactsContract.Profile? = null
+    private var currentProfile: Profile? = null
 
     init {
         loadNextPage()
@@ -192,13 +199,4 @@ class PeopleViewModel(
             }
         }
     }
-}
-
-sealed interface LikeProfileResult {
-
-    data object Success : LikeProfileResult
-
-    data class Mutual(
-        val chat: Chat
-    ) : LikeProfileResult
 }

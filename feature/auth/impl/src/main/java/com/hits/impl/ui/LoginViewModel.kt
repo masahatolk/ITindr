@@ -3,9 +3,9 @@ package com.hits.impl.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hits.core_ui.R
-import com.hits.itindr.login.domain.LoginError
-import com.hits.itindr.login.domain.LoginResult
-import com.hits.itindr.login.domain.LoginUseCase
+import com.hits.impl.data.usecase.LoginError
+import com.hits.impl.data.usecase.LoginResult
+import com.hits.impl.data.usecase.LoginUseCase
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow

@@ -3,6 +3,7 @@ package com.hits.impl.data.repository
 import com.hits.api.model.Topic
 import com.hits.api.repository.TopicRepository
 import com.hits.core_network.ApiException
+import com.hits.impl.data.mapper.toDomain
 import com.hits.impl.data.remote.api.TopicApi
 
 class TopicRepositoryImpl(
@@ -20,6 +21,6 @@ class TopicRepositoryImpl(
             )
         }
 
-        return response.body().orEmpty()
+        return response.body().orEmpty().map { it.toDomain() }
     }
 }

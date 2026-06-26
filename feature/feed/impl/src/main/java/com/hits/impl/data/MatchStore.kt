@@ -1,5 +1,6 @@
-package com.hits.itindr.mainflow.match
+package com.hits.impl.data
 
+import com.hits.api.model.MatchData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

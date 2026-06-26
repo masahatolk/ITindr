@@ -6,8 +6,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
-import com.hits.itindr.mainflow.Screen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -48,7 +46,7 @@ fun PeopleRoute (
                 ?.set("profile", user)
 
             navController.navigate(
-                Screen.PeopleProfile.route
+                "people_profile"
             )
         }
     )

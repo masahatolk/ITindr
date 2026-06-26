@@ -2,8 +2,8 @@ package com.hits.impl.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hits.api.repository.ProfileRepository
 import com.hits.itindr.login.domain.LogoutUseCase
-import com.hits.itindr.mainflow.profile.data.ProfileRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow

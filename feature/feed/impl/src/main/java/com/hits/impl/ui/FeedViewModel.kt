@@ -2,14 +2,15 @@ package com.hits.impl.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hits.api.model.MatchData
+import com.hits.api.model.Profile
 import com.hits.api.model.User
+import com.hits.api.repository.FeedRepository
+import com.hits.api.repository.ProfileRepository
 import com.hits.core_network.ApiException
-import com.hits.itindr.domain.usecase.LikeProfileUseCase
-import com.hits.itindr.mainflow.feed.domain.FeedRepository
-import com.hits.itindr.mainflow.match.MatchData
-import com.hits.itindr.mainflow.match.MatchStore
-import com.hits.itindr.mainflow.profile.data.ProfileRepository
-import com.hits.itindr.mainflow.profile.domain.Profile
+import com.hits.impl.data.LikeProfileResult
+import com.hits.impl.data.LikeProfileUseCase
+import com.hits.impl.data.MatchStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

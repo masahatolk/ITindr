@@ -1,5 +1,11 @@
 package com.hits.impl.data.repository
 
+import com.hits.api.repository.AuthRepository
+import com.hits.api.repository.ProfileRepository
+import com.hits.core_auth.TokenStore
+import com.hits.core_auth.session.UserSession
+import com.hits.impl.data.remote.datasource.AuthRemoteDataSource
+
 class AuthRepositoryImpl(
     private val remoteDataSource: AuthRemoteDataSource,
     private val tokenStore: TokenStore,
