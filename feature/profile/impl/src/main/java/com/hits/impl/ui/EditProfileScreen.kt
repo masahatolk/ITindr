@@ -31,6 +31,7 @@ import com.hits.core_ui.ActionButton
 import com.hits.core_ui.AppTextStyles
 import com.hits.core_ui.AvatarAssistChip
 import com.hits.core_ui.FullScreenLoader
+import com.hits.core_ui.GradientBackground
 import com.hits.core_ui.InputTextField
 import com.hits.core_ui.R
 import com.hits.core_ui.TopicFlow
@@ -80,128 +81,131 @@ fun EditProfileScreen(
             )
         }
     ) { innerPadding ->
-        when {
-            state.isLoading -> FullScreenLoader("Загружаем профиль")
-            else -> {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                        .padding(horizontal = 24.dp)
-                ) {
 
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
+        GradientBackground(1f) {
+            when {
+                state.isLoading -> FullScreenLoader("Загружаем профиль")
+                else -> {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                            .padding(horizontal = 24.dp)
                     ) {
-                        if (avatarModel != null) {
-                            AsyncImage(
-                                model = avatarModel,
-                                contentDescription = state.name,
-                                modifier = Modifier
-                                    .size(80.dp)
-                                    .clip(RoundedCornerShape(24.dp)),
-                                contentScale = ContentScale.Crop,
-                                alignment = Alignment.Center,
-                            )
-                        } else {
-                            Box(
-                                modifier = Modifier
-                                    .size(80.dp)
-                                    .clip(RoundedCornerShape(24.dp))
-                                    .background(colorResource(R.color.white_transparent30)),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    painter = painterResource(R.drawable.avatar),
-                                    contentDescription = null,
-                                    tint = Color.White,
-                                    modifier = Modifier.size(24.dp)
-                                )
-                            }
-                        }
 
-                        Spacer(modifier = Modifier.width(16.dp))
-
-                        Column(
-                            verticalArrangement = Arrangement.SpaceBetween,
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            AvatarAssistChip(
-                                onClick = onChangeAvatarClick,
-                                text = stringResource(if (avatarModel == null) R.string.choose_photo else R.string.change_photo),
-                                icon = painterResource(R.drawable.gallery_add)
-                            )
-
                             if (avatarModel != null) {
-                                AvatarAssistChip(
-                                    onClick = onDeleteAvatarClick,
-                                    text = stringResource(R.string.delete_photo),
-                                    icon = painterResource(R.drawable.trash_bin)
+                                AsyncImage(
+                                    model = avatarModel,
+                                    contentDescription = state.name,
+                                    modifier = Modifier
+                                        .size(80.dp)
+                                        .clip(RoundedCornerShape(24.dp)),
+                                    contentScale = ContentScale.Crop,
+                                    alignment = Alignment.Center,
                                 )
+                            } else {
+                                Box(
+                                    modifier = Modifier
+                                        .size(80.dp)
+                                        .clip(RoundedCornerShape(24.dp))
+                                        .background(colorResource(R.color.white_transparent30)),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        painter = painterResource(R.drawable.avatar),
+                                        contentDescription = null,
+                                        tint = Color.White,
+                                        modifier = Modifier.size(24.dp)
+                                    )
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.width(16.dp))
+
+                            Column(
+                                verticalArrangement = Arrangement.SpaceBetween,
+                            ) {
+                                AvatarAssistChip(
+                                    onClick = onChangeAvatarClick,
+                                    text = stringResource(if (avatarModel == null) R.string.choose_photo else R.string.change_photo),
+                                    icon = painterResource(R.drawable.gallery_add)
+                                )
+
+                                if (avatarModel != null) {
+                                    AvatarAssistChip(
+                                        onClick = onDeleteAvatarClick,
+                                        text = stringResource(R.string.delete_photo),
+                                        icon = painterResource(R.drawable.trash_bin)
+                                    )
+                                }
                             }
                         }
+
+                        Spacer(modifier = Modifier.height(24.dp))
+
+                        Text(
+                            text = stringResource(R.string.name),
+                            style = AppTextStyles.FieldTitle,
+                            color = Color.White
+                        )
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        InputTextField(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            value = state.name,
+                            onValueChange = onNameChange,
+                            placeholderText = stringResource(R.string.name_input_layout_text),
+                            placeholderTextColor = colorResource(R.color.white_transparent50),
+                            singleLine = true,
+                            minLines = 1,
+                            maxLines = 1,
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        Text(
+                            text = stringResource(R.string.additional_info),
+                            style = AppTextStyles.FieldTitle,
+                            color = Color.White
+                        )
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        InputTextField(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            value = state.about,
+                            onValueChange = onAboutChange,
+                            minLines = 6,
+                            maxLines = 6,
+                            placeholderText = stringResource(R.string.additional_info_input_layout_text),
+                            placeholderTextColor = colorResource(R.color.white_transparent50),
+                            singleLine = false
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        Text(
+                            text = stringResource(R.string.interests),
+                            style = AppTextStyles.FieldTitle,
+                            color = Color.White
+                        )
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        TopicFlow(
+                            tags = state.tags,
+                            selectedIds = state.selectedIds,
+                            multiSelect = true,
+                            maxSelected = 100,
+                            onSelectionChange = onTopicsChanged,
+                        )
                     }
-
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    Text(
-                        text = stringResource(R.string.name),
-                        style = AppTextStyles.FieldTitle,
-                        color = Color.White
-                    )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    InputTextField(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        value = state.name,
-                        onValueChange = onNameChange,
-                        placeholderText = stringResource(R.string.name_input_layout_text),
-                        placeholderTextColor = colorResource(R.color.white_transparent50),
-                        singleLine = true,
-                        minLines = 1,
-                        maxLines = 1,
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Text(
-                        text = stringResource(R.string.additional_info),
-                        style = AppTextStyles.FieldTitle,
-                        color = Color.White
-                    )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    InputTextField(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        value = state.about,
-                        onValueChange = onAboutChange,
-                        minLines = 6,
-                        maxLines = 6,
-                        placeholderText = stringResource(R.string.additional_info_input_layout_text),
-                        placeholderTextColor = colorResource(R.color.white_transparent50),
-                        singleLine = false
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Text(
-                        text = stringResource(R.string.interests),
-                        style = AppTextStyles.FieldTitle,
-                        color = Color.White
-                    )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    TopicFlow(
-                        tags = state.tags,
-                        selectedIds = state.selectedIds,
-                        multiSelect = true,
-                        maxSelected = 100,
-                        onSelectionChange = onTopicsChanged,
-                    )
                 }
             }
         }

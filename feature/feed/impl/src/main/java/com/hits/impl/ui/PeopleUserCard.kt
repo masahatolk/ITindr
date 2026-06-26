@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.hits.api.model.User
+import com.hits.core_ui.GradientBackground
 import com.hits.core_ui.Toolbar
 import com.hits.core_ui.UserCard
 import com.hits.impl.ui.swipeableCards.ui.ReactionPanel
@@ -54,21 +55,23 @@ fun PeopleUserCard(
             }
         ) { innerPadding ->
 
-            UserCard(
-                name = profile.name,
-                about = profile.about,
-                avatar = profile.avatar,
-                topics = profile.topics,
-                modifier = Modifier
-                    .padding(
-                        PaddingValues(
-                            start = 24.dp,
-                            end = 24.dp,
-                            top = innerPadding.calculateTopPadding() + 16.dp,
-                            bottom = innerPadding.calculateBottomPadding() + 100.dp
-                        )
-                    ),
-            )
+            GradientBackground(1f) {
+                UserCard(
+                    name = profile.name,
+                    about = profile.about,
+                    avatar = profile.avatar,
+                    topics = profile.topics,
+                    modifier = Modifier
+                        .padding(
+                            PaddingValues(
+                                start = 24.dp,
+                                end = 24.dp,
+                                top = innerPadding.calculateTopPadding() + 16.dp,
+                                bottom = innerPadding.calculateBottomPadding() + 100.dp
+                            )
+                        ),
+                )
+            }
         }
     }
 }

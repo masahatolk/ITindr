@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -136,14 +137,14 @@ fun MainScreen() {
                     enterTransition = {
                         slideIntoContainer(
                             AnimatedContentTransitionScope.SlideDirection.Left,
-                            animationSpec = tween(300)
+                            animationSpec = tween(600)
                         )
                     },
 
                     exitTransition = {
                         slideOutOfContainer(
                             AnimatedContentTransitionScope.SlideDirection.Right,
-                            animationSpec = tween(300)
+                            animationSpec = tween(600)
                         )
                     },
                 ) { backStackEntry ->
@@ -170,14 +171,14 @@ fun MainScreen() {
                     enterTransition = {
                         slideIntoContainer(
                             AnimatedContentTransitionScope.SlideDirection.Left,
-                            animationSpec = tween(300)
+                            animationSpec = tween(600)
                         )
                     },
 
                     exitTransition = {
                         slideOutOfContainer(
                             AnimatedContentTransitionScope.SlideDirection.Right,
-                            animationSpec = tween(300)
+                            animationSpec = tween(600)
                         )
                     },
                 ) {
@@ -189,21 +190,29 @@ fun MainScreen() {
 
             if (showBottomBar) {
 
+                val currentDestination = navController.currentBackStackEntry?.destination
+
                 BottomNavigation(
                     modifier = Modifier.align(
                         Alignment.BottomCenter
-                    ), selectedRoute = currentRoute, onNavigate = { route ->
+                    ),
+                    selectedRoute = currentRoute,
+                    onNavigate = { route ->
+                        val alreadySelected = currentDestination
+                            ?.hierarchy
+                            ?.any { it.route == route } == true
+
+                        if (alreadySelected) return@BottomNavigation
+
                         navController.navigate(route) {
-
-                            popUpTo(
-                                navController.graph.startDestinationId
-                            )
-
+                            popUpTo(navController.graph.startDestinationId) {
+                                saveState = true
+                            }
                             launchSingleTop = true
-
                             restoreState = true
                         }
-                    })
+                    }
+                )
             }
 
             matchData?.let { match ->
