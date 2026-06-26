@@ -32,7 +32,7 @@ import com.hits.core_ui.AppTextStyles
 import com.hits.core_ui.AvatarAssistChip
 import com.hits.core_ui.InputTextField
 import com.hits.core_ui.R
-import com.hits.core_ui.TagFlow
+import com.hits.core_ui.TopicFlow
 import com.hits.core_ui.Toolbar
 
 @Composable
@@ -194,7 +194,7 @@ fun EditProfileScreen(
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    TagFlow(
+                    TopicFlow(
                         tags = state.tags,
                         selectedIds = state.selectedIds,
                         multiSelect = true,

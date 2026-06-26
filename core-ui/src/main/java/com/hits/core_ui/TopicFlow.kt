@@ -13,11 +13,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 
-data class TagItem(val id: String, val text: String)
+data class TopicItem(val id: String, val text: String)
 
 @Composable
-fun TagFlow(
-    tags: List<TagItem>,
+fun TopicFlow(
+    tags: List<TopicItem>,
     selectedIds: Set<String>,
     modifier: Modifier = Modifier,
     multiSelect: Boolean = true,

@@ -1,7 +1,7 @@
 package com.hits.impl.ui
 
 import android.net.Uri
-import com.hits.core_ui.TagItem
+import com.hits.core_ui.TopicItem
 
 data class EditProfileUiState(
     val isLoading: Boolean = false,
@@ -16,7 +16,7 @@ data class EditProfileUiState(
 
     val about: String = "",
 
-    val tags: List<TagItem> = emptyList(),
+    val tags: List<TopicItem> = emptyList(),
 
     val selectedIds: Set<String> = emptySet(),
 

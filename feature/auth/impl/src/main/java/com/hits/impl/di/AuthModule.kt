@@ -1,17 +1,18 @@
-package com.hits.itindr.login.di
+package com.hits.impl.di
 
-import com.hits.itindr.login.presentation.InfoViewModel
-import com.hits.itindr.login.data.AuthRemoteDataSource
-import com.hits.itindr.login.data.AuthRemoteDataSourceImpl
-import com.hits.itindr.login.data.AuthRepositoryImpl
-import com.hits.itindr.login.domain.AuthRepository
-import com.hits.itindr.login.domain.LoginUseCase
-import com.hits.itindr.login.domain.LogoutUseCase
-import com.hits.itindr.login.domain.RegisterUseCase
-import com.hits.itindr.login.presentation.LoginViewModel
-import com.hits.itindr.login.presentation.RegisterViewModel
+import com.hits.api.repository.AuthRepository
+import com.hits.impl.data.remote.datasource.AuthRemoteDataSource
+import com.hits.impl.data.remote.datasource.AuthRemoteDataSourceImpl
+import com.hits.impl.data.repository.AuthRepositoryImpl
+import com.hits.impl.data.usecase.LoginUseCase
+import com.hits.impl.data.usecase.LogoutUseCase
+import com.hits.impl.data.usecase.RegisterUseCase
+import com.hits.impl.ui.InfoViewModel
+import com.hits.impl.ui.LoginViewModel
+import com.hits.impl.ui.RegisterViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
+
 
 val loginModule = module {
 

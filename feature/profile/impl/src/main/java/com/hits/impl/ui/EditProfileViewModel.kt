@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hits.api.repository.ProfileRepository
 import com.hits.api.repository.TopicRepository
-import com.hits.core_ui.TagItem
+import com.hits.core_ui.TopicItem
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -65,7 +65,7 @@ class EditProfileViewModel(
                         about = profile.about,
 
                         tags = topics.map {
-                            TagItem(
+                            TopicItem(
                                 id = it.id, text = it.title
                             )
                         },

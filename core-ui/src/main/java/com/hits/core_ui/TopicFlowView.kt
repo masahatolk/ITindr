@@ -1,4 +1,4 @@
-package com.hits.itindr
+package com.hits.core_ui
 
 import android.content.Context
 import android.graphics.Canvas
@@ -10,15 +10,13 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.withStyledAttributes
-import kotlin.math.max
-import com.hits.core_ui.R
 
 class TopicFlowView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null
 ) : View(context, attrs) {
 
-    var tags: List<TagItem> = emptyList()
+    var tags: List<TopicItem> = emptyList()
         set(value) {
             field = value
             requestLayout()
@@ -102,7 +100,7 @@ class TopicFlowView @JvmOverloads constructor(
         }
     }
 
-    private fun updatePaint(tag: TagItem) {
+    private fun updatePaint(tag: TopicItem) {
         val selected = selectionManager.isSelected(tag.id)
         bgPaint.color = if (selected) selectedBgColor else defaultBgColor
         textPaint.color = if (selected) selectedTextColor else defaultTextColor
@@ -149,7 +147,7 @@ class TopicFlowView @JvmOverloads constructor(
         return true
     }
 
-    private data class TagRect(val item: TagItem, val rect: RectF)
+    private data class TagRect(val item: TopicItem, val rect: RectF)
 
     private class TagSelectionManager {
         var multiSelect: Boolean = true
@@ -158,7 +156,7 @@ class TopicFlowView @JvmOverloads constructor(
         var onSelectionChange: ((List<String>) -> Unit)? = null
         var onSelectionLimitReached: ((Int) -> Unit)? = null
 
-        fun handleClick(tag: TagItem) {
+        fun handleClick(tag: TopicItem) {
             val currentlySelected = selectedIds.contains(tag.id)
             if (multiSelect) {
                 if (!currentlySelected) {

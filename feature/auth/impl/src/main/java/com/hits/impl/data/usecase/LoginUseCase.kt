@@ -1,4 +1,4 @@
-package com.hits.itindr.login.domain
+package com.hits.impl.data.usecase
 
 import android.util.Log
 

@@ -19,13 +19,8 @@ import com.hits.api.model.Chat
 import com.hits.impl.ui.ChatListRoute
 import com.hits.impl.ui.ConversationRoute
 import com.hits.itindr.GradientBackground
-import com.hits.itindr.mainflow.feed.FeedScreen
-import com.hits.itindr.mainflow.feed.PeopleProfileRoute
-import com.hits.itindr.mainflow.feed.PeopleRoute
 import com.hits.itindr.mainflow.match.MatchOverlay
 import com.hits.itindr.mainflow.match.MatchStore
-import com.hits.itindr.mainflow.profile.ui.EditProfileRoute
-import com.hits.itindr.mainflow.profile.ui.ProfileRoute
 import org.koin.compose.koinInject
 
 @Composable
