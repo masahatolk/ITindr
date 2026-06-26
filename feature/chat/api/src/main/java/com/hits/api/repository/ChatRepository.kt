@@ -8,6 +8,11 @@ import com.hits.api.model.ChatMessage
 interface ChatRepository {
     suspend fun getChats(): CachedResult<List<Chat>>
     suspend fun createChat(companionId: String): Chat
-    suspend fun getMessages(chatId: String): CachedResult<List<ChatMessage>>
-    suspend fun sendMessage(chatId: String, text: String, attachments: List<Attachment>): ChatMessage
+    suspend fun getMessages(
+        chatId: String, limit: Int, offset: Int
+    ): CachedResult<List<ChatMessage>>
+
+    suspend fun sendMessage(
+        chatId: String, text: String, attachments: List<Attachment>
+    ): ChatMessage
 }

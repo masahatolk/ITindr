@@ -30,19 +30,19 @@ class ChatRemoteDataSourceImpl(
         val response = api.createChat(CreateChatRequest(companionId))
 
         if (response.isSuccessful) {
-            return response.body()
-                ?: throw Exception("Пустое тело запроса")
+            return response.body() ?: throw Exception("Пустое тело запроса")
         }
 
         throw Exception(response.errorBody()?.string().orEmpty())
     }
 
-    override suspend fun getMessages(chatId: String): List<MessageDto> {
+    override suspend fun getMessages(
+        chatId: String, limit: Int, offset: Int
+    ): List<MessageDto> {
 
-        val response = api.getMessages(chatId, 100, 0)
+        val response = api.getMessages(chatId, limit, offset)
 
         if (response.isSuccessful) {
-
             return response.body() ?: emptyList()
         }
 
@@ -50,19 +50,15 @@ class ChatRemoteDataSourceImpl(
     }
 
     override suspend fun sendMessage(
-        chatId: String,
-        text: String,
-        attachments: List<MultipartBody.Part>
+        chatId: String, text: String, attachments: List<MultipartBody.Part>
     ): MessageDto {
 
         val response = api.sendMessage(
-            chatId = chatId,
-            text = text.toRequestBody(),
-            attachments = attachments)
+            chatId = chatId, text = text.toRequestBody(), attachments = attachments
+        )
 
         if (response.isSuccessful) {
-            val dto = response.body()
-                ?: throw Exception("Пустое тело запроса")
+            val dto = response.body() ?: throw Exception("Пустое тело запроса")
 
             return MessageDto(
                 id = dto.id,

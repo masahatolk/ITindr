@@ -107,18 +107,18 @@ fun ConversationRoute(
             currentElement = {
                 ChatInput(
                     value = state.messageDraft, onValueChange = {
-                        viewModel.onIntent(
-                            ChatIntent.MessageDraftChanged(it)
-                        )
-                    }, onSend = {
-                        viewModel.sendMessageWithPhotos(
-                            text = state.messageDraft,
-                            photos = pickerState.selectedPhotos.map { it.toString() })
+                    viewModel.onIntent(
+                        ChatIntent.MessageDraftChanged(it)
+                    )
+                }, onSend = {
+                    viewModel.sendMessageWithPhotos(
+                        text = state.messageDraft,
+                        photos = pickerState.selectedPhotos.map { it.toString() })
 
-                        pickerViewModel.clearSelection()
+                    pickerViewModel.clearSelection()
 
-                        showPicker = false
-                    }, onAttachPhoto = {}, isSending = state.isSendingMessage
+                    showPicker = false
+                }, onAttachPhoto = {}, isSending = state.isSendingMessage
                 )
             },
         )
@@ -130,27 +130,22 @@ fun ConversationRoute(
         )
     }
 
-    ConversationScreen(
-        state = state,
-        title = title,
-        onBack = onBack,
-        onOpenAttachmentPicker = {
+    ConversationScreen(state = state, title = title, onBack = onBack, onOpenAttachmentPicker = {
 
-            pickerViewModel.clearSelection()
+        pickerViewModel.clearSelection()
 
-            galleryPermissionLauncher.launch(
-                galleryPermission()
-            )
-        },
-        onDraftChanged = {
-            viewModel.onIntent(
-                ChatIntent.MessageDraftChanged(it)
-            )
-        },
-        onSend = {
-            viewModel.onIntent(
-                ChatIntent.SendMessage
-            )
-        },
-    )
+        galleryPermissionLauncher.launch(
+            galleryPermission()
+        )
+    }, onDraftChanged = {
+        viewModel.onIntent(
+            ChatIntent.MessageDraftChanged(it)
+        )
+    }, onSend = {
+        viewModel.onIntent(
+            ChatIntent.SendMessage
+        )
+    }, onLoadMore = {
+        viewModel.onIntent(ChatIntent.LoadMoreMessages)
+    })
 }

@@ -30,6 +30,11 @@ class ChatViewModel(
     )
     val uiState: StateFlow<ChatUiState> = _uiState.asStateFlow()
 
+    private val pageSize = 30
+    private var currentOffset = 0
+    private var hasMore = true
+    private var isLoadingMore = false
+
     fun onIntent(intent: ChatIntent) {
         when (intent) {
             ChatIntent.LoadChats -> loadChats()
@@ -43,6 +48,7 @@ class ChatViewModel(
             is ChatIntent.CreateChat -> createChat(intent.companionId)
 
             ChatIntent.ErrorShown -> _uiState.update { it.copy(snackbarMessage = null) }
+            ChatIntent.LoadMoreMessages -> loadMoreMessages()
         }
     }
 
@@ -59,18 +65,18 @@ class ChatViewModel(
             _uiState.update { it.copy(isChatsLoading = true, snackbarMessage = null) }
             runCatching { repository.getChats() }.onSuccess { result ->
 
-                    // TODO snackbar не показывает
-                    _uiState.update {
-                        it.copy(
-                            chats = result.value,
-                            isChatsLoading = false,
-                            snackbarMessage = if (result.fromCache) CACHE_CHATS_MESSAGE else null,
-                        )
-                    }
-                }.onFailure { throwable ->
-
-                    showError(throwable, loadingChats = false)
+                // TODO snackbar не показывает
+                _uiState.update {
+                    it.copy(
+                        chats = result.value,
+                        isChatsLoading = false,
+                        snackbarMessage = if (result.fromCache) CACHE_CHATS_MESSAGE else null,
+                    )
                 }
+            }.onFailure { throwable ->
+
+                showError(throwable, loadingChats = false)
+            }
         }
     }
 
@@ -85,13 +91,13 @@ class ChatViewModel(
             _uiState.update { it.copy(isCreatingChat = true, snackbarMessage = null) }
             runCatching { repository.createChat(normalizedCompanionId) }.onSuccess { chat ->
 
-                    _uiState.update { state ->
-                        state.copy(
-                            chats = listOf(chat) + state.chats,
-                            isCreatingChat = false,
-                        )
-                    }
-                }.onFailure { throwable -> showError(throwable, creatingChat = false) }
+                _uiState.update { state ->
+                    state.copy(
+                        chats = listOf(chat) + state.chats,
+                        isCreatingChat = false,
+                    )
+                }
+            }.onFailure { throwable -> showError(throwable, creatingChat = false) }
         }
     }
 
@@ -116,10 +122,10 @@ class ChatViewModel(
                     runCatching {
                         repository.sendMessage(chatId, result.value, _uiState.value.attachments)
                     }.onSuccess { message ->
-                            appendSentMessage(message)
-                        }.onFailure {
-                            showError(it, sendingMessage = false)
-                        }
+                        appendSentMessage(message)
+                    }.onFailure {
+                        showError(it, sendingMessage = false)
+                    }
                 }
             }
         }
@@ -186,9 +192,11 @@ class ChatViewModel(
 
         val uiMessage = message.toUi(currentUserId)
 
+        currentOffset++
+
         _uiState.update {
             it.copy(
-                messages = it.messages + uiMessage,
+                messages = listOf(uiMessage) + it.messages,
                 messageDraft = "",
                 isSendingMessage = false,
             )
@@ -196,6 +204,8 @@ class ChatViewModel(
     }
 
     private fun loadMessages(chatId: String) {
+        currentOffset = 0
+        hasMore = true
 
         _uiState.update {
             it.copy(
@@ -204,39 +214,83 @@ class ChatViewModel(
         }
 
         viewModelScope.launch {
-
             runCatching {
-                repository.getMessages(chatId)
+                repository.getMessages(
+                    chatId = chatId, limit = pageSize, offset = currentOffset
+                )
             }.onSuccess { result ->
 
-                    val currentUserId = userSession.getUserId()
+                val currentUserId = userSession.getUserId()
 
-                    val uiMessages = result.value.reversed().map { message ->
-
-                        ChatMessageUi(
-                            id = message.id,
-                            text = message.text,
-                            senderName = message.senderName,
-                            isOutgoing = message.userId == currentUserId,
-                            avatar = message.avatar,
-                            createdAt = message.createdAt.toRussianDate(),
-                            attachments = message.attachments,
-                        )
-                    }
-
-                    // TODO не показывает snackbar
-                    _uiState.update {
-                        it.copy(
-                            messages = uiMessages,
-                            isMessagesLoading = false,
-                            snackbarMessage = if (result.fromCache) CACHE_MESSAGES_MESSAGE else null,
-                        )
-                    }
-                }.onFailure {
-                    showError(
-                        it, loadingMessages = false
+                val uiMessages = result.value.map { message ->
+                    ChatMessageUi(
+                        id = message.id,
+                        text = message.text,
+                        senderName = message.senderName,
+                        isOutgoing = message.userId == currentUserId,
+                        avatar = message.avatar,
+                        createdAt = message.createdAt.toRussianDate(),
+                        attachments = message.attachments
                     )
                 }
+
+                currentOffset += uiMessages.size
+                hasMore = uiMessages.size == pageSize
+
+                _uiState.update {
+                    it.copy(
+                        messages = uiMessages, isMessagesLoading = false
+                    )
+                }
+            }.onFailure {
+                showError(it, loadingMessages = false)
+            }
+        }
+    }
+
+    fun loadMoreMessages() {
+        val chatId = _uiState.value.currentChatId ?: return
+
+        if (isLoadingMore || !hasMore) return
+
+        viewModelScope.launch {
+            isLoadingMore = true
+
+            try {
+
+                val result = repository.getMessages(
+                    chatId = chatId,
+                    limit = pageSize,
+                    offset = currentOffset
+                )
+
+                val currentUserId = userSession.getUserId()
+
+                val newMessages = result.value.map { message ->
+                    ChatMessageUi(
+                        id = message.id,
+                        text = message.text,
+                        senderName = message.senderName,
+                        isOutgoing = message.userId == currentUserId,
+                        avatar = message.avatar,
+                        createdAt = message.createdAt.toRussianDate(),
+                        attachments = message.attachments
+                    )
+                }
+
+                currentOffset += newMessages.size
+                hasMore = newMessages.size == pageSize
+
+                _uiState.update { state ->
+                    state.copy(
+                        messages = (state.messages + newMessages)
+                            .distinctBy { it.id }
+                    )
+                }
+
+            } finally {
+                isLoadingMore = false
+            }
         }
     }
 
@@ -289,6 +343,7 @@ sealed interface ChatIntent {
     data class MessageDraftChanged(val text: String) : ChatIntent
     data object SendMessage : ChatIntent
     data class CreateChat(val companionId: String) : ChatIntent
+    data object LoadMoreMessages : ChatIntent
     data object ErrorShown : ChatIntent
 }
 

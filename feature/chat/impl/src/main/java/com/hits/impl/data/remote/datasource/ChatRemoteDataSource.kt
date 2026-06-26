@@ -15,7 +15,9 @@ interface ChatRemoteDataSource {
     ): CreatedChatDto
 
     suspend fun getMessages(
-        chatId: String
+        chatId: String,
+        limit: Int,
+        offset: Int
     ): List<MessageDto>
 
     suspend fun sendMessage(

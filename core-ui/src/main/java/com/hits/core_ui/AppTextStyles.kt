@@ -1,14 +1,16 @@
 package com.hits.core_ui
 
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.text.TextStyle
 
 object AppTextStyles {
 
     val Header = TextStyle(
         fontSize = 40.sp,
-        fontWeight = FontWeight.Bold
+        fontWeight = FontWeight.Bold,
+        color = Color.White
     )
 
     val SmallHeader = TextStyle(

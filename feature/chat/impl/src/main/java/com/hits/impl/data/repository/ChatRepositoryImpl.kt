@@ -35,8 +35,7 @@ class ChatRepositoryImpl(
             chatDao.insertChats(entities)
 
             CachedResult(
-                value = entities.map { it.toDomain() },
-                fromCache = false
+                value = entities.map { it.toDomain() }, fromCache = false
             )
 
         } catch (e: IOException) {
@@ -48,8 +47,7 @@ class ChatRepositoryImpl(
             val cache = chatDao.getChats(currentUserId)
 
             CachedResult(
-                value = cache.map { it.toDomain() },
-                fromCache = true
+                value = cache.map { it.toDomain() }, fromCache = true
             )
         }
     }
@@ -71,10 +69,14 @@ class ChatRepositoryImpl(
         }
     }
 
-    override suspend fun getMessages(chatId: String): CachedResult<List<ChatMessage>> {
+    override suspend fun getMessages(
+        chatId: String, limit: Int, offset: Int
+    ): CachedResult<List<ChatMessage>> {
         return try {
 
-            val remote = remoteDataSource.getMessages(chatId)
+            val remote = remoteDataSource.getMessages(
+                chatId = chatId, limit = limit, offset = offset
+            )
 
             val entities = remote.map {
                 it.toEntity(chatId)
@@ -83,25 +85,23 @@ class ChatRepositoryImpl(
             messageDao.insertMessages(entities)
 
             CachedResult(
-                value = entities.map { it.toDomain() },
-                fromCache = false
+                value = entities.map { it.toDomain() }, fromCache = false
             )
 
         } catch (e: IOException) {
 
             val cache = messageDao.getMessages(chatId)
+                .drop(offset)
+                .take(limit)
 
             CachedResult(
-                value = cache.reversed().map { it.toDomain() },
-                fromCache = true
+                value = cache.map { it.toDomain() }, fromCache = true
             )
         }
     }
 
     override suspend fun sendMessage(
-        chatId: String,
-        text: String,
-        attachments: List<Attachment>
+        chatId: String, text: String, attachments: List<Attachment>
     ): ChatMessage {
 
         return try {

@@ -12,7 +12,7 @@ interface MessageDao {
     @Query("""
         SELECT * FROM messages
         WHERE chatId = :chatId
-        ORDER BY createdAt ASC
+        ORDER BY createdAt DESC
     """)
     suspend fun getMessages(chatId: String): List<MessageEntity>
 

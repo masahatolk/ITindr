@@ -39,6 +39,7 @@
     <string name="server_didnt_return_auth_token">Сервер не вернул токен авторизации</string>
     <string name="register_error_passwords_do_not_match">Пароли не совпадают</string>
     <string name="register_error_request_failed">Не удалось выполнить регистрацию</string>
-    <string name="title_profile">Профиль</string>
     <string name="title_people">Люди</string>
+    <string name="title_chats">Чаты</string>
+    <string name="title_profile">Профиль</string>
 </resources>

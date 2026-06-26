@@ -14,7 +14,7 @@ import com.hits.impl.data.mapper.Converters
         ChatEntity::class,
         MessageEntity::class
     ],
-    version = 6,
+    version = 7,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
