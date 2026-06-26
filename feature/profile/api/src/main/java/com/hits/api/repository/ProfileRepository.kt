@@ -1,6 +1,5 @@
 package com.hits.api.repository
 
-import android.net.Uri
 import com.hits.api.model.Profile
 
 interface ProfileRepository {
@@ -14,7 +13,7 @@ interface ProfileRepository {
     ) : Profile
 
     suspend fun uploadAvatar(
-        avatar: Uri
+        avatar: String
     )
 
     suspend fun deleteAvatar()

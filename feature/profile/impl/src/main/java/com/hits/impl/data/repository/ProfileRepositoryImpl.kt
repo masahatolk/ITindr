@@ -1,6 +1,7 @@
 package com.hits.impl.data.repository
 
 import android.net.Uri
+import androidx.core.net.toUri
 import com.hits.api.model.Profile
 import com.hits.api.repository.ProfileRepository
 import com.hits.impl.data.mapper.toDomain
@@ -26,8 +27,8 @@ class ProfileRepositoryImpl(
         ).toDomain()
     }
 
-    override suspend fun uploadAvatar(avatar: Uri) {
-        remoteDataSource.uploadAvatar(avatar)
+    override suspend fun uploadAvatar(avatar: String) {
+        remoteDataSource.uploadAvatar(avatar.toUri())
     }
 
     override suspend fun deleteAvatar() {

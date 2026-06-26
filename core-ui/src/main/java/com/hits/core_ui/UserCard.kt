@@ -88,7 +88,7 @@ fun UserCard(
             Spacer(Modifier.height(24.dp))
         }
 
-        ProfileTagsFlow(
+        ProfileTopicsFlow(
             topics = topics,
             modifier = Modifier
                 .fillMaxWidth()

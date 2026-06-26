@@ -42,8 +42,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import coil.compose.AsyncImage
+import com.hits.api.model.Topic
+import com.hits.api.model.User
 import com.hits.core_ui.R
 import com.hits.core_ui.R.style.SwipeableProfileTagFlowView
+import com.hits.core_ui.TopicFlowView
+import com.hits.core_ui.TopicItem
 import com.hits.itindr.TagFlowView
 import com.hits.itindr.TagItem
 import com.hits.itindr.mainflow.profile.domain.Profile
@@ -60,7 +64,7 @@ private const val SCROLL_INDICATOR_TRAVEL = 162f
 @Composable
 fun SwipeableProfileCard(
     modifier: Modifier = Modifier,
-    profile: Profile,
+    profile: User,
     onLike: () -> Unit,
     onDislike: () -> Unit,
 ) {
@@ -207,31 +211,6 @@ private fun DescriptionScrollIndicator(
                 .background(Color.White),
         )
     }
-}
-
-@Composable
-fun ProfileTopicsFlow(
-    topics: List<Topic>,
-    modifier: Modifier = Modifier,
-) {
-    AndroidView(
-        modifier = modifier,
-        factory = { context ->
-            TagFlowView(ContextThemeWrapper(context, SwipeableProfileTagFlowView)).apply {
-                View.setOnTouchListener { _, _ -> true }
-                View.setClickable = false
-                View.setFocusable = false
-            }
-        },
-        update = { view ->
-            view.tags = topics.map { tag ->
-                TagItem(
-                    id = tag.id,
-                    text = tag.title,
-                )
-            }
-        },
-    )
 }
 
 @Composable

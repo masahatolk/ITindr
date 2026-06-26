@@ -64,7 +64,7 @@ fun FeedScreen(
 
     LaunchedEffect(state.isTokenExpired) {
         if (state.isTokenExpired) {
-            context.startActivity(Intent(context, Class.forName("com.hits.itindr.mainflow.StartActivity")::class.java))
+            context.startActivity(Intent(context, Class.forName("com.hits.itindr.StartActivity")))
             (context as? Activity)?.finish()
         }
     }

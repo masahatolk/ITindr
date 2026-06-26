@@ -8,8 +8,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.hits.itindr.StartActivity
-import com.hits.itindr.mainflow.Screen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -49,7 +47,7 @@ fun ProfileRoute(
             when (event) {
                 ProfileUiEvent.OpenLoginScreen -> {
                     context.startActivity(
-                        Intent(context, StartActivity::class.java)
+                        Intent(context, Class.forName("com.hits.itindr.StartActivity"))
                     )
 
                     (context as? Activity)?.finish()
@@ -61,7 +59,7 @@ fun ProfileRoute(
     ProfileScreen(
         state = state,
         onEditClick = {
-            navController.navigate(Screen.EditProfile.route)
+            navController.navigate("edit_profile")
         },
         onLogoutClick = {
             viewModel.logout()

@@ -53,7 +53,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun openMain() {
-        startActivity(Intent(requireContext(), Class.forName("com.hits.itindr.mainflow.MainActivity")::class.java))
+        startActivity(Intent(requireContext(), Class.forName("com.hits.itindr.mainflow.MainActivity")))
         requireActivity().finish()
     }
 

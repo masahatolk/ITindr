@@ -70,7 +70,7 @@ class InfoViewModel(
     }
 
     fun uploadAvatar(
-        avatar: Uri,
+        avatar: String,
         onSuccess: () -> Unit,
         onError: () -> Unit
     ) {

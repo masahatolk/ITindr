@@ -2,8 +2,8 @@ package com.hits.impl.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hits.api.repository.AuthRepository
 import com.hits.api.repository.ProfileRepository
-import com.hits.itindr.login.domain.LogoutUseCase
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class ProfileViewModel(
     private val profileRepository: ProfileRepository,
-    private val logoutUseCase: LogoutUseCase,
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
 
     private val _event = MutableSharedFlow<ProfileUiEvent>()
@@ -60,7 +60,7 @@ class ProfileViewModel(
 
     fun logout() {
         viewModelScope.launch {
-            logoutUseCase()
+            authRepository.logout()
 
             _event.emit(ProfileUiEvent.OpenLoginScreen)
         }

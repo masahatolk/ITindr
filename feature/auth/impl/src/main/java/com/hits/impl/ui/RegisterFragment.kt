@@ -50,7 +50,14 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.event.collect { event ->
                     when (event) {
-                        RegisterUiEvent.OpenInfoScreen -> navController.navigate(R.id.action_register_to_info)
+                        RegisterUiEvent.OpenInfoScreen -> {
+                            val actionId = resources.getIdentifier(
+                                "action_register_to_info",
+                                "id",
+                                requireContext().packageName
+                            )
+                            navController.navigate(actionId)
+                        }
                         is RegisterUiEvent.ShowError -> showError(event.messageResId)
                     }
                 }
