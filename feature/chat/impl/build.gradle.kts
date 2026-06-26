@@ -58,9 +58,9 @@ dependencies {
     implementation(libs.retrofit.serialization)
     implementation(libs.logging.interceptor)
 
-    implementation(libs.androidx.room.common.jvm)
-
     implementation(libs.coil.compose)
+
+    implementation(libs.androidx.room.common.jvm)
 
     ksp(libs.androidx.room.compiler)
 }

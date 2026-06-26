@@ -42,14 +42,14 @@
 
     <fragment
         android:id="@+id/login"
-        android:name="com.hits.itindr.login.presentation.LoginFragment"
+        android:name="com.hits.impl.ui.LoginFragment"
         android:label="LoginFragment">
 
     </fragment>
 
     <fragment
         android:id="@+id/register"
-        android:name="com.hits.itindr.login.presentation.RegisterFragment"
+        android:name="com.hits.impl.ui.RegisterFragment"
         android:label="RegisterFragment">
 
         <action
@@ -63,7 +63,7 @@
 
     <fragment
         android:id="@+id/info"
-        android:name="com.hits.itindr.login.presentation.InfoFragment"
+        android:name="com.hits.impl.ui.InfoFragment"
         android:label="InfoFragment">
 
     </fragment>
