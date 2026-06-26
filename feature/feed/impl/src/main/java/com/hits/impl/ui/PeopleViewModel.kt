@@ -199,4 +199,12 @@ class PeopleViewModel(
             }
         }
     }
+
+    fun selectUser(user: User) {
+        feedRepository.setSelectedUser(user)
+    }
+
+    fun selectedUser(): User? {
+        return feedRepository.getSelectedUser()
+    }
 }

@@ -14,7 +14,7 @@ interface ProfileRemoteDataSource {
     ) : ProfileResponse
 
     suspend fun uploadAvatar(
-        avatar: Uri
+        avatar: String
     )
 
     suspend fun deleteAvatar()

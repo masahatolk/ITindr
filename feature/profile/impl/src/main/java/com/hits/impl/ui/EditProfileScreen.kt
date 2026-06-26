@@ -30,6 +30,7 @@ import coil.compose.AsyncImage
 import com.hits.core_ui.ActionButton
 import com.hits.core_ui.AppTextStyles
 import com.hits.core_ui.AvatarAssistChip
+import com.hits.core_ui.FullScreenLoader
 import com.hits.core_ui.InputTextField
 import com.hits.core_ui.R
 import com.hits.core_ui.TopicFlow

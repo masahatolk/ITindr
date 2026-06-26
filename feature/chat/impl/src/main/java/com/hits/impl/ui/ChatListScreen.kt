@@ -16,14 +16,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.hits.api.model.Chat
 import com.hits.core_ui.AppTextStyles
 import com.hits.core_ui.R
 import com.hits.impl.ui.components.ChatListItem
-import com.hits.impl.ui.components.FullScreenLoader
+import com.hits.core_ui.FullScreenLoader
 
 
 @Composable

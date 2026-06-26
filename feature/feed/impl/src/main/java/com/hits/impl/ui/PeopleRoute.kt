@@ -6,6 +6,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -41,13 +42,8 @@ fun PeopleRoute (
         gridState = gridState,
         onClick = { user ->
 
-            navController.currentBackStackEntry
-                ?.savedStateHandle
-                ?.set("profile", user)
-
-            navController.navigate(
-                "people_profile"
-            )
+            viewModel.selectUser(user)
+            navController.navigate("people_profile")
         }
     )
 }

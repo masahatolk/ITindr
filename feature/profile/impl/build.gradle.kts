@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -62,4 +63,6 @@ dependencies {
     implementation(libs.logging.interceptor)
 
     implementation(libs.coil.compose)
+
+    implementation(libs.androidx.navigation.fragment)
 }

@@ -43,4 +43,6 @@ dependencies {
 
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.serialization)
+
+    implementation(libs.androidx.navigation.fragment)
 }

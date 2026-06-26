@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hits.core_ui.CircleIconButton
+import com.hits.core_ui.FullScreenLoader
 import com.hits.core_ui.UserCard
 import com.hits.core_ui.R.drawable.edit
 import com.hits.core_ui.R.drawable.logout

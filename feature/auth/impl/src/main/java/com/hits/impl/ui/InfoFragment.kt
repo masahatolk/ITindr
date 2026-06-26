@@ -148,7 +148,7 @@ class InfoFragment : Fragment(R.layout.fragment_info) {
                     } else {
 
                         viewModel.uploadAvatar(
-                            avatar = avatar,
+                            avatar = avatar.toString(),
 
                             onSuccess = {
                                 openMain()

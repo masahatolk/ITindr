@@ -80,7 +80,7 @@ class InfoViewModel(
             try {
 
                 profileRepository.uploadAvatar(
-                    avatar
+                    avatar.toString()
                 )
 
                 onSuccess()

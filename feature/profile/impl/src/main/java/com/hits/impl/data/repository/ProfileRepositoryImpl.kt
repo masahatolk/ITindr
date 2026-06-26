@@ -28,7 +28,7 @@ class ProfileRepositoryImpl(
     }
 
     override suspend fun uploadAvatar(avatar: String) {
-        remoteDataSource.uploadAvatar(avatar.toUri())
+        remoteDataSource.uploadAvatar(avatar)
     }
 
     override suspend fun deleteAvatar() {

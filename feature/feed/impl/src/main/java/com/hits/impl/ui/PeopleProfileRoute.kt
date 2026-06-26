@@ -6,7 +6,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import com.hits.api.model.User
+import androidx.navigation.NavController
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -17,11 +17,7 @@ fun PeopleProfileRoute(
 
     val state by viewModel.state.collectAsState()
 
-    val profile =
-        navController.previousBackStackEntry
-            ?.savedStateHandle
-            ?.get<User>("profile")
-            ?: return
+    val profile = viewModel.selectedUser() ?: return
 
     val snackbarHostState = remember {
         SnackbarHostState()

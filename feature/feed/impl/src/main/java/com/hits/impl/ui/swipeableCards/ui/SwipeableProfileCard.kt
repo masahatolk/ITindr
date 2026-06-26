@@ -1,7 +1,5 @@
 package com.hits.impl.ui.swipeableCards.ui
 
-import android.view.ContextThemeWrapper
-import android.view.View
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -40,18 +38,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import coil.compose.AsyncImage
-import com.hits.api.model.Topic
 import com.hits.api.model.User
+import com.hits.core_ui.ProfileTopicsFlow
 import com.hits.core_ui.R
-import com.hits.core_ui.R.style.SwipeableProfileTagFlowView
-import com.hits.core_ui.TopicFlowView
-import com.hits.core_ui.TopicItem
-import com.hits.itindr.TagFlowView
-import com.hits.itindr.TagItem
-import com.hits.itindr.mainflow.profile.domain.Profile
-import com.hits.itindr.mainflow.profile.domain.Topic
 import kotlin.math.roundToInt
 
 

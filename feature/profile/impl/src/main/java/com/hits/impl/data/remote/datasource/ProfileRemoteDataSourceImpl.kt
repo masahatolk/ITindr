@@ -2,6 +2,7 @@ package com.hits.impl.data.remote.datasource
 
 import android.content.Context
 import android.net.Uri
+import androidx.core.net.toUri
 import com.hits.core_media.extensions.toAvatarPart
 import com.hits.core_network.ApiException
 import com.hits.impl.data.remote.api.ProfileApi
@@ -59,8 +60,8 @@ class ProfileRemoteDataSourceImpl(
         )
     }
 
-    override suspend fun uploadAvatar(avatar: Uri) {
-        val response = profileApi.uploadAvatar(avatar.toAvatarPart(context))
+    override suspend fun uploadAvatar(avatar: String) {
+        val response = profileApi.uploadAvatar(avatar.toUri().toAvatarPart(context))
 
         if (!response.isSuccessful) {
 

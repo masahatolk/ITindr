@@ -8,6 +8,8 @@ import com.hits.impl.data.remote.datasource.FeedRemoteDataSource
 class FeedRepositoryImpl(
     private val remoteDataSource: FeedRemoteDataSource,
 ) : FeedRepository {
+    private var selectedUser: User? = null
+
     override suspend fun getAllUsers(
         limit: Int,
         offset: Int
@@ -22,4 +24,10 @@ class FeedRepositoryImpl(
     override suspend fun dislikeProfile(profileId: String): ReactionResult {
         return remoteDataSource.dislikeProfile(profileId)
     }
+
+    override fun setSelectedUser(user: User) {
+        selectedUser = user
+    }
+
+    override fun getSelectedUser(): User? = selectedUser
 }

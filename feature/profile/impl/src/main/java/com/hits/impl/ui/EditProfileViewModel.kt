@@ -149,7 +149,7 @@ class EditProfileViewModel(
                     current.localAvatarUri != null -> {
 
                         profileRepository.uploadAvatar(
-                            current.localAvatarUri
+                            current.localAvatarUri.toString()
                         )
                     }
                 }

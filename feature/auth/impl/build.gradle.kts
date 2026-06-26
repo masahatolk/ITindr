@@ -62,5 +62,7 @@ dependencies {
     implementation(libs.retrofit.serialization)
     implementation(libs.logging.interceptor)
 
+    implementation(libs.androidx.navigation.fragment)
+
     implementation(libs.coil.compose)
 }

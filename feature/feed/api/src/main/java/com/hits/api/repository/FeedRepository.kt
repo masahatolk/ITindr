@@ -10,6 +10,8 @@ interface FeedRepository {
     suspend fun getProfiles(): List<User>
     suspend fun likeProfile(profileId: String): ReactionResult
     suspend fun dislikeProfile(profileId: String): ReactionResult
+    fun setSelectedUser(user: User)
+    fun getSelectedUser(): User?
 }
 
 data class ReactionResult(
