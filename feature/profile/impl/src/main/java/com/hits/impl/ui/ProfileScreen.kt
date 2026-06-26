@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -21,11 +22,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hits.core_ui.CircleIconButton
-import com.hits.core_ui.FullScreenLoader
-import com.hits.core_ui.UserCard
+import com.hits.core_ui.R
 import com.hits.core_ui.R.drawable.edit
 import com.hits.core_ui.R.drawable.logout
-import com.hits.core_ui.R
+import com.hits.core_ui.UserCard
 
 @Composable
 fun ProfileScreen(
@@ -86,21 +86,24 @@ fun ProfileScreen(
 
             state.profile != null -> {
 
-                UserCard(
-                    name = state.profile.name,
-                    about = state.profile.about,
-                    avatar = state.profile.avatar,
-                    topics = state.profile.topics,
-                    modifier = Modifier
-                        .padding(
-                            PaddingValues(
-                                start = 24.dp,
-                                end = 24.dp,
-                                top = innerPadding.calculateTopPadding() + 24.dp,
-                                bottom = innerPadding.calculateBottomPadding() + 100.dp
-                            )
-                        ),
-                )
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(
+                        start = 24.dp,
+                        end = 24.dp,
+                        top = innerPadding.calculateTopPadding() + 24.dp,
+                        bottom = innerPadding.calculateTopPadding() + 100.dp,
+                    )
+                ) {
+                    item {
+                        UserCard(
+                            name = state.profile.name,
+                            about = state.profile.about,
+                            avatar = state.profile.avatar,
+                            topics = state.profile.topics
+                        )
+                    }
+                }
             }
         }
     }

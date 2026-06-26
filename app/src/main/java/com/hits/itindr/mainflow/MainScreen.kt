@@ -1,9 +1,12 @@
 package com.hits.itindr.mainflow
 
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -17,6 +20,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.hits.api.model.Chat
+import com.hits.core_ui.GradientBackground
+import com.hits.impl.data.MatchStore
 import com.hits.impl.ui.ChatListRoute
 import com.hits.impl.ui.ConversationRoute
 import com.hits.impl.ui.EditProfileRoute
@@ -24,9 +29,7 @@ import com.hits.impl.ui.FeedScreen
 import com.hits.impl.ui.PeopleProfileRoute
 import com.hits.impl.ui.PeopleRoute
 import com.hits.impl.ui.ProfileRoute
-import com.hits.core_ui.GradientBackground
 import com.hits.impl.ui.match.MatchOverlay
-import com.hits.impl.data.MatchStore
 import org.koin.compose.koinInject
 
 @Composable
@@ -188,19 +191,20 @@ fun MainScreen() {
                 }
             }
 
-            if (showBottomBar) {
 
-                val currentDestination = navController.currentBackStackEntry?.destination
+            val currentDestination = navController.currentBackStackEntry?.destination
 
+            AnimatedVisibility(
+                visible = showBottomBar,
+                modifier = Modifier.align(Alignment.BottomCenter),
+                enter = slideInVertically(
+                    animationSpec = tween(600), initialOffsetY = { it / 2 }),
+                exit = slideOutVertically(
+                    animationSpec = tween(600), targetOffsetY = { it / 2 })) {
                 BottomNavigation(
-                    modifier = Modifier.align(
-                        Alignment.BottomCenter
-                    ),
-                    selectedRoute = currentRoute,
-                    onNavigate = { route ->
-                        val alreadySelected = currentDestination
-                            ?.hierarchy
-                            ?.any { it.route == route } == true
+                    selectedRoute = currentRoute, onNavigate = { route ->
+                        val alreadySelected =
+                            currentDestination?.hierarchy?.any { it.route == route } == true
 
                         if (alreadySelected) return@BottomNavigation
 
@@ -211,9 +215,9 @@ fun MainScreen() {
                             launchSingleTop = true
                             restoreState = true
                         }
-                    }
-                )
+                    })
             }
+
 
             matchData?.let { match ->
 

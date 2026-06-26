@@ -35,7 +35,7 @@ fun UserCard(
     about: String,
     avatar: String?,
     topics: List<Topic>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
 
     Column(
@@ -46,7 +46,7 @@ fun UserCard(
             modifier = Modifier
                 .heightIn(min = 100.dp, max = 340.dp)
                 .clip(RoundedCornerShape(32.dp)),
-            contentAlignment = Alignment.BottomStart
+            contentAlignment = Alignment.BottomStart,
         ) {
             if (avatar != null) {
                 AsyncImage(
