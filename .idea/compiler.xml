@@ -3,6 +3,7 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="11">
       <module name="ITindr.chat-feature" target="21" />
+      <module name="ITindr.core-database" target="21" />
       <module name="ITindr.interactors" target="21" />
     </bytecodeTargetLevel>
   </component>

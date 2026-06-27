@@ -1,7 +1,7 @@
-package com.hits.core_database.di
+package com.hits.impl.di
 
 import androidx.room.Room
-import com.hits.core_database.AppDatabase
+import com.hits.impl.data.local.AppDatabase
 import org.koin.dsl.module
 
 val databaseModule = module {

@@ -8,9 +8,9 @@ import android.view.animation.BounceInterpolator
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.hits.itindr.databinding.FragmentHomeBinding
 import com.hits.core_ui.R.drawable.logo_dot
 import com.hits.core_ui.R.drawable.logo_heart
+import com.hits.itindr.databinding.FragmentHomeBinding
 
 
 class HomeFragment : Fragment(R.layout.fragment_home) {

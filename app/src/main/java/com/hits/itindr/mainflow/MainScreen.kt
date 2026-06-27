@@ -198,9 +198,10 @@ fun MainScreen() {
                 visible = showBottomBar,
                 modifier = Modifier.align(Alignment.BottomCenter),
                 enter = slideInVertically(
-                    animationSpec = tween(600), initialOffsetY = { it / 2 }),
+                    animationSpec = tween(600), initialOffsetY = { it }),
                 exit = slideOutVertically(
-                    animationSpec = tween(600), targetOffsetY = { it / 2 })) {
+                    animationSpec = tween(600), targetOffsetY = { it })
+            ) {
                 BottomNavigation(
                     selectedRoute = currentRoute, onNavigate = { route ->
                         val alreadySelected =

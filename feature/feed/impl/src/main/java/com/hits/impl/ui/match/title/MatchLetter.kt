@@ -3,24 +3,17 @@ package com.hits.impl.ui.match.title
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 
 @Composable
 fun MatchLetter(
     drawable: Int,
     glowDrawable: Int?,
     visible: Boolean,
-    glowAlpha: Float,
 ) {
     if (!visible) return
 
@@ -39,30 +32,33 @@ fun MatchLetter(
         )
     }
 
-    Box(
-        modifier = Modifier.height(32.dp),
-        contentAlignment = Alignment.BottomCenter
-    ) {
-
-        if (glowDrawable != null) {
+    Layout(
+        content = {
+            if (glowDrawable != null) {
+                Image(
+                    painter = painterResource(glowDrawable),
+                    contentDescription = null
+                )
+            }
 
             Image(
-                painter = painterResource(glowDrawable),
-                contentDescription = null,
-                modifier = Modifier
-                    .alpha(glowAlpha)
-                    .matchParentSize()
+                painter = painterResource(drawable),
+                contentDescription = null
             )
         }
+    ) { measurables, constraints ->
 
-        Image(
-            painter = painterResource(drawable),
-            contentDescription = null,
-            modifier = Modifier
-                .graphicsLayer {
-                    scaleX = scale.value
-                    scaleY = scale.value
-                }
+        val glow = measurables[0].measure(constraints)
+        val icon = measurables[1].measure(constraints)
+
+        layout(icon.width, icon.height) {
+
+            glow.place(
+                x = (icon.width - glow.width) / 2,
+                y = (icon.height - glow.height) / 2
             )
+
+            icon.place(0, 0)
+        }
     }
 }

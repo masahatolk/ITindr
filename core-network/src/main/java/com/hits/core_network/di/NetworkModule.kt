@@ -7,7 +7,6 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -25,24 +24,16 @@ val networkModule = module {
         )
     }
 
-    single {
-        HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
-    }
-
     single(named("mainClient")) {
         OkHttpClient.Builder()
             .addInterceptor(get<AuthInterceptor>())
             .authenticator(get<TokenAuthenticator>())
-            .addInterceptor(get<HttpLoggingInterceptor>())
             .build()
     }
 
     single(named("refreshClient")) {
         OkHttpClient.Builder()
             .addInterceptor(get<AuthInterceptor>())
-            .addInterceptor(get<HttpLoggingInterceptor>())
             .build()
     }
 

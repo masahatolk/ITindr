@@ -1,7 +1,7 @@
-package com.hits.core_database
+package com.hits.impl.data.local
 
-import androidx.room.RoomDatabase
 import androidx.room.Database
+import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.hits.impl.data.local.dao.ChatDao
 import com.hits.impl.data.local.dao.MessageDao

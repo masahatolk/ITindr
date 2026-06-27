@@ -1,7 +1,7 @@
 package com.hits.itindr
 
 import android.app.Application
-import com.hits.core_database.di.databaseModule
+import com.hits.impl.di.databaseModule
 import com.hits.core_media.di.mediaModule
 import com.hits.core_network.di.networkModule
 import com.hits.impl.di.chatModule

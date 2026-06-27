@@ -56,7 +56,6 @@ android {
 dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(project(":core-network"))
-    implementation(project(":core-database"))
     implementation(project(":core-auth"))
     implementation(project(":core-ui"))
     implementation(project(":core-media"))

@@ -13,10 +13,9 @@ import com.hits.core_ui.R
 @Composable
 fun MatchTitle(
     visibleLetters: Int,
-    glowAlpha: Float,
 ) {
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.Bottom
     ) {
 
         symbols.forEachIndexed { index, symbol ->
@@ -36,7 +35,6 @@ fun MatchTitle(
                     drawable = symbol.drawable,
                     glowDrawable = symbol.glowDrawable,
                     visible = index < visibleLetters,
-                    glowAlpha = glowAlpha
                 )
             }
         }
