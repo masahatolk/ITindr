@@ -60,10 +60,6 @@ fun MatchOverlay(
         Animatable(0f)
     }
 
-    val glowAlpha = remember {
-        Animatable(0f)
-    }
-
     val smallTitleAlpha = remember {
         Animatable(0f)
     }
@@ -118,11 +114,6 @@ fun MatchOverlay(
         }
 
         coroutineScope {
-            launch {
-                glowAlpha.animateTo(
-                    1f, tween(800)
-                )
-            }
 
             launch {
                 buttonAlpha.animateTo(
@@ -158,7 +149,6 @@ fun MatchOverlay(
 
                     MatchTitle(
                         visibleLetters = visibleLetters,
-                        glowAlpha = glowAlpha.value
                     )
                 }
 
