@@ -8,7 +8,10 @@ import android.view.animation.BounceInterpolator
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.hits.core_ui.R.drawable.logo_dot
+import com.hits.core_ui.R.drawable.logo_heart
 import com.hits.itindr.databinding.FragmentHomeBinding
+
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
@@ -122,9 +125,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val dot = binding.logoDot
 
         val newDrawable = if (isHeart) {
-            R.drawable.logo_dot
+            logo_dot
         } else {
-            R.drawable.logo_heart
+            logo_heart
         }
 
         isHeart = !isHeart

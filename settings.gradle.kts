@@ -21,4 +21,17 @@ dependencyResolutionManagement {
 
 rootProject.name = "ITindr"
 include(":app")
- 
+include(":core-network")
+include(":core-auth")
+include(":feature:chat:api")
+include(":feature:chat:impl")
+include(":core-ui")
+include(":core-media")
+include(":feature:profile:impl")
+include(":feature:profile:api")
+include(":feature:feed:api")
+include(":feature:feed:impl")
+include(":feature:auth:api")
+include(":feature:auth:impl")
+include(":feature:topic:api")
+include(":feature:topic:impl")

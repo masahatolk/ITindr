@@ -1,6 +1,3 @@
-apply {
-    plugin(rootProject.libs.plugins.detekt.get().pluginId)
-}
 detekt {
     autoCorrect = true
     config.setFrom("$rootDir/config/detekt/detekt.yml")
@@ -17,17 +14,16 @@ plugins {
     alias(libs.plugins.detekt)
     alias(libs.plugins.compose.compiler)
     kotlin("plugin.serialization") version "2.0.21"
+    id("kotlin-parcelize")
 }
 
 android {
     namespace = "com.hits.itindr"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.hits.itindr"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -55,12 +51,24 @@ android {
         viewBinding = true
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.14"
-    }
 }
 
 dependencies {
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(project(":core-network"))
+    implementation(project(":core-auth"))
+    implementation(project(":core-ui"))
+    implementation(project(":core-media"))
+    implementation(project(":feature:chat:impl"))
+    implementation(project(":feature:chat:api"))
+    implementation(project(":feature:feed:impl"))
+    implementation(project(":feature:feed:api"))
+    implementation(project(":feature:profile:impl"))
+    implementation(project(":feature:profile:api"))
+    implementation(project(":feature:auth:impl"))
+    implementation(project(":feature:auth:api"))
+    implementation(project(":feature:topic:impl"))
+    implementation(project(":feature:topic:api"))
     implementation(libs.coil.compose)
 
     implementation(libs.androidx.compose.ui.test.junit4)
@@ -69,6 +77,9 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
 
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
     // Jetpack Compose integration
     implementation(libs.androidx.navigation.compose)
 
@@ -84,7 +95,10 @@ dependencies {
 
     // JSON serialization library, works with the Kotlin serialization plugin
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.logging.interceptor)
 
+    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.serialization)
 
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.core.ktx)
